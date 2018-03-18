@@ -5,14 +5,19 @@ This extension provides support for the RGBDS flavor of the Game Boy's Z80 varia
 ## Features
 
 - Syntax highlighting grammar
+![syntax highlighting](https://raw.githubusercontent.com/DonaldHays/rgbds-vscode/master/previews/syntax-highlighting.png)
 - Documented snippets for all instructions, including cycle counts and affected flags
+![documented snippets](https://raw.githubusercontent.com/DonaldHays/rgbds-vscode/master/previews/instruction-snippets.gif)
 - A problem matcher for highlighting `rgbasm` compile-time errors in source code
-- Doc comment extraction on symbol declarations
+![problem matcher](https://raw.githubusercontent.com/DonaldHays/rgbds-vscode/master/previews/problem-matcher.gif)
+- Symbol extraction with doc comments, which appear in intellisense prompts
   - Any uninterrupted runs of lines that consist only of comments before a symbol declaration will be considered part of that symbol's documentation
   - A comment on the same line as a symbol declaration is also part of its documentation
+![intellisense](https://raw.githubusercontent.com/DonaldHays/rgbds-vscode/master/previews/doc-comment.gif)
 - Hovering over symbols will show its documentation
-- Symbols appear in intellisense prompts, with documentation
-- Ability to jump to a symbol's declaration
+![Syntax highlighting grammar](https://raw.githubusercontent.com/DonaldHays/rgbds-vscode/master/previews/hovers.gif)
+- Ability to jump to a symbol's definition
+![Syntax highlighting grammar](https://raw.githubusercontent.com/DonaldHays/rgbds-vscode/master/previews/definition.gif)
 
 ## Usage
 
