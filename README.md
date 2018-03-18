@@ -4,19 +4,43 @@ This extension provides support for the RGBDS flavor of the Game Boy's Z80 varia
 
 ## Features
 
-- Syntax highlighting grammar
+### Syntax Highlighting Grammar
+
+A full grammar definition for syntax highlighting is included.
+
 ![syntax highlighting](https://raw.githubusercontent.com/DonaldHays/rgbds-vscode/master/previews/syntax-highlighting.png)
-- Documented snippets for all instructions, including cycle counts and affected flags
+
+### Documented Instruction Snippets
+
+Instruction snippets reveal and document every instruction the Game Boy CPU understands. The documentation even includes the number of cycles instructions take!
+
 ![documented snippets](https://raw.githubusercontent.com/DonaldHays/rgbds-vscode/master/previews/instruction-snippets.gif)
-- A problem matcher for highlighting `rgbasm` compile-time errors in source code
+
+
+### Problem Matcher
+
+An included problem matcher enables Visual Studio Code to highlight invalid lines of code when you compile.
+
 ![problem matcher](https://raw.githubusercontent.com/DonaldHays/rgbds-vscode/master/previews/problem-matcher.gif)
-- Symbol extraction with doc comments, which appear in intellisense prompts
-  - Any uninterrupted runs of lines that consist only of comments before a symbol declaration will be considered part of that symbol's documentation
-  - A comment on the same line as a symbol declaration is also part of its documentation
+
+### Documented Symbol Detection
+
+Symbols you declare are detected and populated in Intellisense prompts. It even grabs your documentation comments!
+- Any uninterrupted runs of lines that consist only of comments preceding a symbol declaration will be considered part of that symbol's documentation.
+- A comment on the same line as a symbol declaration is also part of its documentation.
+
 ![intellisense](https://raw.githubusercontent.com/DonaldHays/rgbds-vscode/master/previews/doc-comment.gif)
-- Hovering over symbols will show its documentation
+
+### Documentation Hovers
+
+Hover over symbol references to see their documentation at a glance.
+
 ![Syntax highlighting grammar](https://raw.githubusercontent.com/DonaldHays/rgbds-vscode/master/previews/hovers.gif)
-- Ability to jump to a symbol's definition
+
+### Jump to Declaration
+
+For when you need to see a symbol's implementation.
+
 ![Syntax highlighting grammar](https://raw.githubusercontent.com/DonaldHays/rgbds-vscode/master/previews/definition.gif)
 
 ## Usage
