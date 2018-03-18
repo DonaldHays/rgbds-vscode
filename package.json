@@ -1,0 +1,89 @@
+{
+    "name": "rgbds-z80",
+    "displayName": "RGBDS Z80",
+    "description": "Language service for RGBDS GB Z80.",
+    "version": "0.0.1",
+    "publisher": "donaldhays",
+    "engines": {
+        "vscode": "^1.20.0"
+    },
+    "categories": [
+        "Languages"
+    ],
+    "keywords": [
+        "rgbds",
+        "z80",
+        "gbz80",
+        "game boy",
+        "gameboy"
+    ],
+    "activationEvents": [
+        "onLanguage:gbz80"
+    ],
+    "main": "./out/extension",
+    "contributes": {
+        "problemMatchers": [
+            {
+                "name": "rgbdserror",
+                "owner": "rgbasm",
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}"
+                ],
+                "pattern": [
+                    {
+                        "regexp": "^(warning|ERROR): (.*)\\(([0-9]+)\\):$",
+                        "severity": 1,
+                        "file": 2,
+                        "line": 3
+                    },
+                    {
+                        "regexp": "^\\s+(.*)$",
+                        "message": 1
+                    }
+                ]
+            }
+        ],
+        "languages": [
+            {
+                "id": "gbz80",
+                "extensions": [
+                    ".asm",
+                    ".z80",
+                    ".inc"
+                ],
+                "aliases": [
+                    "GBZ80",
+                    "z80"
+                ],
+                "configuration": "./gbz80-configuration.json"
+            }
+        ],
+        "snippets": [
+            {
+                "language": "gbz80",
+                "path": "./snippets/gbz80.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "gbz80",
+                "scopeName": "source.asm.gbz80",
+                "path": "./syntaxes/rgbds-asm.tmLanguage"
+            }
+        ]
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "npm run compile && node ./node_modules/vscode/bin/test"
+    },
+    "devDependencies": {
+        "typescript": "^2.6.1",
+        "vscode": "^1.1.6",
+        "@types/node": "^7.0.43",
+        "@types/mocha": "^2.2.42"
+    }
+}

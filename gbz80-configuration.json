@@ -1,0 +1,15 @@
+{
+  "comments" : {
+    "lineComment" : ";"
+  },
+  "autoClosingPairs" : [
+    ["[", "]"],
+    ["(", ")"],
+    ["\"", "\""]
+  ],
+  "surroundingPairs" : [
+    ["[", "]"],
+    ["(", ")"],
+    ["\"", "\""]
+  ]
+}

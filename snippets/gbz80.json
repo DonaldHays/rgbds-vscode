@@ -1,0 +1,546 @@
+{
+  "Macro" : {
+    "prefix" : "macro",
+    "body": [
+      "${1:name}: macro",
+      "\t$0",
+      "endm"
+    ],
+    "description": "Macro Definition"
+  },
+  "adc a, r8" : {
+    "prefix" : "adc a, r8",
+    "body": "adc a, ${0:r8}",
+    "description": "a = a + r8 + carry\nCycles: 1, Bytes: 1\nFlags:\n- Z: Set if result is 0\n- N: 0\n- H: Set if overflow from bit 3\n- C: Set if overflow from bit 7\n"
+  },
+  "adc a, [hl]" : {
+    "prefix" : "adc a, [hl]",
+    "body": "adc a, [hl]",
+    "description": "a = a + [hl] + carry\nCycles: 2, Bytes: 1\nFlags:\n- Z: Set if result is 0\n- N: 0\n- H: Set if overflow from bit 3\n- C: Set if overflow from bit 7\n"
+  },
+  "adc a, n8" : {
+    "prefix" : "adc a, n8",
+    "body": "adc a, ${0:n8}",
+    "description": "a = a + n8 + carry\nCycles: 2, Bytes: 2\nFlags:\n- Z: Set if result is 0\n- N: 0\n- H: Set if overflow from bit 3\n- C: Set if overflow from bit 7\n"
+  },
+  "add a, r8" : {
+    "prefix" : "add a, r8",
+    "body": "add a, ${0:r8}",
+    "description": "a = a + r8\nCycles: 1, Bytes: 1\nFlags:\n- Z: Set if result is 0\n- N: 0\n- H: Set if overflow from bit 3\n- C: Set if overflow from bit 7\n"
+  },
+  "add a, [hl]" : {
+    "prefix" : "add a, [hl]",
+    "body": "add a, [hl]",
+    "description": "a = a + [hl]\nCycles: 2, Bytes: 1\nFlags:\n- Z: Set if result is 0\n- N: 0\n- H: Set if overflow from bit 3\n- C: Set if overflow from bit 7\n"
+  },
+  "add a, n8" : {
+    "prefix" : "add a, n8",
+    "body": "add a, ${0:n8}",
+    "description": "a = a + n8\nCycles: 2, Bytes: 2\nFlags:\n- Z: Set if result is 0\n- N: 0\n- H: Set if overflow from bit 3\n- C: Set if overflow from bit 7\n"
+  },
+  "add hl, r16" : {
+    "prefix" : "add hl, r16",
+    "body": "add hl, ${0:r16}",
+    "description": "hl = hl + r16\nCycles: 2, Bytes: 1\nFlags:\n- N: 0\n- H: Set if overflow from bit 11\n- C: Set if overflow from bit 15\n"
+  },
+  "add hl, sp" : {
+    "prefix" : "add hl, sp",
+    "body": "add hl, sp",
+    "description": "hl = hl + sp\nCycles: 2, Bytes: 1\nFlags:\n- N: 0\n- H: Set if overflow from bit 11\n- C: Set if overflow from bit 15\n"
+  },
+  "add sp, e8" : {
+    "prefix" : "add sp, e8",
+    "body": "add sp, ${0:e8}",
+    "description": "sp = sp + e8\nCycles: 4, Bytes: 2\nFlags:\n- Z: 0\n- N: 0\n- H: Set if overflow from bit 3\n- C: Set if overflow from bit 7\n"
+  },
+  "and a, r8" : {
+    "prefix" : "and a, r8",
+    "body": "and a, ${0:r8}",
+    "description": "a = a & r8\nCycles: 1, Bytes: 1\nFlags:\n- Z: Set if result is 0\n- N: 0\n- H: 1\n- C: 0\n"
+  },
+  "and a, [hl]" : {
+    "prefix" : "and a, [hl]",
+    "body": "and a, [hl]",
+    "description": "a = a & [hl]\nCycles: 2, Bytes: 1\nFlags:\n- Z: Set if result is 0\n- N: 0\n- H: 1\n- C: 0\n"
+  },
+  "and a, n8" : {
+    "prefix" : "and a, n8",
+    "body": "and a, ${0:n8}",
+    "description": "a = a & n8\nCycles: 2, Bytes: 2\nFlags:\n- Z: Set if result is 0\n- N: 0\n- H: 1\n- C: 0\n"
+  },
+  "bit u3, r8" : {
+    "prefix" : "bit u3, r8",
+    "body" : "bit ${1:u3}, ${2:r8}",
+    "description" : "Sets Z if bit u3 in r8 is 0\nCycles: 2, Bytes: 2\nFlags:\n- Z: Set if selected bit is 0\n- N: 0\n- H: 1\n"
+  },
+  "bit u3, [hl]" : {
+    "prefix" : "bit u3, [hl]",
+    "body" : "bit ${0:u3}, [hl]",
+    "description" : "Sets Z if bit u3 in [hl] is 0\nCycles: 3, Bytes: 2\nFlags:\n- Z: Set if selected bit is 0\n- N: 0\n- H: 1\n"
+  },
+  "call n16" : {
+    "prefix" : "call n16",
+    "body" : "call ${0:n16}",
+    "description" : "Calls address n16\nCycles: 6, Bytes: 3\n"
+  },
+  "call cc, n16" : {
+    "prefix" : "call cc, n16",
+    "body" : "call ${1:cc}, ${2:n16}",
+    "description" : "Calls address n16 if condition cc is met\nCycles: 6/3, Bytes: 3\n"
+  },
+  "ccf" : {
+    "prefix" : "ccf",
+    "body" : "ccf",
+    "description" : "Complements the carry flag\nCycles: 1, Bytes: 1\nFlags:\n- N: 0\n- H: 0\n- C: Complemented\n"
+  },
+  "cp a, r8" : {
+    "prefix" : "cp a, r8",
+    "body" : "cp a, ${0:r8}",
+    "description" : "flags = a - r8\nCycles: 1, Bytes: 1\nFlags:\n- Z: Set if result is 0 (a == r8)\n- N: 1\n- H: Set if no borrow from bit 4\n- C: Set if no borrow (a < r8)\n"
+  },
+  "cp a, [hl]" : {
+    "prefix" : "cp a, [hl]",
+    "body" : "cp a, [hl]",
+    "description" : "flags = a - [hl]\nCycles: 2, Bytes: 1\nFlags:\n- Z: Set if result is 0 (a == [hl])\n- N: 1\n- H: Set if no borrow from bit 4\n- C: Set if no borrow (a < [hl])\n"
+  },
+  "cp a, n8" : {
+    "prefix" : "cp a, n8",
+    "body" : "cp a, ${0:n8}",
+    "description" : "flags = a - n8\nCycles: 2, Bytes: 2\nFlags:\n- Z: Set if result is 0 (a == n8)\n- N: 1\n- H: Set if no borrow from bit 4\n- C: Set if no borrow (a < n8)\n"
+  },
+  "cpl" : {
+    "prefix" : "cpl",
+    "body" : "cpl",
+    "description" : "a = ~a\nCycles: 1, Bytes: 1\nFlags:\n- N: 1\n- H: 1\n"
+  },
+  "daa" : {
+    "prefix" : "daa",
+    "body" : "daa",
+    "description" : "Decimal adjusts A to correct BCD value after arithmetic\nCycles: 1, Bytes: 1\nFlags:\n- Z: Set if result is 0\n- H: 0\n- C: Set or reset based on operation\n"
+  },
+  "dec r8" : {
+    "prefix" : "dec r8",
+    "body" : "dec ${0:r8}",
+    "description" : "r8 = r8 - 1\nCycles: 1, Bytes: 1\nFlags:\n- Z: Set if result is 0\n- N: 1\n- H: Set if no borrow from bit 4\n"
+  },
+  "dec [hl]" : {
+    "prefix" : "dec [hl]",
+    "body" : "dec [hl]",
+    "description" : "[hl] = [hl] - 1\nCycles: 3, Bytes: 1\nFlags:\n- Z: Set if result is 0\n- N: 1\n- H: Set if no borrow from bit 4\n"
+  },
+  "dec r16" : {
+    "prefix" : "dec r16",
+    "body" : "dec ${0:r16}",
+    "description" : "r16 = r16 - 1\nCycles: 2, Bytes: 1\n"
+  },
+  "dec sp" : {
+    "prefix" : "dec sp",
+    "body" : "dec sp",
+    "description" : "sp = sp - 1\nCycles: 2, Bytes: 1\n"
+  },
+  "di" : {
+    "prefix" : "di",
+    "body" : "di",
+    "description" : "Disables interrupts\nCycles: 1, Bytes: 1\n"
+  },
+  "ei" : {
+    "prefix" : "ei",
+    "body" : "ei",
+    "description" : "Enables interrupts\nCycles: 1, Bytes: 1\n"
+  },
+  "halt" : {
+    "prefix" : "halt",
+    "body" : "halt",
+    "description" : "Puts the CPU into low power mode\nCycles: -, Bytes: 1\n"
+  },
+  "inc r8" : {
+    "prefix" : "inc r8",
+    "body" : "inc ${0:r8}",
+    "description" : "r8 = r8 + 1\nCycles: 1, Bytes: 1\nFlags:\n- Z: Set if result is 0\n- N: 0\n- H: Set if overflow from bit 3\n"
+  },
+  "inc [hl]" : {
+    "prefix" : "inc [hl]",
+    "body" : "inc [hl]",
+    "description" : "[hl] = [hl] + 1\nCycles: 3, Bytes: 1\nFlags:\n- Z: Set if result is 0\n- N: 0\n- H: Set if overflow from bit 3\n"
+  },
+  "inc r16" : {
+    "prefix" : "inc r16",
+    "body" : "inc ${0:r16}",
+    "description" : "r16 = r16 + 1\nCycles: 2, Bytes: 1\n"
+  },
+  "inc sp" : {
+    "prefix" : "inc sp",
+    "body" : "inc sp",
+    "description" : "sp = sp + 1\nCycles: 2, Bytes: 1\n"
+  },
+  "jp n16" : {
+    "prefix" : "jp n16",
+    "body" : "jp ${0:n16}",
+    "description" : "Jumps to address n16\nCycles: 4, Bytes: 3\n"
+  },
+  "jp cc, n16" : {
+    "prefix" : "jp cc, n16",
+    "body" : "jp ${1:cc}, ${2:n16}",
+    "description" : "Jumps to address n16 if condition cc is met\nCycles: 4/3, Bytes: 3\n"
+  },
+  "jp hl" : {
+    "prefix" : "jp hl",
+    "body" : "jp hl",
+    "description" : "Jumps to address in hl\nCycles: 1, Bytes: 1\n"
+  },
+  "jr e8" : {
+    "prefix" : "jr e8",
+    "body" : "jr ${0:e8}",
+    "description" : "Relative jumps by adding e8 to pc\nCycles: 3, Bytes: 2\n"
+  },
+  "jr cc, e8" : {
+    "prefix" : "jr cc, e8",
+    "body" : "jr ${1:cc}, ${2:e8}",
+    "description" : "Relative jumps by adding e8 to pc if condition cc is met\nCycles: 3/2, Bytes: 2\n"
+  },
+  "ld r8, r8" : {
+    "prefix" : "ld r8, r8",
+    "body" : "ld ${1:r8}, ${2:r8}",
+    "description" : "Copies the value from the right register into the left\nCycles: 1, Bytes: 1\n"
+  },
+  "ld r8, n8" : {
+    "prefix" : "ld r8, n8",
+    "body" : "ld ${1:r8}, ${2:n8}",
+    "description" : "r8 = n8\nCycles: 2, Bytes: 2\n"
+  },
+  "ld r16, n16" : {
+    "prefix" : "ld r16, n16",
+    "body" : "ld ${1:r16}, ${2:n16}",
+    "description" : "r16 = n16\nCycles: 3, Bytes: 3\n"
+  },
+  "ld [hl], r8" : {
+    "prefix" : "ld [hl], r8",
+    "body" : "ld [hl], ${0:r8}",
+    "description" : "[hl] = r8\nCycles: 2, Bytes: 1\n"
+  },
+  "ld [hl], n8" : {
+    "prefix" : "ld [hl], n8",
+    "body" : "ld [hl], ${0:n8}",
+    "description" : "[hl] = n8\nCycles: 3, Bytes: 2\n"
+  },
+  "ld r8, [hl]" : {
+    "prefix" : "ld r8, [hl]",
+    "body" : "ld ${0:r8}, [hl]",
+    "description" : "r8 = [hl]\nCycles: 2, Bytes: 1\n"
+  },
+  "ld [r16], a" : {
+    "prefix" : "ld [r16], a",
+    "body" : "ld [${0:r16}], a",
+    "description" : "[r16] = a\nCycles: 2, Bytes: 1\n"
+  },
+  "ld [n16], a" : {
+    "prefix" : "ld [n16], a",
+    "body" : "ld [${0:n16}], a",
+    "description" : "[n16] = a\nCycles: 4, Bytes: 3\n"
+  },
+  "ldh [$ff00+n8], a" : {
+    "prefix" : "ldh [$ff00+n8], a",
+    "body" : "ldh [\\$ff00+${0:n8}], a",
+    "description" : "[$ff00 + n8] = a\nCycles: 3, Bytes: 2\n"
+  },
+  "ld [$ff00+c], a" : {
+    "prefix" : "ld [$ff00+c], a",
+    "body" : "ld [\\$ff00+c], a",
+    "description" : "[$ff00 + c] = a\nCycles: 2, Bytes: 1\n"
+  },
+  "ld a, [r16]" : {
+    "prefix" : "ld a, [r16]",
+    "body" : "ld a, [${0:r16}]",
+    "description" : "a = [r16]\nCycles: 2, Bytes: 1\n"
+  },
+  "ld a, [n16]" : {
+    "prefix" : "ld a, [n16]",
+    "body" : "ld a, [${0:n16}]",
+    "description" : "a = [n16]\nCycles: 4, Bytes: 3\n"
+  },
+  "ldh a, [$ff00+n8]" : {
+    "prefix" : "ldh a, [$ff00+n8]",
+    "body" : "ldh a, [\\$ff00+${0:n8}]",
+    "description" : "a = [$ff00 + n8]\nCycles: 3, Bytes: 2\n"
+  },
+  "ld a, [$ff00+c]" : {
+    "prefix" : "ld a, [$ff00+c]",
+    "body" : "ld a, [\\$ff00+c]",
+    "description" : "a = [$ff00 + c]\nCycles: 2, Bytes: 1\n"
+  },
+  "ld [hl+], a" : {
+    "prefix" : "ld [hl+], a",
+    "body" : "ld [hl+], a",
+    "description" : "[hl] = a, hl = hl + 1\nCycles: 2, Bytes: 1\n"
+  },
+  "ld [hl-], a" : {
+    "prefix" : "ld [hl-], a",
+    "body" : "ld [hl-], a",
+    "description" : "[hl] = a, hl = hl - 1\nCycles: 2, Bytes: 1\n"
+  },
+  "ld a, [hl+]" : {
+    "prefix" : "ld a, [hl+]",
+    "body" : "ld a, [hl+]",
+    "description" : "a = [hl], hl = hl + 1\nCycles: 2, Bytes: 1\n"
+  },
+  "ld a, [hl-]" : {
+    "prefix" : "ld a, [hl-]",
+    "body" : "ld a, [hl-]",
+    "description" : "a = [hl], hl = hl - 1\nCycles: 2, Bytes: 1\n"
+  },
+  "ld sp, n16" : {
+    "prefix" : "ld sp, n16",
+    "body" : "ld sp, ${0:n16}",
+    "description" : "sp = n16\nCycles: 3, Bytes: 3\n"
+  },
+  "ld [n16], sp" : {
+    "prefix" : "ld [n16], sp",
+    "body" : "ld [${0:n16}], sp",
+    "description" : "[n16, n16 + 1] = sp\nCycles: 5, Bytes: 3\n"
+  },
+  "ld hl, sp+e8" : {
+    "prefix" : "ld hl, sp+e8",
+    "body" : "ld hl, sp+${0:e8}",
+    "description" : "hl = sp + e8\nCycles: 3, Bytes: 2\nFlags:\n- Z: 0\n- N: 0\n- H: Set if overflow from bit 3\n- C: Set if overflow from bit 7\n"
+  },
+  "ld sp, hl" : {
+    "prefix" : "ld sp, hl",
+    "body" : "ld sp, hl",
+    "description" : "sp = hl\nCycles: 2, Bytes: 1\n"
+  },
+  "nop" : {
+    "prefix" : "nop",
+    "body" : "nop",
+    "description" : "No operation\nCycles: 1, Bytes: 1\n"
+  },
+  "or a, r8" : {
+    "prefix" : "or a, r8",
+    "body": "or a, ${0:r8}",
+    "description": "a = a | r8\nCycles: 1, Bytes: 1\nFlags:\n- Z: Set if result is 0\n- N: 0\n- H: 0\n- C: 0\n"
+  },
+  "or a, [hl]" : {
+    "prefix" : "or a, [hl]",
+    "body": "or a, [hl]",
+    "description": "a = a | [hl]\nCycles: 2, Bytes: 1\nFlags:\n- Z: Set if result is 0\n- N: 0\n- H: 0\n- C: 0\n"
+  },
+  "or a, n8" : {
+    "prefix" : "or a, n8",
+    "body": "or a, ${0:n8}",
+    "description": "a = a | n8\nCycles: 2, Bytes: 2\nFlags:\n- Z: Set if result is 0\n- N: 0\n- H: 0\n- C: 0\n"
+  },
+  "pop af" : {
+    "prefix" : "pop af",
+    "body" : "pop af",
+    "description" : "Pops the stack into af\nCycles: 3, Bytes: 1\n"
+  },
+  "pop r16" : {
+    "prefix" : "pop r16",
+    "body" : "pop ${0:r16}",
+    "description" : "Pops the stack into r16\nCycles: 3, Bytes: 1\n"
+  },
+  "push af" : {
+    "prefix" : "push af",
+    "body" : "push af",
+    "description" : "Pushes af onto the stack\nCycles: 4, Bytes: 1\n"
+  },
+  "push r16" : {
+    "prefix" : "push r16",
+    "body" : "push ${0:r16}",
+    "description" : "Pushes r16 onto the stack\nCycles: 4, Bytes: 1\n"
+  },
+  "res u3, r8" : {
+    "prefix" : "res u3, r8",
+    "body" : "res ${1:u3}, ${2:r8}",
+    "description" : "Sets the bit u3 in r8 to 0\nCycles: 2, Bytes: 2\n"
+  },
+  "res u3, [hl]" : {
+    "prefix" : "res u3, [hl]",
+    "body" : "res ${0:u3}, [hl]",
+    "description" : "Sets the bit u3 in [hl] to 0\nCycles: 4, Bytes: 2\n"
+  },
+  "ret" : {
+    "prefix" : "ret",
+    "body" : "ret",
+    "description" : "Returns from the current subroutine\nCycles: 4, Bytes: 1\n"
+  },
+  "ret cc" : {
+    "prefix" : "ret cc",
+    "body" : "ret ${0:cc}",
+    "description" : "Returns from the current subroutine if condition cc is met\nCycles: 5/2, Bytes: 1\n"
+  },
+  "reti" : {
+    "prefix" : "reti",
+    "body" : "reti",
+    "description" : "Returns from the current subroutine and enables interrupts\nCycles: 4, Bytes: 1\n"
+  },
+  "rl r8" : {
+    "prefix" : "rl r8",
+    "body": "rl ${0:r8}",
+    "description": "Rotates r8 left, sets bit 0 to carry, sets carry to old bit 7\nCycles: 2, Bytes: 2\nFlags:\n- Z: Set if result is 0\n- N: 0\n- H: 0\n- C: Set to old bit 7\n"
+  },
+  "rl [hl]" : {
+    "prefix" : "rl [hl]",
+    "body": "rl [hl]",
+    "description": "Rotates [hl] left, sets bit 0 to carry, sets carry to old bit 7\nCycles: 4, Bytes: 2\nFlags:\n- Z: Set if result is 0\n- N: 0\n- H: 0\n- C: Set to old bit 7\n"
+  },
+  "rla" : {
+    "prefix" : "rla",
+    "body": "rla",
+    "description": "Rotates A left, sets bit 0 to carry, sets carry to old bit 7\nCycles: 4, Bytes: 2\nFlags:\n- Z: 0\n- N: 0\n- H: 0\n- C: Set to old bit 7\n"
+  },
+  "rlc r8" : {
+    "prefix" : "rlc r8",
+    "body": "rlc ${0:r8}",
+    "description": "Rotates r8 left, sets bit 0 and carry to old bit 7\nCycles: 2, Bytes: 2\nFlags:\n- Z: Set if result is 0\n- N: 0\n- H: 0\n- C: Set to old bit 7\n"
+  },
+  "rlc [hl]" : {
+    "prefix" : "rlc [hl]",
+    "body" : "rlc [hl]",
+    "description" : "Rotates [hl] left, sets bit 0 and carry to old bit 7\nCycles: 4, Bytes: 2\nFlags:\n- Z: Set if result is 0\n- N: 0\n- H: 0\n- C: Set to old bit 7\n"
+  },
+  "rlca" : {
+    "prefix" : "rlca",
+    "body": "rlca",
+    "description": "Rotates A left, sets bit 0 and carry to old bit 7\nCycles: 1, Bytes: 1\nFlags:\n- Z: 0\n- N: 0\n- H: 0\n- C: Set to old bit 7\n"
+  },
+  "rr r8" : {
+    "prefix" : "rr r8",
+    "body": "rr ${0:r8}",
+    "description": "Rotates r8 right, sets bit 7 to carry, sets carry to old bit 0\nCycles: 2, Bytes: 2\nFlags:\n- Z: Set if result is 0\n- N: 0\n- H: 0\n- C: Set to old bit 0\n"
+  },
+  "rr [hl]" : {
+    "prefix" : "rr [hl]",
+    "body": "rr [hl]",
+    "description": "Rotates [hl] right, sets bit 7 to carry, sets carry to old bit 0\nCycles: 4, Bytes: 2\nFlags:\n- Z: Set if result is 0\n- N: 0\n- H: 0\n- C: Set to old bit 0\n"
+  },
+  "rra" : {
+    "prefix" : "rra",
+    "body": "rra",
+    "description": "Rotates A right, sets bit 7 to carry, sets carry to old bit 0\nCycles: 1, Bytes: 1\nFlags:\n- Z: 0\n- N: 0\n- H: 0\n- C: Set to old bit 0\n"
+  },
+  "rrc r8" : {
+    "prefix" : "rrc r8",
+    "body": "rrc ${0:r8}",
+    "description": "Rotates r8 right, sets bit 7 and carry to old bit 0\nCycles: 2, Bytes: 2\nFlags:\n- Z: Set if result is 0\n- N: 0\n- H: 0\n- C: Set to old bit 0\n"
+  },
+  "rrc [hl]" : {
+    "prefix" : "rrc [hl]",
+    "body": "rrc [hl]",
+    "description": "Rotates [hl] right, sets bit 7 and carry to old bit 0\nCycles: 4, Bytes: 2\nFlags:\n- Z: Set if result is 0\n- N: 0\n- H: 0\n- C: Set to old bit 0\n"
+  },
+  "rrca" : {
+    "prefix" : "rrca",
+    "body": "rrca",
+    "description": "Rotates A right, sets bit 7 and carry to old bit 0\nCycles: 1, Bytes: 1\nFlags:\n- Z: 0\n- N: 0\n- H: 0\n- C: Set to old bit 0\n"
+  },
+  "rst vec" : {
+    "prefix" : "rst vec",
+    "body" : "rst ${0:vec}",
+    "description" : "Calls given reset vector\nCycles: 4, Bytes: 1\n"
+  },
+  "sbc a, r8" : {
+    "prefix" : "sbc a, r8",
+    "body" : "sbc a, ${0:r8}",
+    "description" : "a = a - r8 - c\nCycles: 1, Bytes:1\nFlags:\n- Z: Set if result is 0\n- N: 1\n- H: Set if no borrow from bit 4\n- C: Set if no borrow\n"
+  },
+  "sbc a, [hl]" : {
+    "prefix" : "sbc a, [hl]",
+    "body" : "sbc a, [hl]",
+    "description" : "a = a - [hl] - c\nCycles: 2, Bytes:1\nFlags:\n- Z: Set if result is 0\n- N: 1\n- H: Set if no borrow from bit 4\n- C: Set if no borrow\n"
+  },
+  "sbc a, n8" : {
+    "prefix" : "sbc a, n8",
+    "body" : "sbc a, ${0:n8}",
+    "description" : "a = a - n8 - c\nCycles: 2, Bytes:2\nFlags:\n- Z: Set if result is 0\n- N: 1\n- H: Set if no borrow from bit 4\n- C: Set if no borrow\n"
+  },
+  "scf" : {
+    "prefix" : "scf",
+    "body" : "scf",
+    "description" : "Sets the carry flag to 1\nCycles: 1, Bytes:1\nFlags:\n- N: 0\n- H: 0\n- C: 1\n"
+  },
+  "set u3, r8" : {
+    "prefix" : "set u3, r8",
+    "body" : "set ${1:u3}, ${2:r8}",
+    "description" : "Sets the bit u3 in r8 to 1\nCycles: 2, Bytes: 2\n"
+  },
+  "set u3, [hl]" : {
+    "prefix" : "set u3, [hl]",
+    "body" : "set ${0:u3}, [hl]",
+    "description" : "Sets the bit u3 in [hl] to 1\nCycles: 4, Bytes: 2\n"
+  },
+  "sla r8" : {
+    "prefix" : "sla r8",
+    "body" : "sla ${0:r8}",
+    "description" : "Shifts r8 left, sets carry to old bit 7\nCycles: 2, Bytes: 2\nFlags:\n- Z: Set if result is 0\n- N: 0\n- H: 0\n- C: Set to old bit 7\n"
+  },
+  "sla [hl]" : {
+    "prefix" : "sla [hl]",
+    "body" : "sla [hl]",
+    "description" : "Shifts [hl] left, sets carry to old bit 7\nCycles: 4, Bytes: 2\nFlags:\n- Z: Set if result is 0\n- N: 0\n- H: 0\n- C: Set to old bit 7\n"
+  },
+  "sra r8" : {
+    "prefix" : "sra r8",
+    "body" : "sra ${0:r8}",
+    "description" : "Shifts r8 right keeping bit 7 unchanged, sets carry to old bit 0\nCycles: 2, Bytes: 2\nFlags:\n- Z: Set if result is 0\n- N: 0\n- H: 0\n- C: Set to old bit 0\n"
+  },
+  "sra [hl]" : {
+    "prefix" : "sra [hl]",
+    "body" : "sra [hl]",
+    "description" : "Shifts [hl] right keeping bit 7 unchanged, sets carry to old bit 0\nCycles: 4, Bytes: 2\nFlags:\n- Z: Set if result is 0\n- N: 0\n- H: 0\n- C: Set to old bit 0\n"
+  },
+  "srl r8" : {
+    "prefix" : "srl r8",
+    "body" : "srl ${0:r8}",
+    "description" : "Shifts r8 right, sets carry to old bit 0\nCycles: 2, Bytes: 2\nFlags:\n- Z: Set if result is 0\n- N: 0\n- H: 0\n- C: Set to old bit 0\n"
+  },
+  "srl [hl]" : {
+    "prefix" : "srl [hl]",
+    "body" : "srl [hl]",
+    "description" : "Shifts [hl] right, sets carry to old bit 0\nCycles: 4, Bytes: 2\nFlags:\n- Z: Set if result is 0\n- N: 0\n- H: 0\n- C: Set to old bit 0\n"
+  },
+  "stop" : {
+    "prefix" : "stop",
+    "body" : "stop",
+    "description" : "Puts the CPU into very low power mode\nCycles: -, Bytes: 2\n"
+  },
+  "sub a, r8" : {
+    "prefix" : "sub a, r8",
+    "body": "sub a, ${0:r8}",
+    "description": "a = a - r8\nCycles: 1, Bytes: 1\nFlags:\n- Z: Set if result is 0 (a == r8)\n- N: 1\n- H: Set if no borrow from bit 4\n- C: Set if no borrow (a < r8)\n"
+  },
+  "sub a, [hl]" : {
+    "prefix" : "sub a, [hl]",
+    "body": "sub a, [hl]",
+    "description": "a = a - [hl]\nCycles: 2, Bytes: 1\nFlags:\n- Z: Set if result is 0 (a == [hl])\n- N: 1\n- H: Set if no borrow from bit 4\n- C: Set if no borrow (a < [hl])\n"
+  },
+  "sub a, n8" : {
+    "prefix" : "sub a, n8",
+    "body": "sub a, ${0:n8}",
+    "description": "a = a - n8\nCycles: 2, Bytes: 2\nFlags:\n- Z: Set if result is 0 (a == n8)\n- N: 1\n- H: Set if no borrow from bit 4\n- C: Set if no borrow (a < n8)\n"
+  },
+  "swap r8" : {
+    "prefix" : "swap r8",
+    "body" : "swap ${0:r8}",
+    "description" : "Swaps the upper and lower 4 bits in r8\nCycles: 2, Bytes: 2\nFlags:\n- Z: Set if result is 0\n- N: 0\n- H: 0\n- C: 0\n"
+  },
+  "swap [hl]" : {
+    "prefix" : "swap [hl]",
+    "body" : "swap [hl]",
+    "description" : "Swaps the upper and lower 4 bits in [hl]\nCycles: 4, Bytes: 2\nFlags:\n- Z: Set if result is 0\n- N: 0\n- H: 0\n- C: 0\n"
+  },
+  "xor a, r8" : {
+    "prefix" : "xor a, r8",
+    "body" : "xor a, ${0:r8}",
+    "description" : "a = a ^ r8\nCycles: 1, Bytes: 1\nFlags:\n- Z: Set if result is 0\n- N: 0\n- H: 0\n- C:0\n"
+  },
+  "xor a, [hl]" : {
+    "prefix" : "xor a, [hl]",
+    "body" : "xor a, [hl]",
+    "description" : "a = a ^ [hl]\nCycles: 2, Bytes: 1\nFlags:\n- Z: Set if result is 0\n- N: 0\n- H: 0\n- C:0\n"
+  },
+  "xor a, n8" : {
+    "prefix" : "xor a, n8",
+    "body" : "xor a, ${0:n8}",
+    "description" : "a = a ^ n8\nCycles: 2, Bytes: 2\nFlags:\n- Z: Set if result is 0\n- N: 0\n- H: 0\n- C:0\n"
+  }
+}
