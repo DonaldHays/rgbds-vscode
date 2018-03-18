@@ -2,7 +2,7 @@
     "name": "rgbds-z80",
     "displayName": "RGBDS Z80",
     "description": "Language service for RGBDS GB Z80.",
-    "version": "0.0.1",
+    "version": "1.0.0",
     "publisher": "donaldhays",
     "engines": {
         "vscode": "^1.20.0"
@@ -85,5 +85,11 @@
         "vscode": "^1.1.6",
         "@types/node": "^7.0.43",
         "@types/mocha": "^2.2.42"
+    },
+    "homepage": "https://github.com/DonaldHays/rgbds-vscode",
+    "bugs": "https://github.com/DonaldHays/rgbds-vscode/issues",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/DonaldHays/rgbds-vscode.git"
     }
 }
