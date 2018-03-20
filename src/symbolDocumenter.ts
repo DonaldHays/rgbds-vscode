@@ -5,9 +5,11 @@ import * as path from 'path';
 
 const commentLineRegex = /^;(.*)$/
 const endCommentRegex = /^[^;]+;(.*)$/
-const includeLineRegex = /^include[\s]+"([^"]+)".*$/
+const includeLineRegex = /^include[\s]+"([^"]+)".*$/i
 const spacerRegex = /^(.)\1{3,}$/
 const labelDefinitionRegex = /^([a-zA-Z_][a-zA-Z_0-9]*[:]{0,2}).*$/
+const instructionRegex = /^(adc|add|and|bit|call|ccf|cp|cpl|daa|dec|di|ei|halt|inc|jp|jr|ld|nop|or|pop|push|res|ret|reti|rl|rla|rlc|rlca|rr|rra|rrc|rrca|rst|sbc|scf|set|sla|sra|srl|stop|sub|swap|xor)$/i
+const keywordRegex = /^(section|pops|pushs|equ|set|equs|macro|endm|shift|rsset|rsreset|rb|rw|rl|export|global|purge|db|dw|dl|ds|incbin|include|union|nextu|endu|printt|printv|printi|printf|repeat|endr|fail|warn|if|elif|else|endc|opt|popo|pusho)$/i
 
 class SymbolDescriptor {
   constructor(public location: vscode.Location, public isExported: boolean, public documentation?: string) { }
@@ -27,6 +29,7 @@ export class ASMSymbolDocumenter {
   files: { [name: string]: FileTable };
   constructor() {
     this.files = {};
+    
     vscode.workspace.findFiles("**/*.{z80,inc,asm}", null, undefined).then((files) => {
       files.forEach((fileURI) => {
         vscode.workspace.openTextDocument(fileURI).then((document) => {
@@ -136,6 +139,14 @@ export class ASMSymbolDocumenter {
           table.includedFiles.push(includeName);
         } else if (labelMatch) {
           const declaration = labelMatch[1];
+          if (instructionRegex.test(declaration)) {
+            continue;
+          }
+          
+          if (keywordRegex.test(declaration)) {
+            continue;
+          }
+          
           const name = declaration.replace(/:+/, "");
           const location = new vscode.Location(document.uri, line.range.start);
           let isExported = false;
