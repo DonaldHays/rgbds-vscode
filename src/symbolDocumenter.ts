@@ -61,12 +61,47 @@ export class ASMSymbolDocumenter {
     });
   }
   
+  /**
+   * Seeks files that include `fsPath` for symbols.
+   * @param fsPath The path of the file to seek above.
+   * @param output The collection of discovered symbols.
+   * @param searched Paths of files that have already been searched.
+   */
+  private _seekSymbolsUp(fsPath: string, output: { [name: string]: SymbolDescriptor }, searched: string[]) {
+    for (const filename in this.files) {
+      if (this.files.hasOwnProperty(filename)) {
+        if (searched.indexOf(filename) != -1) {
+          continue;
+        }
+        
+        const table = this.files[filename];
+        if (table == undefined) {
+          return;
+        }
+        
+        if (table.includedFiles.indexOf(fsPath) != -1) {
+          this._seekSymbols(filename, output, searched, false, true);
+        }
+      }
+    }
+  }
+  
+  /**
+   * Seeks symbols for use by Intellisense in the file at `fsPath`.
+   * @param fsPath The path of the file to seek in.
+   * @param output The collection of discovered symbols.
+   * @param searched Paths of files that have already been searched.
+   * @param onlyExported If true, only outputs exported symbols.
+   * @param searchIncludes If true, also searches file includes.
+   */
   private _seekSymbols(fsPath: string, output: { [name: string]: SymbolDescriptor }, searched: string[], onlyExported: boolean, searchIncludes: boolean) {
     const table = this.files[fsPath];
     
     if (table == undefined) {
       return;
     }
+    
+    searched.push(fsPath);
         
     for (const name in table.symbols) {
       if (table.symbols.hasOwnProperty(name)) {
@@ -87,9 +122,15 @@ export class ASMSymbolDocumenter {
           this._seekSymbols(includeFilename, output, searched, onlyExported, searchIncludes);
         }
       });
+      
+      this._seekSymbolsUp(fsPath, output, searched);
     }
   }
   
+  /**
+   * Returns a set of symbols possibly within scope of `context`.
+   * @param context The document to find symbols for.
+   */
   symbols(context: vscode.TextDocument): {[name: string] : SymbolDescriptor} {
     const output: { [name: string]: SymbolDescriptor } = {};
     
@@ -107,6 +148,12 @@ export class ASMSymbolDocumenter {
     return output;
   }
   
+  /**
+   * Returns a `SymbolDescriptor` for the symbol having `name`, or `undefined`
+   * if no such symbol exists.
+   * @param name The name of the symbol.
+   * @param searchContext The document to find the symbol in.
+   */
   symbol(name: string, searchContext: vscode.TextDocument): SymbolDescriptor | undefined {
     return this.symbols(searchContext)[name];
   }
