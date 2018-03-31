@@ -3,6 +3,7 @@
     {
       "name" : "adc a, r8",
       "description" : "`a` = `a` + r8 + carry",
+      "optionalA" : true,
       "cycles" : 1,
       "bytes" : 1,
       "flags" : {
@@ -15,6 +16,7 @@
     {
       "name" : "adc a, [hl]",
       "description" : "`a` = `a` + [`hl`] + carry",
+      "optionalA" : true,
       "cycles" : 2,
       "bytes" : 1,
       "flags" : {
@@ -27,6 +29,7 @@
     {
       "name" : "adc a, n8",
       "description" : "`a` = `a` + n8 + carry",
+      "optionalA" : true,
       "cycles" : 2,
       "bytes" : 2,
       "flags" : {
@@ -39,6 +42,7 @@
     {
       "name" : "add a, r8",
       "description" : "`a` = `a` + r8",
+      "optionalA" : true,
       "cycles" : 1,
       "bytes" : 1,
       "flags" : {
@@ -51,6 +55,7 @@
     {
       "name" : "add a, [hl]",
       "description" : "`a` = `a` + [`hl`]",
+      "optionalA" : true,
       "cycles" : 2,
       "bytes" : 1,
       "flags" : {
@@ -63,6 +68,7 @@
     {
       "name" : "add a, n8",
       "description" : "`a` = `a` + n8",
+      "optionalA" : true,
       "cycles" : 2,
       "bytes" : 2,
       "flags" : {
@@ -109,6 +115,7 @@
     {
       "name" : "and a, r8",
       "description" : "`a` = `a` & r8",
+      "optionalA" : true,
       "cycles" : 1,
       "bytes" : 1,
       "flags" : {
@@ -121,6 +128,7 @@
     {
       "name" : "and a, [hl]",
       "description" : "`a` = `a` & [hl]",
+      "optionalA" : true,
       "cycles" : 2,
       "bytes" : 1,
       "flags" : {
@@ -133,6 +141,7 @@
     {
       "name" : "and a, n8",
       "description" : "`a` = `a` & n8",
+      "optionalA" : true,
       "cycles" : 2,
       "bytes" : 2,
       "flags" : {
@@ -192,6 +201,7 @@
     {
       "name" : "cp a, r8",
       "description" : "flags = `a` - r8",
+      "optionalA" : true,
       "cycles" : 1,
       "bytes" : 1,
       "flags" : {
@@ -204,6 +214,7 @@
     {
       "name" : "cp a, [hl]",
       "description" : "flags = `a` - [`hl`]",
+      "optionalA" : true,
       "cycles" : 2,
       "bytes" : 1,
       "flags" : {
@@ -216,6 +227,7 @@
     {
       "name" : "cp a, n8",
       "description" : "flags = `a` - n8",
+      "optionalA" : true,
       "cycles" : 2,
       "bytes" : 2,
       "flags" : {
@@ -547,6 +559,7 @@
     {
       "name" : "or a, r8",
       "description" : "`a` = `a` | r8",
+      "optionalA" : true,
       "cycles" : 1,
       "bytes" : 1,
       "flags" : {
@@ -559,6 +572,7 @@
     {
       "name" : "or a, [hl]",
       "description" : "`a` = `a` | [hl]",
+      "optionalA" : true,
       "cycles" : 2,
       "bytes" : 1,
       "flags" : {
@@ -571,6 +585,7 @@
     {
       "name" : "or a, n8",
       "description" : "`a` = `a` | n8",
+      "optionalA" : true,
       "cycles" : 2,
       "bytes" : 2,
       "flags" : {
@@ -797,6 +812,7 @@
     {
       "name" : "sbc a, r8",
       "description" : "`a` = `a` - r8 - c",
+      "optionalA" : true,
       "cycles" : 1,
       "bytes" : 1,
       "flags" : {
@@ -809,6 +825,7 @@
     {
       "name" : "sbc a, [hl]",
       "description" : "`a` = `a` - [`hl`] - c",
+      "optionalA" : true,
       "cycles" : 2,
       "bytes" : 1,
       "flags" : {
@@ -821,6 +838,7 @@
     {
       "name" : "sbc a, n8",
       "description" : "`a` = `a` - n8 - c",
+      "optionalA" : true,
       "cycles" : 2,
       "bytes" : 2,
       "flags" : {
@@ -937,6 +955,7 @@
     {
       "name" : "sub a, r8",
       "description" : "`a` = `a` - r8",
+      "optionalA" : true,
       "cycles" : 1,
       "bytes" : 1,
       "flags" : {
@@ -949,6 +968,7 @@
     {
       "name" : "sub a, [hl]",
       "description" : "`a` = `a` - [`hl`]",
+      "optionalA" : true,
       "cycles" : 2,
       "bytes" : 1,
       "flags" : {
@@ -961,6 +981,7 @@
     {
       "name" : "sub a, n8",
       "description" : "`a` = `a` - n8",
+      "optionalA" : true,
       "cycles" : 2,
       "bytes" : 2,
       "flags" : {
@@ -997,6 +1018,7 @@
     {
       "name" : "xor a, r8",
       "description" : "`a` = `a` ^ r8",
+      "optionalA" : true,
       "cycles" : 1,
       "bytes" : 1,
       "flags" : {
@@ -1009,6 +1031,7 @@
     {
       "name" : "xor a, [hl]",
       "description" : "`a` = `a` ^ [`hl`]",
+      "optionalA" : true,
       "cycles" : 2,
       "bytes" : 1,
       "flags" : {
@@ -1021,6 +1044,7 @@
     {
       "name" : "xor a, n8",
       "description" : "`a` = `a` ^ n8",
+      "optionalA" : true,
       "cycles" : 2,
       "bytes" : 2,
       "flags" : {

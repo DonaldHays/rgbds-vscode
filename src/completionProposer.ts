@@ -29,7 +29,38 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
         
         for (let index = 0; index < output.length; index++) {
           const entry = output[index];
-          if (entry.aliasHLI) {
+          if (entry.optionalA) {
+            output.splice(index, 1);
+            
+            output.push({
+              "name": entry.name,
+              "description": entry.description,
+              "cycles": entry.cycles,
+              "bytes": entry.bytes,
+              "flags": {
+                "z": entry.flags.z || "",
+                "n": entry.flags.n || "",
+                "h": entry.flags.h || "",
+                "c": entry.flags.c || ""
+              }
+            });
+            
+            output.push({
+              "name": entry.name.replace("a, ", ""),
+              "description": entry.description,
+              "cycles": entry.cycles,
+              "bytes": entry.bytes,
+              "flags": {
+                "z": entry.flags.z || "",
+                "n": entry.flags.n || "",
+                "h": entry.flags.h || "",
+                "c": entry.flags.c || ""
+              }
+            });
+            
+            needsToLoop = true;
+            break;
+          } else if (entry.aliasHLI) {
             output.splice(index, 1);
             
             hliValues.forEach((hli) => {
