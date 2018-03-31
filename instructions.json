@@ -480,7 +480,21 @@
       "flags" : {}
     },
     {
+      "name" : "ld [hli], a",
+      "description" : "[`hl`] = `a`, `hl` += 1",
+      "cycles" : 2,
+      "bytes" : 1,
+      "flags" : {}
+    },
+    {
       "name" : "ld [hl-], a",
+      "description" : "[`hl`] = `a`, `hl` -= 1",
+      "cycles" : 2,
+      "bytes" : 1,
+      "flags" : {}
+    },
+    {
+      "name" : "ld [hld], a",
       "description" : "[`hl`] = `a`, `hl` -= 1",
       "cycles" : 2,
       "bytes" : 1,
@@ -494,7 +508,21 @@
       "flags" : {}
     },
     {
+      "name" : "ld a, [hli]",
+      "description" : "`a` = [`hl`], `hl` += 1",
+      "cycles" : 2,
+      "bytes" : 1,
+      "flags" : {}
+    },
+    {
       "name" : "ld a, [hl-]",
+      "description" : "`a` = [`hl`], `hl` -= 1",
+      "cycles" : 2,
+      "bytes" : 1,
+      "flags" : {}
+    },
+    {
+      "name" : "ld a, [hld]",
       "description" : "`a` = [`hl`], `hl` -= 1",
       "cycles" : 2,
       "bytes" : 1,
