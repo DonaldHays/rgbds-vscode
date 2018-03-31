@@ -3,6 +3,10 @@ All notable changes to the "rgbds-z80" extension will be documented in this file
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.3.1] - 2018-03-31
+### Added
+- Added support for additional instruction aliases in Intellisense.
+
 ## [1.3.0] - 2018-03-29
 ### Changed
 - Improved Intellisense support for instructions.
