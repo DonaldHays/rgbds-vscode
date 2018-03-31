@@ -18,6 +18,8 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
     
     const r8Values = ["a", "b", "c", "d", "e", "h", "l"];
     const r16Values = ["bc", "de", "hl"];
+    const hliValues = ["hl+", "hli"];
+    const hldValues = ["hl-", "hld"];
     
     instructions.forEach((instructionJSON: any) => {
       const output: any[] = [instructionJSON];
@@ -27,7 +29,51 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
         
         for (let index = 0; index < output.length; index++) {
           const entry = output[index];
-          if (entry.name.indexOf("r8") != -1) {
+          if (entry.aliasHLI) {
+            output.splice(index, 1);
+            
+            hliValues.forEach((hli) => {
+              const newOutput = {
+                "name": entry.name.replace("hl+", hli),
+                "description": entry.description,
+                "cycles": entry.cycles,
+                "bytes": entry.bytes,
+                "flags": {
+                  "z": entry.flags.z || "",
+                  "n": entry.flags.n || "",
+                  "h": entry.flags.h || "",
+                  "c": entry.flags.c || ""
+                }
+              };
+              
+              output.push(newOutput);
+            });
+            
+            needsToLoop = true;
+            break;
+          } else if (entry.aliasHLD) {
+            output.splice(index, 1);
+            
+            hldValues.forEach((hld) => {
+              const newOutput = {
+                "name" : entry.name.replace("hl-", hld),
+                "description" : entry.description,
+                "cycles" : entry.cycles,
+                "bytes" : entry.bytes,
+                "flags" : {
+                  "z" : entry.flags.z || "",
+                  "n" : entry.flags.n || "",
+                  "h" : entry.flags.h || "",
+                  "c" : entry.flags.c || ""
+                }
+              };
+              
+              output.push(newOutput);
+            });
+            
+            needsToLoop = true;
+            break;
+          } else if (entry.name.indexOf("r8") != -1) {
             output.splice(index, 1);
             
             r8Values.forEach((r8) => {
