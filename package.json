@@ -17,6 +17,7 @@
         "game boy",
         "gameboy"
     ],
+    "icon": "icon.png",
     "activationEvents": [
         "onLanguage:gbz80"
     ],
