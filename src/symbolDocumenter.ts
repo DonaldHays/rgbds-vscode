@@ -26,6 +26,12 @@ class FileTable {
   }
 }
 
+enum SearchMode {
+  globals,
+  includes,
+  parents
+}
+
 export class ASMSymbolDocumenter {
   files: { [name: string]: FileTable };
   constructor() {
@@ -80,7 +86,8 @@ export class ASMSymbolDocumenter {
         }
         
         if (table.includedFiles.indexOf(fsPath) != -1) {
-          this._seekSymbols(filename, output, searched, false, true);
+          this._seekSymbols(filename, output, searched, SearchMode.includes);
+          this._seekSymbols(filename, output, searched, SearchMode.parents);
         }
       }
     }
@@ -91,10 +98,9 @@ export class ASMSymbolDocumenter {
    * @param fsPath The path of the file to seek in.
    * @param output The collection of discovered symbols.
    * @param searched Paths of files that have already been searched.
-   * @param onlyExported If true, only outputs exported symbols.
-   * @param searchIncludes If true, also searches file includes.
+   * @param mode What sort of files and symbols to seek through.
    */
-  private _seekSymbols(fsPath: string, output: { [name: string]: SymbolDescriptor }, searched: string[], onlyExported: boolean, searchIncludes: boolean) {
+  private _seekSymbols(fsPath: string, output: { [name: string]: SymbolDescriptor }, searched: string[], mode: SearchMode) {
     const table = this.files[fsPath];
     
     if (table == undefined) {
@@ -107,22 +113,24 @@ export class ASMSymbolDocumenter {
       if (table.symbols.hasOwnProperty(name)) {
         const symbol = table.symbols[name];
         if (!(name in output)) {
-          if ((onlyExported == false) || symbol.isExported) {
+          if ((mode != SearchMode.globals) || symbol.isExported) {
             output[name] = symbol;
           }
         }
       }
     }
     
-    if (searchIncludes) {
+    if (mode == SearchMode.includes) {
       table.includedFiles.forEach((includeFilename) => {
         if (searched.indexOf(includeFilename) == -1) {
           searched.push(includeFilename);
           
-          this._seekSymbols(includeFilename, output, searched, onlyExported, searchIncludes);
+          this._seekSymbols(includeFilename, output, searched, SearchMode.includes);
         }
       });
-      
+    }
+    
+    if (mode == SearchMode.parents) {
       this._seekSymbolsUp(fsPath, output, searched);
     }
   }
@@ -137,13 +145,16 @@ export class ASMSymbolDocumenter {
     // First, find all exported symbols in the entire workspace
     for (const filename in this.files) {
       if (this.files.hasOwnProperty(filename)) {
-        this._seekSymbols(filename, output, [], true, false);
+        this._seekSymbols(filename, output, [], SearchMode.globals);
       }
     }
     
     // Next, grab all symbols for this file and included files
     const searchedIncludes: string[] = []
-    this._seekSymbols(context.uri.fsPath, output, searchedIncludes, false, true);
+    this._seekSymbols(context.uri.fsPath, output, searchedIncludes, SearchMode.includes);
+    
+    // Finally, grab files that include this file
+    this._seekSymbols(context.uri.fsPath, output, searchedIncludes, SearchMode.parents);
     
     return output;
   }
