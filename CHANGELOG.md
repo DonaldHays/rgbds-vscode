@@ -3,6 +3,10 @@ All notable changes to the "rgbds-z80" extension will be documented in this file
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.3.3]
+### Fixed
+- Fixed highlighting `repeat` instead of `rept`.
+
 ## [1.3.2] - 2018-04-01
 ### Fixed
 - Removed some false positive cases that could result in out-of-scope symbol declarations appearing in Intellisense.
