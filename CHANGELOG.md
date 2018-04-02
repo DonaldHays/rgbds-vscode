@@ -7,6 +7,9 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Fixed
 - Removed some false positive cases that could result in out-of-scope symbol declarations appearing in Intellisense.
 
+### Added
+- Added a snippet for repeat blocks.
+
 ## [1.3.1] - 2018-03-31
 ### Added
 - Added support for additional instruction aliases in Intellisense.
