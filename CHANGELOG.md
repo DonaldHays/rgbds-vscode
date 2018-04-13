@@ -3,7 +3,11 @@ All notable changes to the "rgbds-z80" extension will be documented in this file
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
-## [1.3.3]
+## [1.3.4] - 2018-04-12
+### Added
+- `rom0`, `romx`, `vram`, `sram`, `wram0`, `wramx`, `oam`, `hram`, `bank`, and `align` are now recognized as keywords.
+
+## [1.3.3] - 2018-04-02
 ### Fixed
 - Fixed highlighting `repeat` instead of `rept`.
 
