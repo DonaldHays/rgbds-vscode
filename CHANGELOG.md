@@ -3,6 +3,10 @@ All notable changes to the "rgbds-z80" extension will be documented in this file
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.4.0] - 2018-04-13
+### Added
+- Added the ability to see all symbol declarations within a file (`Cmd+Shift+O` or `Ctrl+Shift+O`) or the entire workspace (`Cmd+T` or `Ctrl+T`).
+
 ## [1.3.4] - 2018-04-12
 ### Added
 - `rom0`, `romx`, `vram`, `sram`, `wram0`, `wramx`, `oam`, `hram`, `bank`, and `align` are now recognized as keywords.

@@ -226,7 +226,11 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
     for (const name in symbols) {
       if (symbols.hasOwnProperty(name)) {
         const symbol = symbols[name];
-        const item = new vscode.CompletionItem(name, vscode.CompletionItemKind.Constant);
+        let kind = vscode.CompletionItemKind.Constant;
+        if (symbol.kind == vscode.SymbolKind.Function) {
+          kind = vscode.CompletionItemKind.Function;
+        }
+        const item = new vscode.CompletionItem(name, kind);
         item.documentation = new vscode.MarkdownString(symbol.documentation);
         output.push(item);
       }

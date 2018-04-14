@@ -13,7 +13,7 @@ const instructionRegex = /^(adc|add|and|bit|call|ccf|cp|cpl|daa|dec|di|ei|halt|i
 const keywordRegex = /^(section|pops|pushs|equ|set|equs|macro|endm|shift|rsset|rsreset|rb|rw|rl|export|global|purge|db|dw|dl|ds|incbin|include|union|nextu|endu|printt|printv|printi|printf|rept|endr|fail|warn|if|elif|else|endc|opt|popo|pusho|rom0|romx|vram|sram|wram0|wramx|oam|hram|bank|align)$/i
 
 class SymbolDescriptor {
-  constructor(public location: vscode.Location, public isExported: boolean, public documentation?: string) { }
+  constructor(public location: vscode.Location, public isExported: boolean, public kind: vscode.SymbolKind, public documentation?: string) { }
 }
 
 class FileTable {
@@ -206,6 +206,8 @@ export class ASMSymbolDocumenter {
             continue;
           }
           
+          const isFunction = declaration.indexOf(":") != -1;
+          
           const name = declaration.replace(/:+/, "");
           const location = new vscode.Location(document.uri, line.range.start);
           let isExported = false;
@@ -230,7 +232,7 @@ export class ASMSymbolDocumenter {
             documentation = commentBuffer.join("\n");
           }
           
-          table.symbols[name] = new SymbolDescriptor(location, isExported, documentation);
+          table.symbols[name] = new SymbolDescriptor(location, isExported, isFunction ? vscode.SymbolKind.Function : vscode.SymbolKind.Constant, documentation);
         }
         
         commentBuffer = [];
