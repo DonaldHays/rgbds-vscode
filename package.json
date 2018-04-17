@@ -2,7 +2,7 @@
     "name": "rgbds-z80",
     "displayName": "RGBDS Z80",
     "description": "Language service for RGBDS GB Z80.",
-    "version": "1.4.0",
+    "version": "1.4.1",
     "publisher": "donaldhays",
     "engines": {
         "vscode": "^1.20.0"
@@ -51,7 +51,8 @@
                 "extensions": [
                     ".asm",
                     ".z80",
-                    ".inc"
+                    ".inc",
+                    ".s"
                 ],
                 "aliases": [
                     "GBZ80",
