@@ -10,7 +10,7 @@ const spacerRegex = /^(.)\1{3,}$/
 const labelDefinitionRegex = /^([a-zA-Z_][a-zA-Z_0-9]*[:]{0,2}).*$/
 const defineExpressionRegex = /^[\s]*[a-zA-Z_][a-zA-Z_0-9]*[\s]+(equ|equs|set)[\s]+.*$/i
 const instructionRegex = /^(adc|add|and|bit|call|ccf|cp|cpl|daa|dec|di|ei|halt|inc|jp|jr|ld|ldh|nop|or|pop|push|res|ret|reti|rl|rla|rlc|rlca|rr|rra|rrc|rrca|rst|sbc|scf|set|sla|sra|srl|stop|sub|swap|xor)$/i
-const keywordRegex = /^(section|pops|pushs|equ|set|equs|macro|endm|shift|rsset|rsreset|rb|rw|rl|export|global|purge|db|dw|dl|ds|incbin|include|union|nextu|endu|printt|printv|printi|printf|rept|endr|fail|warn|if|elif|else|endc|opt|popo|pusho|rom0|romx|vram|sram|wram0|wramx|oam|hram|bank|align)$/i
+const keywordRegex = /^(section|pops|pushs|equ|set|equs|macro|endm|shift|rsset|rsreset|rb|rw|rl|export|global|purge|db|dw|dl|ds|incbin|include|union|nextu|endu|printt|printv|printi|printf|rept|endr|fail|warn|if|elif|else|endc|opt|popo|pusho|rom0|romx|vram|sram|wram0|wramx|oam|hram|bank|align|acos|asin|atan|atan2|charmap|cos|def|div|high|low|mul|sin|strcat|strcmp|strin|strlen|strlwr|strsub|strupr|tan)$/i
 
 class SymbolDescriptor {
   constructor(public location: vscode.Location, public isExported: boolean, public kind: vscode.SymbolKind, public documentation?: string) { }

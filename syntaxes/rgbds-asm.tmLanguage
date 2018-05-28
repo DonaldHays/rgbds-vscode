@@ -47,7 +47,7 @@
 			<key>name</key>
 			<string>keyword.other.gbz80</string>
 			<key>match</key>
-			<string>\b(?i:section|pops|pushs|equ|set|equs|macro|endm|shift|rsset|rsreset|rb|rw|rl|export|global|purge|db|dw|dl|ds|incbin|include|union|nextu|endu|printt|printv|printi|printf|rept|endr|fail|warn|if|elif|else|endc|opt|popo|pusho|rom0|romx|vram|sram|wram0|wramx|oam|hram|bank|align)\b</string>
+			<string>\b(?i:section|pops|pushs|equ|set|equs|macro|endm|shift|rsset|rsreset|rb|rw|rl|export|global|purge|db|dw|dl|ds|incbin|include|union|nextu|endu|printt|printv|printi|printf|rept|endr|fail|warn|if|elif|else|endc|opt|popo|pusho|rom0|romx|vram|sram|wram0|wramx|oam|hram|bank|align|acos|asin|atan|atan2|charmap|cos|def|div|high|low|mul|sin|strcat|strcmp|strin|strlen|strlwr|strsub|strupr|tan)\b</string>
 		</dict>
 		<dict>
 			<key>name</key>
