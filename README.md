@@ -66,3 +66,7 @@ The `rgbasm` problem matcher is named "rgbdserror". The following is an example 
   "problemMatcher": "$rgbdserror"
 }
 ```
+
+### Include Path Searching
+
+This extension supports Intellisense for symbols declared in included files. By default, it searches for included files relative to the directory of the open file. But you can configure additional directories to search via the `rgbdsz80.includePath` configuration variable. You may assign a string path or an array of string paths to that variable, and all associated directories will be searched in turn to resolve an included file. Configured paths may be either absolute or relative to the _workspace_ directory.
