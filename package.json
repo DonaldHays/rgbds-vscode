@@ -73,6 +73,19 @@
                 "scopeName": "source.asm.gbz80",
                 "path": "./syntaxes/rgbds-asm.tmLanguage"
             }
+        ],
+        "configuration" :[
+            {
+                "type": "object",
+                "title": "RGBDS Z80",
+                "properties": {
+                    "rgbdsz80.includePath": {
+                        "type": ["array", "string"],
+                        "default" : [],
+                        "description": "Specifies folder paths relative to the workspace root to search for include files."
+                    }
+                }
+            }
         ]
     },
     "scripts": {
