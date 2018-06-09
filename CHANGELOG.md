@@ -3,6 +3,10 @@ All notable changes to the "rgbds-z80" extension will be documented in this file
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.5.0] - 2018-06-09
+### Added
+- Support for searching for include files via `rgbdsz80.includePath` configuration variable.
+
 ## [1.4.2] - 2018-05-27
 ### Added
 - `acos`, `asin`, `atan`, `atan2`, `charmap`, `cos`, `def`, `div`, `high`, `low`, `mul`, `sin`, `strcat`, `strcmp`, `strin`, `strlen`, `strlwr`, `strsub`, `strupr`, and `tan` are now recognized as keywords.
