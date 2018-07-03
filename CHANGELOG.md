@@ -3,6 +3,10 @@ All notable changes to the "rgbds-z80" extension will be documented in this file
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.5.1] - 2018-07-03
+### Changed
+- Documentation comment lines that begin with `@` now receive a leading newline.
+
 ## [1.5.0] - 2018-06-09
 ### Added
 - Support for searching for include files via `rgbdsz80.includePath` configuration variable.

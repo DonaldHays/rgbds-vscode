@@ -225,6 +225,16 @@ export class ASMSymbolDocumenter {
     return this.symbols(searchContext)[name];
   }
   
+  private _pushDocumentationLine(line: String, buffer: String[]) {
+    line = line.trim();
+    
+    if (line.indexOf("@") == 0 && buffer.length > 0) {
+      buffer.push("");
+    }
+    
+    buffer.push(line);
+  }
+  
   private _document(document: vscode.TextDocument) {
     const table = new FileTable(document.uri.fsPath);
     this.files[document.uri.fsPath] = table;
@@ -242,7 +252,7 @@ export class ASMSymbolDocumenter {
           continue;
         }
         
-        commentBuffer.push(baseLine);
+        this._pushDocumentationLine(baseLine, commentBuffer);
       } else {
         const includeLineMatch = includeLineRegex.exec(line.text);
         const labelMatch = labelDefinitionRegex.exec(line.text);
@@ -273,7 +283,7 @@ export class ASMSymbolDocumenter {
           
           const endCommentMatch = endCommentRegex.exec(line.text);
           if (endCommentMatch) {
-            commentBuffer.push(endCommentMatch[1].trim());
+            this._pushDocumentationLine(endCommentMatch[1].trim(), commentBuffer);
           }
           
           if (defineExpressionRegex.test(line.text)) {
