@@ -5,7 +5,7 @@
     "version": "1.5.1",
     "publisher": "donaldhays",
     "engines": {
-        "vscode": "^1.20.0"
+        "vscode": "^1.22.0"
     },
     "categories": [
         "Programming Languages"
@@ -74,14 +74,17 @@
                 "path": "./syntaxes/rgbds-asm.tmLanguage"
             }
         ],
-        "configuration" :[
+        "configuration": [
             {
                 "type": "object",
                 "title": "RGBDS Z80",
                 "properties": {
                     "rgbdsz80.includePath": {
-                        "type": ["array", "string"],
-                        "default" : [],
+                        "type": [
+                            "array",
+                            "string"
+                        ],
+                        "default": [],
                         "description": "Specifies folder paths relative to the workspace root to search for include files."
                     }
                 }
@@ -96,10 +99,10 @@
         "test": "npm run compile && node ./node_modules/vscode/bin/test"
     },
     "devDependencies": {
-        "typescript": "^2.8.3",
-        "vscode": "^1.1.14",
-        "@types/node": "^10.0.0",
-        "@types/mocha": "^5.2.0"
+        "typescript": "^2.9.2",
+        "vscode": "^1.1.18",
+        "@types/node": "^10.5.2",
+        "@types/mocha": "^5.2.5"
     },
     "homepage": "https://github.com/DonaldHays/rgbds-vscode",
     "bugs": "https://github.com/DonaldHays/rgbds-vscode/issues",
