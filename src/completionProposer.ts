@@ -4,9 +4,16 @@ import * as vscode from 'vscode';
 import { ASMSymbolDocumenter } from './symbolDocumenter';
 import * as path from 'path';
 import * as fs from 'fs';
+import { syntaxInfo } from './syntaxInfo';
+
+const instructionRegex = new RegExp(`^(${syntaxInfo.instructions.join("|")})\\b`, "i");
+const registerRegex = new RegExp(`\\b(${syntaxInfo.registerCodes.join("|")})\\b`, "gi");
 
 export class ASMCompletionProposer implements vscode.CompletionItemProvider {
   instructionItems: vscode.CompletionItem[];
+  
+  _instructionCasing = "lower";
+  _registerCasing = "lower";
   
   constructor(public symbolDocumenter: ASMSymbolDocumenter) {
     this.instructionItems = [];
@@ -208,10 +215,55 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
   provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken, context: vscode.CompletionContext): vscode.ProviderResult<vscode.CompletionItem[] | vscode.CompletionList> {
     let output: vscode.CompletionItem[] = [];
     
-    const registers: string[] = ["a", "f", "b", "c", "d", "e", "h", "l", "af", "bc", "de", "hl", "sp"];
-    registers.forEach((register) => {
-      output.push(new vscode.CompletionItem(register, vscode.CompletionItemKind.Variable));
-    });
+    if (vscode.workspace.getConfiguration().get("rgbdsz80.formatting.instructions") == "upper") {
+      if (this._instructionCasing == "lower") {
+        this._instructionCasing = "upper";
+        this.instructionItems.forEach((item) => {
+          item.label = item.label.replace(instructionRegex, (instruction) => {
+            return instruction.toUpperCase();
+          });
+        });
+      }
+    } else {
+      if (this._instructionCasing == "upper") {
+        this._instructionCasing = "lower";
+        this.instructionItems.forEach((item) => {
+          item.label = item.label.replace(instructionRegex, (instruction) => {
+            return instruction.toLowerCase();
+          });
+        });
+      }
+    }
+    
+    if (vscode.workspace.getConfiguration().get("rgbdsz80.formatting.registers") == "upper") {
+      if (this._registerCasing == "lower") {
+        this._registerCasing = "upper";
+        this.instructionItems.forEach((item) => {
+          item.label = item.label.replace(registerRegex, (instruction) => {
+            return instruction.toUpperCase();
+          });
+        });
+      }
+      
+      const registers: string[] = ["A", "F", "B", "C", "D", "E", "H", "L", "AF", "BC", "DE", "HL", "SP"];
+      registers.forEach((register) => {
+        output.push(new vscode.CompletionItem(register, vscode.CompletionItemKind.Variable));
+      });
+    } else {
+      if (this._registerCasing == "upper") {
+        this._registerCasing = "lower";
+        this.instructionItems.forEach((item) => {
+          item.label = item.label.replace(registerRegex, (instruction) => {
+            return instruction.toLowerCase();
+          });
+        });
+      }
+      
+      const registers: string[] = ["a", "f", "b", "c", "d", "e", "h", "l", "af", "bc", "de", "hl", "sp"];
+      registers.forEach((register) => {
+        output.push(new vscode.CompletionItem(register, vscode.CompletionItemKind.Variable));
+      });
+    }
     
     const keywords: string[] = ["macro", "endm"];
     keywords.forEach((keyword) => {

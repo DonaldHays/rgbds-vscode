@@ -80,12 +80,23 @@
                 "title": "RGBDS Z80",
                 "properties": {
                     "rgbdsz80.includePath": {
+                        "description": "Specifies folder paths relative to the workspace root to search for include files.",
                         "type": [
                             "array",
                             "string"
                         ],
-                        "default": [],
-                        "description": "Specifies folder paths relative to the workspace root to search for include files."
+                        "default": []
+                    },
+                    "rgbdsz80.formatting.capitalization": {
+                        "description": "How to capitalize parts of the language.",
+                        "type":"object",
+                        "patternProperties": {
+                            "^.*$": {
+                                "type" : ["string", "null"],
+                                "enum": ["upper","lower",null]
+                            }
+                        },
+                        "default": {}
                     }
                 }
             }
@@ -97,6 +108,9 @@
         "watch": "tsc -watch -p ./",
         "postinstall": "node ./node_modules/vscode/bin/install",
         "test": "npm run compile && node ./node_modules/vscode/bin/test"
+    },
+    "dependencies": {
+        "xml-js": "^1.6.7"
     },
     "devDependencies": {
         "typescript": "^2.9.2",

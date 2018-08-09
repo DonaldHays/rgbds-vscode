@@ -32,22 +32,52 @@
 			</array>
 		</dict>
 		<dict>
-			<key>name</key>
-			<string>keyword.other.gbz80</string>
 			<key>match</key>
-			<string>\b(?i:adc|add|and|bit|call|ccf|cp|cpl|daa|dec|di|ei|halt|inc|jp|jr|ld|ldh|nop|or|pop|push|res|ret|reti|rl|rla|rlc|rlca|rr|rra|rrc|rrca|rst|sbc|scf|set|sla|sra|srl|stop|sub|swap|xor)\b</string>
+			<string>^\s*((?i:set))\b</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.other.opcode.gbz80</string>
+				</dict>
+			</dict>
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>variable.language.register.gbz80</string>
+			<string>keyword.other.opcode.gbz80</string>
 			<key>match</key>
-			<string>\b(?i:a|f|b|c|d|e|h|l|af|bc|de|hl|sp|pc)\b</string>
+			<string>\b(?i:adc|add|and|bit|call|ccf|cp|cpl|daa|dec|di|ei|halt|inc|jp|jr|ld|ldh|nop|or|pop|push|res|ret|reti|rl|rla|rlc|rlca|rr|rra|rrc|rrca|rst|sbc|scf|sla|sra|srl|stop|sub|swap|xor)\b</string>
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>keyword.other.gbz80</string>
+			<string>variable.language.registercodes.gbz80</string>
 			<key>match</key>
-			<string>\b(?i:section|pops|pushs|equ|set|equs|macro|endm|shift|rsset|rsreset|rb|rw|rl|export|global|purge|db|dw|dl|ds|incbin|include|union|nextu|endu|printt|printv|printi|printf|rept|endr|fail|warn|if|elif|else|endc|opt|popo|pusho|rom0|romx|vram|sram|wram0|wramx|oam|hram|bank|align|acos|asin|atan|atan2|charmap|cos|def|div|high|low|mul|sin|strcat|strcmp|strin|strlen|strlwr|strsub|strupr|tan)\b</string>
+			<string>\b(?i:a|f|b|c|d|e|h|l|af|bc|de|hl|hli|hld|sp|pc|z|nz|nc)\b</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\b((?i:bank))\b(\s*\[)</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.gbz80</string>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>keyword.control.gbz80</string>
+			<key>match</key>
+			<string>\b(?i:include|export|global|union|nextu|endu|printt|printv|printi|printf|fail|warn|if|elif|else|endc|purge|rept|endr|opt|popo|pusho|pops|pushs|equ|set|equs|macro|endm|shift|charmap|rsreset|rb|rw|rl|db|dw|dl|ds|section|rom0|romx|vram|sram|wram0|wramx|oam|hram|align)\b</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>support.function.gbz80</string>
+			<key>match</key>
+			<string>\b(?i:mul|sin|cos|tan|asin|acos|atan|atan2|strcat|strcmp|strin|strlen|strlwr|strsub|strupr|bank|def|high|low)\b</string>
 		</dict>
 		<dict>
 			<key>name</key>
