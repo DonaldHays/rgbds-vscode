@@ -20,7 +20,22 @@ const keywordFunctionRegex = /^(mul|sin|cos|tan|asin|acos|atan|atan2|strcat|strc
 const hexLiteralRegex = /^(\$[0-9a-f]+)\b/i
 
 export class ASMFormatter {
-  private _rule(name: string): string | null {
+  private _case(value: string, output: vscode.TextEdit[], line: vscode.TextLine, offset: number, configuration: string|null|undefined) {
+    if (configuration == "upper") {
+      let newValue = value.toUpperCase();
+      if (value != newValue) {
+        output.push(new vscode.TextEdit(new vscode.Range(line.range.start.translate(0, offset), line.range.start.translate(0, offset + value.length)), newValue));
+      }
+    }
+    else if (configuration == "lower") {
+      let newValue = value.toLowerCase();
+      if (value != newValue) {
+        output.push(new vscode.TextEdit(new vscode.Range(line.range.start.translate(0, offset), line.range.start.translate(0, offset + value.length)), newValue));
+      }
+    }
+  }
+  
+  rule(name: string): string | null {
     name = name.toLowerCase();
     
     let rules: { [key: string]: string|null} = vscode.workspace.getConfiguration().get("rgbdsz80.formatting.capitalization") || {};
@@ -38,21 +53,6 @@ export class ASMFormatter {
     return null;
   }
   
-  private _case(value: string, output: vscode.TextEdit[], line: vscode.TextLine, offset: number, configuration: string|null|undefined) {
-    if (configuration == "upper") {
-      let newValue = value.toUpperCase();
-      if (value != newValue) {
-        output.push(new vscode.TextEdit(new vscode.Range(line.range.start.translate(0, offset), line.range.start.translate(0, offset + value.length)), newValue));
-      }
-    }
-    else if (configuration == "lower") {
-      let newValue = value.toLowerCase();
-      if (value != newValue) {
-        output.push(new vscode.TextEdit(new vscode.Range(line.range.start.translate(0, offset), line.range.start.translate(0, offset + value.length)), newValue));
-      }
-    }
-  }
-  
   format(document: vscode.TextDocument, range: vscode.Range, options: vscode.FormattingOptions): vscode.ProviderResult<vscode.TextEdit[]> {
     let startLineNumber = document.lineAt(range.start).lineNumber;
     let endLineNumber = document.lineAt(range.end).lineNumber;
@@ -67,9 +67,9 @@ export class ASMFormatter {
       let result: (RegExpExecArray | null) = null;
       
       if (result = instructionSetRegex.exec(text)) {
-        this._case(result[2], output, line, result[1].length, this._rule(`language.instruction.${result[2]}`));
+        this._case(result[2], output, line, result[1].length, this.rule(`language.instruction.${result[2]}`));
       } else if (result = setExpressionRegex.exec(text)) {
-        this._case(result[2], output, line, result[1].length, this._rule(`language.keyword.preprocessor.${result[2]}`));
+        this._case(result[2], output, line, result[1].length, this.rule(`language.keyword.preprocessor.${result[2]}`));
       }
       
       while (text.length > 0) {
@@ -78,44 +78,44 @@ export class ASMFormatter {
           text = text.substr(result[0].length);
           offset += result[0].length;
         } else if (result = cConditionCodeRegex.exec(text)) {
-          this._case(result[1], output, line, offset, this._rule(`language.instruction.${result[1]}`));
-          this._case(result[3], output, line, offset + result[1].length + result[2].length, this._rule(`language.conditioncode.${result[3]}`));
+          this._case(result[1], output, line, offset, this.rule(`language.instruction.${result[1]}`));
+          this._case(result[3], output, line, offset + result[1].length + result[2].length, this.rule(`language.conditioncode.${result[3]}`));
           text = text.substr(result[0].length);
           offset += result[0].length;
         } else if (result = instructionRegex.exec(text)) {
-          this._case(result[0], output, line, offset, this._rule(`language.instruction.${result[0]}`));
+          this._case(result[0], output, line, offset, this.rule(`language.instruction.${result[0]}`));
           text = text.substr(result[0].length);
           offset += result[0].length;
         } else if (result = keywordPreprocessorRegex.exec(text)) {
-          this._case(result[0], output, line, offset, this._rule(`language.keyword.preprocessor.${result[0]}`));
+          this._case(result[0], output, line, offset, this.rule(`language.keyword.preprocessor.${result[0]}`));
           text = text.substr(result[0].length);
           offset += result[0].length;
         } else if (result = keywordDataDirectiveRegex.exec(text)) {
-          this._case(result[0], output, line, offset, this._rule(`language.keyword.datadirective.${result[0]}`));
+          this._case(result[0], output, line, offset, this.rule(`language.keyword.datadirective.${result[0]}`));
           text = text.substr(result[0].length);
           offset += result[0].length;
         } else if (result = keywordSectionDeclarationRegex.exec(text)) {
-          this._case(result[0], output, line, offset, this._rule(`language.keyword.sectiondeclaration.${result[0]}`));
+          this._case(result[0], output, line, offset, this.rule(`language.keyword.sectiondeclaration.${result[0]}`));
           text = text.substr(result[0].length);
           offset += result[0].length;
         } else if (result = keywordSectionDeclarationBankRegex.exec(text)) {
-          this._case(result[0], output, line, offset, this._rule(`language.keyword.sectiondeclaration.${result[0]}`));
+          this._case(result[0], output, line, offset, this.rule(`language.keyword.sectiondeclaration.${result[0]}`));
           text = text.substr(result[0].length);
           offset += result[0].length;
         } else if (result = keywordFunctionRegex.exec(text)) {
-          this._case(result[0], output, line, offset, this._rule(`language.keyword.function.${result[0]}`));
+          this._case(result[0], output, line, offset, this.rule(`language.keyword.function.${result[0]}`));
           text = text.substr(result[0].length);
           offset += result[0].length;
         } else if (result = registerRegex.exec(text)) {
-          this._case(result[0], output, line, offset, this._rule(`language.register.${result[0]}`));
+          this._case(result[0], output, line, offset, this.rule(`language.register.${result[0]}`));
           text = text.substr(result[0].length);
           offset += result[0].length;
         } else if (result = conditionCodeRegex.exec(text)) {
-          this._case(result[0], output, line, offset, this._rule(`language.conditioncode.${result[0]}`));
+          this._case(result[0], output, line, offset, this.rule(`language.conditioncode.${result[0]}`));
           text = text.substr(result[0].length);
           offset += result[0].length;
         } else if (result = hexLiteralRegex.exec(text)) {
-          this._case(result[0], output, line, offset, this._rule(`language.hex.${result[0]}`));
+          this._case(result[0], output, line, offset, this.rule(`language.hex`));
           text = text.substr(result[0].length);
           offset += result[0].length;
         } else if (result = identifierRegex.exec(text)) {

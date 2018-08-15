@@ -4,41 +4,39 @@ import * as vscode from 'vscode';
 import { ASMSymbolDocumenter } from './symbolDocumenter';
 import * as path from 'path';
 import * as fs from 'fs';
-import { syntaxInfo } from './syntaxInfo';
+import { ASMFormatter } from './formatter';
 
-const instructionRegex = new RegExp(`^(${syntaxInfo.instructions.join("|")})\\b`, "i");
-const registerRegex = new RegExp(`\\b(${syntaxInfo.registerCodes.join("|")})\\b`, "gi");
+const registerRegex = /\b\[?(a|f|b|c|d|e|h|l|af|bc|de|hl|hli|hld|sp|pc)\]?\b/i
+const itemSplitRegex = /,? /
+const hexRegex = /(\$[0-9a-f]+)/i
 
 export class ASMCompletionProposer implements vscode.CompletionItemProvider {
   instructionItems: vscode.CompletionItem[];
-  
-  _instructionCasing = "lower";
-  _registerCasing = "lower";
-  
-  constructor(public symbolDocumenter: ASMSymbolDocumenter) {
+
+  constructor(public symbolDocumenter: ASMSymbolDocumenter, public formatter: ASMFormatter) {
     this.instructionItems = [];
-    
+
     const extension = vscode.extensions.getExtension("donaldhays.rgbds-z80")!;
     const instructionsJSONPath = path.join(extension.extensionPath, "instructions.json");
     const instructionsJSON = JSON.parse(fs.readFileSync(instructionsJSONPath, "utf8"));
     const instructions = instructionsJSON["instructions"];
-    
+
     const r8Values = ["a", "b", "c", "d", "e", "h", "l"];
     const r16Values = ["bc", "de", "hl"];
     const hliValues = ["hl+", "hli"];
     const hldValues = ["hl-", "hld"];
-    
+
     instructions.forEach((instructionJSON: any) => {
       const output: any[] = [instructionJSON];
       var needsToLoop = true;
       while (needsToLoop) {
         needsToLoop = false;
-        
+
         for (let index = 0; index < output.length; index++) {
           const entry = output[index];
           if (entry.optionalA) {
             output.splice(index, 1);
-            
+
             output.push({
               "name": entry.name,
               "description": entry.description,
@@ -51,7 +49,7 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
                 "c": entry.flags.c || ""
               }
             });
-            
+
             output.push({
               "name": entry.name.replace("a, ", ""),
               "description": entry.description,
@@ -64,12 +62,12 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
                 "c": entry.flags.c || ""
               }
             });
-            
+
             needsToLoop = true;
             break;
           } else if (entry.aliasHLI) {
             output.splice(index, 1);
-            
+
             hliValues.forEach((hli) => {
               const newOutput = {
                 "name": entry.name.replace("hl+", hli),
@@ -83,82 +81,82 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
                   "c": entry.flags.c || ""
                 }
               };
-              
+
               output.push(newOutput);
             });
-            
+
             needsToLoop = true;
             break;
           } else if (entry.aliasHLD) {
             output.splice(index, 1);
-            
+
             hldValues.forEach((hld) => {
               const newOutput = {
-                "name" : entry.name.replace("hl-", hld),
-                "description" : entry.description,
-                "cycles" : entry.cycles,
-                "bytes" : entry.bytes,
-                "flags" : {
-                  "z" : entry.flags.z || "",
-                  "n" : entry.flags.n || "",
-                  "h" : entry.flags.h || "",
-                  "c" : entry.flags.c || ""
+                "name": entry.name.replace("hl-", hld),
+                "description": entry.description,
+                "cycles": entry.cycles,
+                "bytes": entry.bytes,
+                "flags": {
+                  "z": entry.flags.z || "",
+                  "n": entry.flags.n || "",
+                  "h": entry.flags.h || "",
+                  "c": entry.flags.c || ""
                 }
               };
-              
+
               output.push(newOutput);
             });
-            
+
             needsToLoop = true;
             break;
           } else if (entry.name.indexOf("r8") != -1) {
             output.splice(index, 1);
-            
+
             r8Values.forEach((r8) => {
               const newOutput = {
-                "name" : entry.name.replace("r8", r8),
-                "description" : entry.description.replace("r8", `\`${r8}\``),
-                "cycles" : entry.cycles,
-                "bytes" : entry.bytes,
-                "flags" : {
-                  "z" : (entry.flags.z || "").replace("r8", `\`${r8}\``),
-                  "n" : (entry.flags.n || "").replace("r8", `\`${r8}\``),
-                  "h" : (entry.flags.h || "").replace("r8", `\`${r8}\``),
-                  "c" : (entry.flags.c || "").replace("r8", `\`${r8}\``),
+                "name": entry.name.replace("r8", r8),
+                "description": entry.description.replace("r8", `\`${r8}\``),
+                "cycles": entry.cycles,
+                "bytes": entry.bytes,
+                "flags": {
+                  "z": (entry.flags.z || "").replace("r8", `\`${r8}\``),
+                  "n": (entry.flags.n || "").replace("r8", `\`${r8}\``),
+                  "h": (entry.flags.h || "").replace("r8", `\`${r8}\``),
+                  "c": (entry.flags.c || "").replace("r8", `\`${r8}\``),
                 }
               };
-              
+
               output.push(newOutput);
             });
-            
+
             needsToLoop = true;
             break;
           } else if (entry.name.indexOf("r16") != -1) {
             output.splice(index, 1);
-            
+
             r16Values.forEach((r16) => {
               const newOutput = {
-                "name" : entry.name.replace("r16", r16),
-                "description" : entry.description.replace("r16", `\`${r16}\``),
-                "cycles" : entry.cycles,
-                "bytes" : entry.bytes,
-                "flags" : {
-                  "z" : (entry.flags.z || "").replace("r16", `\`${r16}\``),
-                  "n" : (entry.flags.n || "").replace("r16", `\`${r16}\``),
-                  "h" : (entry.flags.h || "").replace("r16", `\`${r16}\``),
-                  "c" : (entry.flags.c || "").replace("r16", `\`${r16}\``),
+                "name": entry.name.replace("r16", r16),
+                "description": entry.description.replace("r16", `\`${r16}\``),
+                "cycles": entry.cycles,
+                "bytes": entry.bytes,
+                "flags": {
+                  "z": (entry.flags.z || "").replace("r16", `\`${r16}\``),
+                  "n": (entry.flags.n || "").replace("r16", `\`${r16}\``),
+                  "h": (entry.flags.h || "").replace("r16", `\`${r16}\``),
+                  "c": (entry.flags.c || "").replace("r16", `\`${r16}\``),
                 }
               };
-              
+
               output.push(newOutput);
             });
-            
+
             needsToLoop = true;
             break;
           }
         }
       }
-      
+
       output.forEach((element) => {
         const item = new vscode.CompletionItem(element.name, vscode.CompletionItemKind.Snippet);
         // const nameLine = `\`${element.name}\``;
@@ -186,94 +184,101 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
           });
         }
         item.documentation = new vscode.MarkdownString(lines.join("  \n"));
-        
+
         let insertText: string = element.name;
         let tabIndex = 1;
-        
+
         insertText = insertText.replace("$", "\\$");
-        
+
         insertText = insertText.replace(/\b(n8|n16|e8|u3|cc|vec)\b/g, (substring: string) => {
           return `\${${tabIndex++}:${substring}}`;
         });
-        
+
         // If there's only one completion item, set index to 0 for a better
         // experience.
         if (tabIndex == 2) {
           insertText = insertText.replace("${1:", "${0:");
         }
-        
+
         if (insertText != element.name) {
           // console.log(insertText);
           item.insertText = new vscode.SnippetString(insertText);
         }
-        
+
         this.instructionItems.push(item);
       });
     });
   }
-  
+
+  _formatSnippet(snippet: string) {
+    let components = snippet.split(itemSplitRegex);
+    let instructionRule = this.formatter.rule(`language.instruction.${components[0].toLowerCase()}`);
+    if (instructionRule == "upper") {
+      components[0] = components[0].toUpperCase();
+    } else {
+      components[0] = components[0].toLowerCase();
+    }
+    
+    for (let componentIndex = 1; componentIndex < components.length; componentIndex++) {
+      let match = null;
+
+      if (match = registerRegex.exec(components[componentIndex])) {
+        let instructionRule = this.formatter.rule(`language.keyword.register.${components[componentIndex].toLowerCase()}`);
+
+        if (instructionRule == "upper") {
+          components[componentIndex] = components[componentIndex].replace(registerRegex, match[1].toUpperCase());
+        } else {
+          components[componentIndex] = components[componentIndex].replace(registerRegex, match[1].toLowerCase());
+        }
+      }
+
+      if (match = hexRegex.exec(components[componentIndex])) {
+        let hexRule = this.formatter.rule(`language.hex`);
+
+        if (hexRule == "upper") {
+          components[componentIndex] = components[componentIndex].replace(hexRegex, match[1].toUpperCase());
+        } else {
+          components[componentIndex] = components[componentIndex].replace(hexRegex, match[1].toLowerCase());
+        }
+      }
+    }
+
+    if (components.length > 0) {
+      let head = components.splice(0, 1);
+      return `${head} ${components.join(", ")}`;
+    } else {
+      return components[0];
+    }
+  }
+
   provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken, context: vscode.CompletionContext): vscode.ProviderResult<vscode.CompletionItem[] | vscode.CompletionList> {
     let output: vscode.CompletionItem[] = [];
-    
-    if (vscode.workspace.getConfiguration().get("rgbdsz80.formatting.instructions") == "upper") {
-      if (this._instructionCasing == "lower") {
-        this._instructionCasing = "upper";
-        this.instructionItems.forEach((item) => {
-          item.label = item.label.replace(instructionRegex, (instruction) => {
-            return instruction.toUpperCase();
-          });
-        });
+
+    this.instructionItems.forEach((item) => {
+      item.label = this._formatSnippet(item.label);
+      if (item.insertText != undefined) {
+        if (typeof item.insertText == "string") {
+          item.insertText = this._formatSnippet(item.insertText);
+        } else {
+          item.insertText.value = this._formatSnippet(item.insertText.value);
+        }
       }
-    } else {
-      if (this._instructionCasing == "upper") {
-        this._instructionCasing = "lower";
-        this.instructionItems.forEach((item) => {
-          item.label = item.label.replace(instructionRegex, (instruction) => {
-            return instruction.toLowerCase();
-          });
-        });
-      }
-    }
-    
-    if (vscode.workspace.getConfiguration().get("rgbdsz80.formatting.registers") == "upper") {
-      if (this._registerCasing == "lower") {
-        this._registerCasing = "upper";
-        this.instructionItems.forEach((item) => {
-          item.label = item.label.replace(registerRegex, (instruction) => {
-            return instruction.toUpperCase();
-          });
-        });
-      }
-      
-      const registers: string[] = ["A", "F", "B", "C", "D", "E", "H", "L", "AF", "BC", "DE", "HL", "SP"];
-      registers.forEach((register) => {
-        output.push(new vscode.CompletionItem(register, vscode.CompletionItemKind.Variable));
-      });
-    } else {
-      if (this._registerCasing == "upper") {
-        this._registerCasing = "lower";
-        this.instructionItems.forEach((item) => {
-          item.label = item.label.replace(registerRegex, (instruction) => {
-            return instruction.toLowerCase();
-          });
-        });
-      }
-      
-      const registers: string[] = ["a", "f", "b", "c", "d", "e", "h", "l", "af", "bc", "de", "hl", "sp"];
-      registers.forEach((register) => {
-        output.push(new vscode.CompletionItem(register, vscode.CompletionItemKind.Variable));
-      });
-    }
-    
+    });
+
+    const registers: string[] = ["a", "f", "b", "c", "d", "e", "h", "l", "af", "bc", "de", "hl", "sp"];
+    registers.forEach((register) => {
+      output.push(new vscode.CompletionItem(register, vscode.CompletionItemKind.Variable));
+    });
+
     const keywords: string[] = ["macro", "endm"];
     keywords.forEach((keyword) => {
       output.push(new vscode.CompletionItem(keyword, vscode.CompletionItemKind.Keyword));
     });
-    
+
     this.instructionItems.forEach((item) => {
       output.push(item);
     });
-    
+
     const symbols = this.symbolDocumenter.symbols(document);
     for (const name in symbols) {
       if (symbols.hasOwnProperty(name)) {
@@ -287,7 +292,7 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
         output.push(item);
       }
     }
-    
+
     return output;
   }
 }
