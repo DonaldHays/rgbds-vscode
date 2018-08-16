@@ -218,7 +218,7 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
     } else {
       components[0] = components[0].toLowerCase();
     }
-    
+
     for (let componentIndex = 1; componentIndex < components.length; componentIndex++) {
       let match = null;
 
@@ -265,14 +265,25 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
       }
     });
 
-    const registers: string[] = ["a", "f", "b", "c", "d", "e", "h", "l", "af", "bc", "de", "hl", "sp"];
-    registers.forEach((register) => {
-      output.push(new vscode.CompletionItem(register, vscode.CompletionItemKind.Variable));
-    });
+    const ruleCollections = [
+      { "rule": "language.register", "kind": vscode.CompletionItemKind.Variable, "items": ["a", "f", "b", "c", "d", "e", "h", "l", "af", "bc", "de", "hl", "hli", "hld", "pc", "sp"] },
+      { "rule": "language.conditioncode", "kind": vscode.CompletionItemKind.Value, "items": ["c", "nc", "z", "nz"] },
+      { "rule": "language.keyword.preprocessor", "kind": vscode.CompletionItemKind.Keyword, "items": ["include", "export", "global", "union", "nextu", "endu", "printt", "printv", "printi", "printf", "fail", "warn", "if", "elif", "else", "endc", "purge", "rept", "endr", "opt", "popo", "pusho", "pops", "pushs", "equ", "equs", "macro", "endm", "shift", "charmap", "set"] },
+      { "rule": "language.keyword.datadirective", "kind": vscode.CompletionItemKind.Keyword, "items": ["rsreset", "rb", "rw", "rl", "db", "dw", "dl", "ds"] },
+      { "rule": "language.keyword.sectiondeclaration", "kind": vscode.CompletionItemKind.Keyword, "items": ["section", "rom0", "romx", "vram", "sram", "wram0", "wramx", "oam", "hram", "align", "bank"] },
+      { "rule": "language.keyword.function", "kind": vscode.CompletionItemKind.Function, "items": ["mul", "sin", "cos", "tan", "asin", "acos", "atan", "atan2", "strcat", "strcmp", "strin", "strlen", "strlwr", "strsub", "strupr", "bank", "def", "high", "low"] },
+    ]
 
-    const keywords: string[] = ["macro", "endm"];
-    keywords.forEach((keyword) => {
-      output.push(new vscode.CompletionItem(keyword, vscode.CompletionItemKind.Keyword));
+    ruleCollections.forEach((collection) => {
+      collection.items.forEach((item) => {
+        let rule = this.formatter.rule(`${collection.rule}.${item}`);
+
+        if (rule == "upper") {
+          output.push(new vscode.CompletionItem(item.toUpperCase(), collection.kind));
+        } else {
+          output.push(new vscode.CompletionItem(item, collection.kind));
+        }
+      })
     });
 
     this.instructionItems.forEach((item) => {
