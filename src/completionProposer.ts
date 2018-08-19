@@ -10,6 +10,9 @@ const registerRegex = /\b\[?(a|f|b|c|d|e|h|l|af|bc|de|hl|hli|hld|sp|pc)\]?\b/i
 const itemSplitRegex = /,? /
 const hexRegex = /(\$[0-9a-f]+)/i
 
+const firstWordRegex = /^(?:[\w\.]+[:]{0,2})?\s*\w*$/
+const sectionRegex = /^\s*section\b/i
+
 export class ASMCompletionProposer implements vscode.CompletionItemProvider {
   instructionItems: vscode.CompletionItem[];
 
@@ -252,6 +255,20 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
   }
 
   provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken, context: vscode.CompletionContext): vscode.ProviderResult<vscode.CompletionItem[] | vscode.CompletionList> {
+    let prefix = document.getText(new vscode.Range(position.with({ character: 0 }), position));
+    
+    let lineContext = new Set();
+    
+    if (firstWordRegex.test(prefix)) {
+      lineContext.add("firstWord");
+    } else {
+      lineContext.add("notFirstWord");
+    }
+    
+    if (sectionRegex.test(prefix)) {
+      lineContext.add("section");
+    }
+    
     let output: vscode.CompletionItem[] = [];
 
     this.instructionItems.forEach((item) => {
@@ -266,15 +283,31 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
     });
 
     const ruleCollections = [
-      { "rule": "language.register", "kind": vscode.CompletionItemKind.Variable, "items": ["a", "f", "b", "c", "d", "e", "h", "l", "af", "bc", "de", "hl", "hli", "hld", "pc", "sp"] },
-      { "rule": "language.conditioncode", "kind": vscode.CompletionItemKind.Value, "items": ["c", "nc", "z", "nz"] },
-      { "rule": "language.keyword.preprocessor", "kind": vscode.CompletionItemKind.Keyword, "items": ["include", "export", "global", "union", "nextu", "endu", "printt", "printv", "printi", "printf", "fail", "warn", "if", "elif", "else", "endc", "purge", "rept", "endr", "opt", "popo", "pusho", "pops", "pushs", "equ", "equs", "macro", "endm", "shift", "charmap", "set"] },
-      { "rule": "language.keyword.datadirective", "kind": vscode.CompletionItemKind.Keyword, "items": ["rsreset", "rb", "rw", "rl", "db", "dw", "dl", "ds"] },
-      { "rule": "language.keyword.sectiondeclaration", "kind": vscode.CompletionItemKind.Keyword, "items": ["section", "rom0", "romx", "vram", "sram", "wram0", "wramx", "oam", "hram", "align", "bank"] },
-      { "rule": "language.keyword.function", "kind": vscode.CompletionItemKind.Function, "items": ["mul", "sin", "cos", "tan", "asin", "acos", "atan", "atan2", "strcat", "strcmp", "strin", "strlen", "strlwr", "strsub", "strupr", "bank", "def", "high", "low"] },
+      { "context": ["notFirstWord"], "rule": "language.register", "kind": vscode.CompletionItemKind.Variable, "items": ["a", "f", "b", "c", "d", "e", "h", "l", "af", "bc", "de", "hl", "hli", "hld", "pc", "sp"] },
+      { "context": ["notFirstWord"], "rule": "language.conditioncode", "kind": vscode.CompletionItemKind.Value, "items": ["c", "nc", "z", "nz"] },
+      
+      { "context": ["firstWord"], "rule": "language.keyword.preprocessor", "kind": vscode.CompletionItemKind.Keyword, "items": ["include", "export", "global", "union", "nextu", "endu", "printt", "printv", "printi", "printf", "fail", "warn", "if", "elif", "else", "endc", "purge", "rept", "endr", "opt", "popo", "pusho", "pops", "pushs", "endm", "shift", "charmap"] },
+      { "context": ["notFirstWord"], "rule": "language.keyword.preprocessor", "kind": vscode.CompletionItemKind.Keyword, "items": ["equ", "equs", "macro", "set"] },
+      
+      { "context": ["firstWord"], "rule": "language.keyword.datadirective", "kind": vscode.CompletionItemKind.Keyword, "items": ["rsreset", "rsset"] },
+      { "context": [], "rule": "language.keyword.datadirective", "kind": vscode.CompletionItemKind.Keyword, "items": ["rb", "rw", "rl", "db", "dw", "dl", "ds"] },
+      
+      { "context": ["firstWord"], "rule": "language.keyword.sectiondeclaration", "kind": vscode.CompletionItemKind.Keyword, "items": ["section"] },
+      { "context": ["section"], "rule": "language.keyword.sectiondeclaration", "kind": vscode.CompletionItemKind.Keyword, "items": ["rom0", "romx", "vram", "sram", "wram0", "wramx", "oam", "hram", "align", "bank"] },
+      
+      { "context": [], "rule": "language.keyword.function", "kind": vscode.CompletionItemKind.Function, "items": ["mul", "sin", "cos", "tan", "asin", "acos", "atan", "atan2", "strcat", "strcmp", "strin", "strlen", "strlwr", "strsub", "strupr", "bank", "def", "high", "low"] },
     ]
 
     ruleCollections.forEach((collection) => {
+      let hasEveryContext = true;
+      for (let contextIndex = 0; contextIndex < collection.context.length; contextIndex++) {
+        hasEveryContext = hasEveryContext && lineContext.has(collection.context[contextIndex]);
+      }
+      
+      if (hasEveryContext == false) {
+        return;
+      }
+      
       collection.items.forEach((item) => {
         let rule = this.formatter.rule(`${collection.rule}.${item}`);
 
@@ -285,10 +318,12 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
         }
       })
     });
-
-    this.instructionItems.forEach((item) => {
-      output.push(item);
-    });
+    
+    if (lineContext.has("firstWord")) {
+      this.instructionItems.forEach((item) => {
+        output.push(item);
+      });
+    }
 
     const symbols = this.symbolDocumenter.symbols(document);
     for (const name in symbols) {
