@@ -70,3 +70,7 @@ The `rgbasm` problem matcher is named "rgbdserror". The following is an example 
 ### Include Path Searching
 
 This extension supports Intellisense for symbols declared in included files. By default, it searches for included files relative to the directory of the open file. But you can configure additional directories to search via the `rgbdsz80.includePath` configuration variable. You may assign a string path or an array of string paths to that variable, and all associated directories will be searched in turn to resolve an included file. Configured paths may be either absolute or relative to the _workspace_ directory.
+
+### Capitalization Formatting
+
+You can customize capitalization rules for your code. See [Capitalization Formatting](https://github.com/DonaldHays/rgbds-vscode/blob/master/formatting.md) for details.
