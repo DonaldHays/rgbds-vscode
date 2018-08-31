@@ -17,7 +17,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(vscode.languages.registerOnTypeFormattingEditProvider({ language: "gbz80", scheme: "file" }, new ASMTypingFormatter(formatter), " ", ",", ";", ":"));
   context.subscriptions.push(vscode.languages.registerDocumentFormattingEditProvider({ language: "gbz80", scheme: "file" }, new ASMDocumentFormatter(formatter)));
   context.subscriptions.push(vscode.languages.registerDocumentRangeFormattingEditProvider({ language: "gbz80", scheme: "file" }, new ASMDocumentRangeFormatter(formatter)));
-  context.subscriptions.push(vscode.languages.registerCompletionItemProvider({ language: "gbz80", scheme: "file" }, new ASMCompletionProposer(symbolDocumenter, formatter)));
+  context.subscriptions.push(vscode.languages.registerCompletionItemProvider({ language: "gbz80", scheme: "file" }, new ASMCompletionProposer(symbolDocumenter, formatter), `"`));
   context.subscriptions.push(vscode.languages.registerDefinitionProvider({ language: "gbz80", scheme: "file" }, new ASMDefinitionProvider(symbolDocumenter)));
   context.subscriptions.push(vscode.languages.registerDocumentSymbolProvider({ language: "gbz80", scheme: "file" }, new ASMDocumentSymbolProvider(symbolDocumenter)));
   context.subscriptions.push(vscode.languages.registerWorkspaceSymbolProvider(new ASMWorkspaceSymbolProvider(symbolDocumenter)));
