@@ -245,7 +245,7 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
       let match = null;
 
       if (match = registerRegex.exec(components[componentIndex])) {
-        let instructionRule = this.formatter.rule(`language.keyword.register.${components[componentIndex].toLowerCase()}`);
+        let instructionRule = this.formatter.rule(`language.register.${components[componentIndex].toLowerCase()}`);
 
         if (instructionRule == "upper") {
           components[componentIndex] = components[componentIndex].replace(registerRegex, match[1].toUpperCase());
