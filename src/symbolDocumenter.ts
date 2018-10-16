@@ -5,10 +5,10 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { syntaxInfo } from './syntaxInfo';
 
-const commentLineRegex = /^;(.*)$/
-const endCommentRegex = /^[^;]+;(.*)$/
+const commentLineRegex = /^;\s*(.*)$/
+const endCommentRegex = /^[^;]+;\s*(.*)$/
 const includeLineRegex = /^include[\s]+"([^"]+)".*$/i
-const spacerRegex = /^(.)\1{3,}$/
+const spacerRegex = /^\s*(.)\1{3,}\s*$/
 const labelDefinitionRegex = /^([a-zA-Z_][a-zA-Z_0-9]*[:]{0,2}).*$/
 const defineExpressionRegex = /^[\s]*[a-zA-Z_][a-zA-Z_0-9]*[\s]+(equ|equs|set)[\s]+.*$/i
 const instructionRegex = new RegExp(`^(${syntaxInfo.instructions.join("|")})$`, "i");
@@ -227,8 +227,6 @@ export class ASMSymbolDocumenter {
   }
   
   private _pushDocumentationLine(line: String, buffer: String[]) {
-    line = line.trim();
-    
     if (line.indexOf("@") == 0 && buffer.length > 0) {
       buffer.push("");
     }
@@ -247,7 +245,7 @@ export class ASMSymbolDocumenter {
       const commentLineMatch = commentLineRegex.exec(line.text);
       
       if (commentLineMatch) {
-        const baseLine = commentLineMatch[1].trim();
+        const baseLine = commentLineMatch[1];
         
         if (spacerRegex.test(baseLine)) {
           continue;
@@ -284,7 +282,7 @@ export class ASMSymbolDocumenter {
           
           const endCommentMatch = endCommentRegex.exec(line.text);
           if (endCommentMatch) {
-            this._pushDocumentationLine(endCommentMatch[1].trim(), commentBuffer);
+            this._pushDocumentationLine(endCommentMatch[1], commentBuffer);
           }
           
           if (defineExpressionRegex.test(line.text)) {
