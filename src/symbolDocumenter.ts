@@ -228,7 +228,10 @@ export class ASMSymbolDocumenter {
   
   private _pushDocumentationLine(line: String, buffer: String[]) {
     if (line.indexOf("@") == 0 && buffer.length > 0) {
-      buffer.push("");
+      let lastLine = buffer[buffer.length - 1];
+      if (lastLine.lastIndexOf("  ") != lastLine.length - 2) {
+        buffer[buffer.length - 1] = lastLine + "  ";
+      }
     }
     
     buffer.push(line);
