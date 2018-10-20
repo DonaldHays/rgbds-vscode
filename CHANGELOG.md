@@ -1,7 +1,16 @@
 # Change Log
 All notable changes to the "rgbds-z80" extension will be documented in this file.
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+## [2.1.0] - 2018-10-20
+### Added
+- Setting the new configuration option `rgbdsz80.includeAllDocCommentNewlines` to `true` will force a newline between all doc comment lines in the formatted Markdown.
+
+### Changed
+- Comments that begin with @ will now only have a single newline preceding them instead of two in the formatted Markdown.
+
+### Fixed
+- Register capitalization formatting is now correctly reflected in intellisense prompts.
+- Two spaces at the end of a doc comment line should now correctly force a newline in the formatted Markdown.
 
 ## [2.0.0] - 2018-08-30
 ### Added
