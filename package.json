@@ -79,6 +79,11 @@
                 "type": "object",
                 "title": "RGBDS Z80",
                 "properties": {
+                    "rgbdsz80.includeAllDocCommentNewlines": {
+                        "description": "Makes every line of comments in a doc comment carry through a newline literal in the output Markdown.",
+                        "type": "boolean",
+                        "default": false
+                    },
                     "rgbdsz80.includePath": {
                         "description": "Specifies folder paths relative to the workspace root to search for include files.",
                         "type": [
