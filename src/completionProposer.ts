@@ -372,7 +372,7 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
       { "context": ["notFirstWord"], "rule": "language.conditioncode", "kind": vscode.CompletionItemKind.Value, "items": ["c", "nc", "z", "nz"] },
       
       { "context": ["firstWord"], "rule": "language.keyword.preprocessor", "kind": vscode.CompletionItemKind.Keyword, "items": ["include", "export", "global", "union", "nextu", "endu", "printt", "printv", "printi", "printf", "fail", "warn", "if", "elif", "else", "endc", "purge", "rept", "endr", "opt", "popo", "pusho", "pops", "pushs", "endm", "shift", "charmap"] },
-      { "context": ["notFirstWord"], "rule": "language.keyword.preprocessor", "kind": vscode.CompletionItemKind.Keyword, "items": ["equ", "equs", "macro", "set"] },
+      { "context": ["firstWord"], "rule": "language.keyword.preprocessor", "kind": vscode.CompletionItemKind.Keyword, "items": ["equ", "equs", "macro", "set"] },
       
       { "context": ["firstWord"], "rule": "language.keyword.datadirective", "kind": vscode.CompletionItemKind.Keyword, "items": ["rsreset", "rsset"] },
       { "context": [], "rule": "language.keyword.datadirective", "kind": vscode.CompletionItemKind.Keyword, "items": ["rb", "rw", "rl", "db", "dw", "dl", "ds"] },
@@ -382,6 +382,8 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
       
       { "context": [], "rule": "language.keyword.function", "kind": vscode.CompletionItemKind.Function, "items": ["mul", "sin", "cos", "tan", "asin", "acos", "atan", "atan2", "strcat", "strcmp", "strin", "strlen", "strlwr", "strsub", "strupr", "bank", "def", "high", "low"] },
     ]
+    
+    let roughKeywords: {[name: string] : string} = {};
 
     ruleCollections.forEach((collection) => {
       let hasEveryContext = true;
@@ -390,17 +392,30 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
       }
       
       if (hasEveryContext == false) {
+        collection.items.forEach((item) => {
+          let rule = this.formatter.rule(`${collection.rule}.${item}`);
+          
+          let cased = item;
+          if (rule == "upper") {
+            cased = item.toUpperCase();
+          }
+          
+          roughKeywords[item] = cased;
+        })
         return;
       }
       
       collection.items.forEach((item) => {
         let rule = this.formatter.rule(`${collection.rule}.${item}`);
-
+        
+        let cased = item;
         if (rule == "upper") {
-          output.push(new vscode.CompletionItem(item.toUpperCase(), collection.kind));
-        } else {
-          output.push(new vscode.CompletionItem(item, collection.kind));
+          cased = item.toUpperCase();
         }
+        
+        output.push(new vscode.CompletionItem(cased, collection.kind));
+        
+        roughKeywords[item] = cased;
       })
     });
     
@@ -408,6 +423,24 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
       this.instructionItems.forEach((item) => {
         output.push(item);
       });
+      
+      if (prefix.indexOf(":") == -1) {
+        let macroItem = new vscode.CompletionItem("macro", vscode.CompletionItemKind.Snippet);
+        macroItem.insertText = new vscode.SnippetString(`\${1:name}: ${roughKeywords["macro"]}\n\t$0\n${roughKeywords["endm"]}`);
+        macroItem.detail = "Macro Definition";
+        let macroDocumentation = new vscode.MarkdownString();
+        macroDocumentation.appendCodeblock(`name: ${roughKeywords["macro"]}\n\n${roughKeywords["endm"]}`, "gbz80");
+        macroItem.documentation = macroDocumentation;
+        output.push(macroItem);
+      }
+      
+      let repeatItem = new vscode.CompletionItem("rept", vscode.CompletionItemKind.Snippet);
+      repeatItem.insertText = new vscode.SnippetString(`${roughKeywords["rept"]} \${1:count}\n\$0\n${roughKeywords["endr"]}`);
+      repeatItem.detail = "Repeat Block";
+      let repeatDocumentation = new vscode.MarkdownString();
+      repeatDocumentation.appendCodeblock(`${roughKeywords["rept"]} count\n\n${roughKeywords["endr"]}`, "gbz80");
+      repeatItem.documentation = repeatDocumentation;
+      output.push(repeatItem);
     }
 
     const symbols = this.symbolDocumenter.symbols(document);

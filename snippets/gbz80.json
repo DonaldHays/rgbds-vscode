@@ -1,20 +1,3 @@
 {
-  "Macro" : {
-    "prefix" : "macro",
-    "body": [
-      "${1:name}: macro",
-      "\t$0",
-      "endm"
-    ],
-    "description": "Macro Definition"
-  },
-  "Repeat" : {
-    "prefix" : "rept",
-    "body": [
-      "rept ${1:count}",
-      "$0",
-      "endr"
-    ],
-    "description": "Repeat Block"
-  }
+  
 }
