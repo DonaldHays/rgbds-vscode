@@ -43,6 +43,14 @@
                         "message": 1
                     }
                 ]
+            },
+            {
+                "name": "rgbdslinkerror",
+                "owner": "rgblink",
+                "pattern": {
+                    "regexp": "^(warning|error): (.+)$",
+                    "message": 2
+                }
             }
         ],
         "languages": [
