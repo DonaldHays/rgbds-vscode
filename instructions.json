@@ -457,6 +457,13 @@
       "flags" : {}
     },
     {
+      "name" : "ld [c], a",
+      "description" : "[$ff00+`c`] = `a`",
+      "cycles" : 2,
+      "bytes" : 1,
+      "flags" : {}
+    },
+    {
       "name" : "ld a, [r16]",
       "description" : "`a` = [r16]",
       "cycles" : 2,
@@ -479,6 +486,13 @@
     },
     {
       "name" : "ld a, [$ff00+c]",
+      "description" : "`a` = [$ff00+`c`]",
+      "cycles" : 2,
+      "bytes" : 1,
+      "flags" : {}
+    },
+    {
+      "name" : "ld a, [c]",
       "description" : "`a` = [$ff00+`c`]",
       "cycles" : 2,
       "bytes" : 1,
