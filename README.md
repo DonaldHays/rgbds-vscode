@@ -47,9 +47,9 @@ For when you need to see a symbol's implementation.
 
 The language support will automatically activate for any file with `.z80`, `.asm`, or `.inc` file extensions.
 
-### Using the Problem Matcher
+### Using the Problem Matchers
 
-The `rgbasm` problem matcher is named "rgbdserror". The following is an example of a build task that calls `make` and uses the problem matcher.
+The `rgbasm` problem matcher is named "rgbdserror", and the `rgblink` problem matcher is named "rgbdslinkerror". The following is an example of a build task that calls `make` and uses the problem matchers.
 
 ```JSON
 {
@@ -63,7 +63,7 @@ The `rgbasm` problem matcher is named "rgbdserror". The following is an example 
   "presentation": {
     "panel": "new"
   },
-  "problemMatcher": "$rgbdserror"
+  "problemMatcher": ["$rgbdserror", "$rgbdslinkerror"]
 }
 ```
 

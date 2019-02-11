@@ -1,6 +1,14 @@
 # Change Log
 All notable changes to the "rgbds-z80" extension will be documented in this file.
 
+## [2.2.0] - 2018-02-10
+### Added
+- A new problem matcher named `rgbdslinkerror`, which can catch several additional types of errors. Both it and `rgbdserror` must be included in a problem matcher configuration to be used.
+- New instruction completions for `ld [c], a` and `ld a, [c]`.
+
+### Fixed
+- The completion snippets for macros and repeat blocks now respect capitalization preferences.
+
 ## [2.1.0] - 2018-10-20
 ### Added
 - Setting the new configuration option `rgbdsz80.includeAllDocCommentNewlines` to `true` will force a newline between all doc comment lines in the formatted Markdown.
