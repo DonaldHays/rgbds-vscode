@@ -45,7 +45,7 @@ For when you need to see a symbol's implementation.
 
 ## Usage
 
-The language support will automatically activate for any file with `.z80`, `.asm`, or `.inc` file extensions.
+The language support will automatically activate for any file with `.z80`, `.asm`, `.inc`, `.s`, or `.sm83` file extensions.
 
 ### Using the Problem Matchers
 
