@@ -16,6 +16,12 @@
 		</dict>
 		<dict>
 			<key>name</key>
+			<string>comment.line.alternative.gbz80</string>
+			<key>match</key>
+			<string>^\*.*$</string>
+		</dict>
+		<dict>
+			<key>name</key>
 			<string>string.quoted.double.gbz80</string>
 			<key>begin</key>
 			<string>&quot;</string>
