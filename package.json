@@ -2,7 +2,7 @@
     "name": "rgbds-z80",
     "displayName": "RGBDS Z80",
     "description": "Language service for RGBDS GB Z80.",
-    "version": "2.2.0",
+    "version": "2.3.0",
     "publisher": "donaldhays",
     "engines": {
         "vscode": "^1.22.0"

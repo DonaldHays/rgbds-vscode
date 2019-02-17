@@ -1,6 +1,13 @@
 # Change Log
 All notable changes to the "rgbds-z80" extension will be documented in this file.
 
+## [2.3.0] - 2018-02-17
+### Added
+- The extension will now activate for files with an extension of `.sm83`.
+
+### Fixed
+- The parsing grammar now correctly identifies lines that begin with an asterisk as a comment.
+
 ## [2.2.0] - 2018-02-10
 ### Added
 - A new problem matcher named `rgbdslinkerror`, which can catch several additional types of errors. Both it and `rgbdserror` must be included in a problem matcher configuration to be used.
