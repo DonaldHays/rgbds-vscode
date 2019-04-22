@@ -88,6 +88,11 @@
                 "type": "object",
                 "title": "RGBDS Z80",
                 "properties": {
+                    "rgbdsz80.showInstructionCompletionSuggestions": {
+                        "description": "Makes Intellisense prompts include documented instruction suggestions.",
+                        "type": "boolean",
+                        "default": true
+                    },
                     "rgbdsz80.includeAllDocCommentNewlines": {
                         "description": "Makes every line of comments in a doc comment carry through a newline literal in the output Markdown.",
                         "type": "boolean",

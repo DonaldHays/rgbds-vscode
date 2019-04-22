@@ -420,9 +420,11 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
     });
     
     if (lineContext.has("firstWord")) {
-      this.instructionItems.forEach((item) => {
-        output.push(item);
-      });
+      if (vscode.workspace.getConfiguration().get("rgbdsz80.showInstructionCompletionSuggestions") || false) {
+        this.instructionItems.forEach((item) => {
+          output.push(item);
+        });
+      }
       
       if (prefix.indexOf(":") == -1) {
         let macroItem = new vscode.CompletionItem("macro", vscode.CompletionItemKind.Snippet);
