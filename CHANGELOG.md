@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to the "rgbds-z80" extension will be documented in this file.
 
+## [2.4.0] - 2018-04-26
+### Added
+- Setting the new configuration option `rgbdsz80.showInstructionCompletionSuggestions` to `false` will suppress completion suggestions for instructions.
+
 ## [2.3.0] - 2018-02-17
 ### Added
 - The extension will now activate for files with an extension of `.sm83`.
