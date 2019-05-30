@@ -205,7 +205,7 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
             lines.push(line);
           });
         }
-        item.documentation = new vscode.MarkdownString(lines.join("  \n"));
+        item.documentation = new vscode.MarkdownString(lines.join("  \\\n"));
 
         let insertText: string = element.name;
         let tabIndex = 1;
