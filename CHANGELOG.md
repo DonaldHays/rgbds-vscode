@@ -1,18 +1,22 @@
 # Change Log
 All notable changes to the "rgbds-z80" extension will be documented in this file.
 
-## [2.4.0] - 2018-04-26
+## [2.4.1] - 2019-05-30
+### Fixed
+- The completion proposer should no longer sometimes fail to include newlines between some items in the "flags changed" section.
+
+## [2.4.0] - 2019-04-26
 ### Added
 - Setting the new configuration option `rgbdsz80.showInstructionCompletionSuggestions` to `false` will suppress completion suggestions for instructions.
 
-## [2.3.0] - 2018-02-17
+## [2.3.0] - 2019-02-17
 ### Added
 - The extension will now activate for files with an extension of `.sm83`.
 
 ### Fixed
 - The parsing grammar now correctly identifies lines that begin with an asterisk as a comment.
 
-## [2.2.0] - 2018-02-10
+## [2.2.0] - 2019-02-10
 ### Added
 - A new problem matcher named `rgbdslinkerror`, which can catch several additional types of errors. Both it and `rgbdserror` must be included in a problem matcher configuration to be used.
 - New instruction completions for `ld [c], a` and `ld a, [c]`.
