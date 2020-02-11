@@ -463,6 +463,13 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
           item.insertText = item.label.substring(1);
         }
         
+        if (symbol.isLocal && symbol.scope && symbol.scope.end) {
+          let symbolRange = new vscode.Range(symbol.scope.start, symbol.scope.end);
+          if (symbolRange.contains(position) == false) {
+            continue;
+          }
+        }
+        
         output.push(item);
       }
     }

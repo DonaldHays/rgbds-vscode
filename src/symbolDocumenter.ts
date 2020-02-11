@@ -11,11 +11,15 @@ const includeLineRegex = /^include[\s]+"([^"]+)".*$/i
 const spacerRegex = /^\s*(.)\1{3,}\s*$/
 const labelDefinitionRegex = /^((([a-zA-Z_][a-zA-Z_0-9]*)?.)?[a-zA-Z_][a-zA-Z_0-9]*[:]{0,2}).*$/
 const defineExpressionRegex = /^[\s]*[a-zA-Z_][a-zA-Z_0-9]*[\s]+(equ|equs|set)[\s]+.*$/i
-const instructionRegex = new RegExp(`^(${syntaxInfo.instructions.join("|")})$`, "i");
-const keywordRegex = new RegExp(`^(${syntaxInfo.preprocessorKeywords.join("|")})$`, "i");
+const instructionRegex = new RegExp(`^(${syntaxInfo.instructions.join("|")})\\b`, "i");
+const keywordRegex = new RegExp(`^(${syntaxInfo.preprocessorKeywords.join("|")})\\b`, "i");
+
+class ScopeDescriptor {
+  constructor(public start: vscode.Position, public end?: vscode.Position) { }
+}
 
 class SymbolDescriptor {
-  constructor(public location: vscode.Location, public isExported: boolean, public kind: vscode.SymbolKind, public documentation?: string) { }
+  constructor(public location: vscode.Location, public isExported: boolean, public isLocal: boolean, public kind: vscode.SymbolKind, public scope?: ScopeDescriptor, public documentation?: string) { }
 }
 
 class FileTable {
@@ -23,12 +27,14 @@ class FileTable {
   fsDir: string
   fsPath: string
   symbols: { [name: string]: SymbolDescriptor }
+  scopes: ScopeDescriptor[]
   
   constructor(fsPath: string) {
     this.includedFiles = [];
     this.fsDir = path.dirname(fsPath);
     this.fsPath = fsPath;
     this.symbols = {};
+    this.scopes = [];
   }
 }
 
@@ -241,6 +247,8 @@ export class ASMSymbolDocumenter {
     const table = new FileTable(document.uri.fsPath);
     this.files[document.uri.fsPath] = table;
     
+    let currentScope: ScopeDescriptor | undefined = undefined;
+    
     let commentBuffer: String[] = [];
     for (let lineNumber = 0; lineNumber < document.lineCount; lineNumber++) {
       const line = document.lineAt(lineNumber);
@@ -272,16 +280,22 @@ export class ASMSymbolDocumenter {
             continue;
           }
           
+          if (declaration.indexOf(".") == -1) {
+            if (currentScope) {
+              currentScope.end = document.positionAt(document.offsetAt(line.range.start) - 1);
+            }
+            
+            currentScope = new ScopeDescriptor(line.range.start);
+            table.scopes.push(currentScope);
+          }
+          
           const isFunction = declaration.indexOf(":") != -1;
           
           const name = declaration.replace(/:+/, "");
           const location = new vscode.Location(document.uri, line.range.start);
-          let isExported = false;
+          const isExported = declaration.indexOf("::") != -1;
+          const isLocal = declaration.indexOf(".") != -1;
           let documentation: string | undefined = undefined;
-          
-          if (declaration.indexOf("::") != -1) {
-            isExported = true;
-          }
           
           const endCommentMatch = endCommentRegex.exec(line.text);
           if (endCommentMatch) {
@@ -298,11 +312,15 @@ export class ASMSymbolDocumenter {
             documentation = commentBuffer.join("\n");
           }
           
-          table.symbols[name] = new SymbolDescriptor(location, isExported, isFunction ? vscode.SymbolKind.Function : vscode.SymbolKind.Constant, documentation);
+          table.symbols[name] = new SymbolDescriptor(location, isExported, isLocal, isFunction ? vscode.SymbolKind.Function : vscode.SymbolKind.Constant, currentScope, documentation);
         }
         
         commentBuffer = [];
       }
+    }
+    
+    if (currentScope) {
+      currentScope.end = document.lineAt(document.lineCount - 1).rangeIncludingLineBreak.end;
     }
   }
 }
