@@ -1,6 +1,13 @@
 # Change Log
 All notable changes to the "rgbds-z80" extension will be documented in this file.
 
+## [2.5.0] - 2020-02-11
+### Added
+- Local labels are now shown in intellisense prompts, appropriately limited to the current scope.
+
+### Fixed
+- Some ways of writing local labels will no longer cause similar global labels to fail to export.
+
 ## [2.4.1] - 2019-05-30
 ### Fixed
 - The completion proposer should no longer sometimes fail to include newlines between some items in the "flags changed" section.
