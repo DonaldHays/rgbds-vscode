@@ -444,6 +444,9 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
       repeatItem.documentation = repeatDocumentation;
       output.push(repeatItem);
     }
+    
+    let triggerWordRange = document.getWordRangeAtPosition(position, /[\S]+/);
+    let triggerWord = document.getText(triggerWordRange);
 
     const symbols = this.symbolDocumenter.symbols(document);
     for (const name in symbols) {
@@ -455,6 +458,11 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
         }
         const item = new vscode.CompletionItem(name, kind);
         item.documentation = new vscode.MarkdownString(symbol.documentation);
+        
+        if (triggerWord.indexOf(".") == 0 && item.label.indexOf(".") == 0) {
+          item.insertText = item.label.substring(1);
+        }
+        
         output.push(item);
       }
     }
