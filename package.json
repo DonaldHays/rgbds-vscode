@@ -108,11 +108,18 @@
                     },
                     "rgbdsz80.formatting.capitalization": {
                         "description": "How to capitalize parts of the language.",
-                        "type":"object",
+                        "type": "object",
                         "patternProperties": {
                             "^.*$": {
-                                "type" : ["string", "null"],
-                                "enum": ["upper","lower",null]
+                                "type": [
+                                    "string",
+                                    "null"
+                                ],
+                                "enum": [
+                                    "upper",
+                                    "lower",
+                                    null
+                                ]
                             }
                         },
                         "default": {}
@@ -129,13 +136,13 @@
         "test": "npm run compile && node ./node_modules/vscode/bin/test"
     },
     "dependencies": {
-        "xml-js": "^1.6.7"
+        "xml-js": "~1.6.11"
     },
     "devDependencies": {
-        "typescript": "^2.9.2",
-        "vscode": "^1.1.18",
-        "@types/node": "^10.5.2",
-        "@types/mocha": "^5.2.5"
+        "typescript": "~3.7.5",
+        "vscode": "~1.1.36",
+        "@types/node": "~13.7.0",
+        "@types/mocha": "~7.0.1"
     },
     "homepage": "https://github.com/DonaldHays/rgbds-vscode",
     "bugs": "https://github.com/DonaldHays/rgbds-vscode/issues",
