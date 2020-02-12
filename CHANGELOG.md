@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to the "rgbds-z80" extension will be documented in this file.
 
+## [2.5.1] - 2020-02-11
+### Fixed
+- Spaces are no longer allowed as part of a label where only a period was supposed to be supported. 😬
+
 ## [2.5.0] - 2020-02-11
 ### Added
 - Local labels are now shown in intellisense prompts, appropriately limited to the current scope.
