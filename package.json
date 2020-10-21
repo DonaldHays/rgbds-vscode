@@ -48,7 +48,7 @@
                 "name": "rgbdslinkerror",
                 "owner": "rgblink",
                 "pattern": {
-                    "regexp": "^(warning|error): (?:.+ -> )*([^:]*)(::REPT~\\d+)?(::[^\\(]+)?\\(([0-9]+)\\): (.+)$",
+                    "regexp": "^(warning|error): (?:(?:.+ -> )*([^:]*)(::REPT~\\d+)?(::[^\\(]+)?\\(([0-9]+)\\): )?(.+)$",
                     "severity": 1,
                     "file": 2,
                     "line": 5,
