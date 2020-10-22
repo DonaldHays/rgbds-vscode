@@ -33,7 +33,7 @@
                 ],
                 "pattern": [
                     {
-                        "regexp": "^(warning|ERROR): (?:.+ -> )*(.*)\\(([0-9]+)\\)(?: -> .*)?:$",
+                        "regexp": "^(warning|ERROR|error): (?:.+ -> )*(.*)\\(([0-9]+)\\)(?: -> .*)?:\\s*(\\[.*\\])?$",
                         "severity": 1,
                         "file": 2,
                         "line": 3
@@ -48,8 +48,11 @@
                 "name": "rgbdslinkerror",
                 "owner": "rgblink",
                 "pattern": {
-                    "regexp": "^(warning|error): (.+)$",
-                    "message": 2
+                    "regexp": "^(warning|error): (?:(?:.+ -> )*([^:]*)(::REPT~\\d+)?(::[^\\(]+)?\\(([0-9]+)\\): )?(.+)$",
+                    "severity": 1,
+                    "file": 2,
+                    "line": 5,
+                    "message": 6
                 }
             }
         ],
