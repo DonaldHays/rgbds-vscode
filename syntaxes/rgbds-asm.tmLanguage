@@ -77,7 +77,7 @@
 			<key>name</key>
 			<string>keyword.control.gbz80</string>
 			<key>match</key>
-			<string>\b(?i:include|export|global|union|nextu|endu|printt|printv|printi|printf|fail|warn|if|elif|else|endc|purge|rept|endr|opt|popo|pusho|pops|pushs|equ|set|equs|macro|endm|shift|charmap|rsreset|rsset|rb|rw|rl|db|dw|dl|ds|section|rom0|romx|vram|sram|wram0|wramx|oam|hram|align)\b</string>
+			<string>\b(?i:include|incbin|export|global|union|fragment|nextu|endu|printt|printv|printi|printf|fail|warn|if|elif|else|endc|purge|rept|endr|opt|popo|pusho|pops|pushs|equ|set|equs|macro|endm|shift|charmap|rsreset|rsset|rb|rw|rl|db|dw|dl|ds|section|rom0|romx|vram|sram|wram0|wramx|oam|hram|align|load)\b</string>
 		</dict>
 		<dict>
 			<key>name</key>
