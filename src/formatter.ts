@@ -16,7 +16,7 @@ const keywordSectionDeclarationBankRegex = /^(bank)\b\s*\[/i
 const keywordPreprocessorRegex = /^(include|incbin|export|global|union|fragment|nextu|endu|printt|printv|printi|printf|fail|warn|if|elif|else|endc|purge|rept|endr|opt|popo|pusho|pops|pushs|equ|equs|macro|endm|shift|charmap|load|endl)\b/i
 const keywordDataDirectiveRegex = /^(rsreset|rsset|rb|rw|rl|db|dw|dl|ds)\b/i
 const keywordSectionDeclarationRegex = /^(section|rom0|romx|vram|sram|wram0|wramx|oam|hram|align)\b/i
-const keywordFunctionRegex = /^(mul|sin|cos|tan|asin|acos|atan|atan2|strcat|strcmp|strin|strlen|strlwr|strsub|strupr|bank|def|high|low)\b/i
+const keywordFunctionRegex = /^(mul|sin|cos|tan|asin|acos|atan|atan2|strcat|strcmp|strin|strlen|strlwr|strsub|strupr|bank|def|high|low|isconst)\b/i
 const hexLiteralRegex = /^(\$[0-9a-f]+)\b/i
 
 export class ASMFormatter {
