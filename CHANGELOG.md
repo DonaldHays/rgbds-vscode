@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to the "rgbds-z80" extension will be documented in this file.
 
-## [2.6.0] - 2020-10-??
+## [2.6.0] - 2020-11-07
 ### Changed
 - Modernized problem matchers for the current version of RGBDS. (Thanks, jendrikw!)
 - Added support for new keywords. (Thanks, jendrikw and Rangi42!)
