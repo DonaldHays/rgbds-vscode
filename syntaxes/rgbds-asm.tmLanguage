@@ -10,6 +10,22 @@
 	<array>
 		<dict>
 			<key>name</key>
+			<string>comment.block.gbz80</string>
+			<key>begin</key>
+			<string>/\*</string>
+			<key>end</key>
+			<string>\*/</string>
+			<key>captures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.gbz80</string>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
 			<string>comment.line.gbz80</string>
 			<key>match</key>
 			<string>;.*$</string>
