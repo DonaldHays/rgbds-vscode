@@ -86,6 +86,11 @@
                 "path": "./syntaxes/rgbds-asm.tmLanguage"
             }
         ],
+        "configurationDefaults": {
+            "[gbz80]": {
+                "editor.wordBasedSuggestions": false
+            }
+        },
         "configuration": [
             {
                 "type": "object",

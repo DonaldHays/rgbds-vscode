@@ -8,6 +8,7 @@ All notable changes to the "rgbds-z80" extension will be documented in this file
 
 ### Changed
 - Improved bracket matching and auto-completion support.
+- Now disables "editor.wordBasedSuggestions" by default when `gbz80` handles a document to better match only relevant content within the file.
 
 ## [2.6.0] - 2020-11-07
 ### Changed
