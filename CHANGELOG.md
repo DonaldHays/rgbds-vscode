@@ -1,6 +1,14 @@
 # Change Log
 All notable changes to the "rgbds-z80" extension will be documented in this file.
 
+## [2.7.0] - 2021-??-??
+### Added
+- Support for C-style block comments.
+- Auto-indentation support for labels.
+
+### Changed
+- Improved bracket matching and auto-completion support.
+
 ## [2.6.0] - 2020-11-07
 ### Changed
 - Modernized problem matchers for the current version of RGBDS. (Thanks, jendrikw!)
