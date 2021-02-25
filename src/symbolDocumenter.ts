@@ -7,6 +7,16 @@ import { syntaxInfo } from './syntaxInfo';
 
 const commentLineRegex = /^;\s*(.*)$/
 const endCommentRegex = /^[^;]+;\s*(.*)$/
+
+// - first: check single line
+// - then, if it fails: check begin.
+//   - if we begin, document lines until we hit block comment end
+const singleLineBlockCommentRegex = /^.*\/\*+\s*(.*?)\s*\*\/.*$/
+const blockCommentBeginRegex = /^.*\/\*+\s*(.*?)\s*$/
+const javaDocCommentBeginRegex = /^.*\/\*\*\s*(.*?)\s*$/
+const javaDocLinePrefixRegex = /^\s*\*?\s*(.*?)\s*$/
+const blockCommentEndRegex = /^(.*?)\s*\*\/.*$/
+
 const includeLineRegex = /^include[\s]+"([^"]+)".*$/i
 const spacerRegex = /^\s*(.)\1{3,}\s*$/
 const labelDefinitionRegex = /^((([a-zA-Z_][a-zA-Z_0-9]*)?\.)?[a-zA-Z_][a-zA-Z_0-9]*[:]{0,2}).*$/
@@ -250,6 +260,9 @@ export class ASMSymbolDocumenter {
     let currentScope: ScopeDescriptor | undefined = undefined;
     
     let commentBuffer: String[] = [];
+    let isInBlockComment = false;
+    let isInJavaDocComment = false;
+    
     for (let lineNumber = 0; lineNumber < document.lineCount; lineNumber++) {
       const line = document.lineAt(lineNumber);
       
@@ -266,6 +279,41 @@ export class ASMSymbolDocumenter {
       } else {
         const includeLineMatch = includeLineRegex.exec(line.text);
         const labelMatch = labelDefinitionRegex.exec(line.text);
+        const singleLineBlockCommentMatch = singleLineBlockCommentRegex.exec(line.text);
+        const blockCommentBeginMatch = blockCommentBeginRegex.exec(line.text);
+        const blockCommentEndMatch = blockCommentEndRegex.exec(line.text);
+        
+        let hadBlockComment = false;
+        
+        if (singleLineBlockCommentMatch) {
+          this._pushDocumentationLine(singleLineBlockCommentMatch[1], commentBuffer);
+          hadBlockComment = true;
+        } else if (blockCommentBeginMatch) {
+          if (spacerRegex.test(blockCommentBeginMatch[1]) == false) {
+            this._pushDocumentationLine(blockCommentBeginMatch[1], commentBuffer);
+          }
+          isInBlockComment = true;
+          isInJavaDocComment = javaDocCommentBeginRegex.test(line.text);
+        } else if (blockCommentEndMatch) {
+          if (spacerRegex.test(blockCommentEndMatch[1]) == false) {
+            this._pushDocumentationLine(blockCommentEndMatch[1], commentBuffer);
+          }
+          isInBlockComment = false;
+          hadBlockComment = true;
+        } else if (isInBlockComment) {
+          let text = line.text;
+          
+          if (isInJavaDocComment) {
+            let javaDocPrefix = text.match(javaDocLinePrefixRegex);
+            if (javaDocPrefix) {
+              text = javaDocPrefix[1];
+            }
+          }
+          
+          if (spacerRegex.test(text) == false) {
+            this._pushDocumentationLine(text, commentBuffer);
+          }
+        }
         
         if (includeLineMatch) {
           const filename = includeLineMatch[1];
@@ -315,7 +363,9 @@ export class ASMSymbolDocumenter {
           table.symbols[name] = new SymbolDescriptor(location, isExported, isLocal, isFunction ? vscode.SymbolKind.Function : vscode.SymbolKind.Constant, currentScope, documentation);
         }
         
-        commentBuffer = [];
+        if (hadBlockComment == false && isInBlockComment == false) {
+          commentBuffer = [];
+        }
       }
     }
     
