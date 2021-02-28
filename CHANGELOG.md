@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to the "rgbds-z80" extension will be documented in this file.
 
-## [2.7.0] - 2021-??-??
+## [2.7.0] - 2021-02-28
 ### Added
 - Support for C-style block comments.
 - Auto-indentation support for labels.
