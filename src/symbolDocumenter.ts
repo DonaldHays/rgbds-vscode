@@ -8,9 +8,6 @@ import { syntaxInfo } from './syntaxInfo';
 const commentLineRegex = /^;\s*(.*)$/
 const endCommentRegex = /^[^;]+;\s*(.*)$/
 
-// - first: check single line
-// - then, if it fails: check begin.
-//   - if we begin, document lines until we hit block comment end
 const singleLineBlockCommentRegex = /^.*\/\*+\s*(.*?)\s*\*\/.*$/
 const blockCommentBeginRegex = /^.*\/\*+\s*(.*?)\s*$/
 const javaDocCommentBeginRegex = /^.*\/\*\*\s*(.*?)\s*$/
