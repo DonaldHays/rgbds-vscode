@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to the "rgbds-z80" extension will be documented in this file.
 
+## [2.?.?] - 2021-??-??
+### Changed
+- When every line of a doc comment shares a common prefix (like "--" in hardware.inc), the prefix will now be clipped out of the documentation view.
+
 ## [2.7.0] - 2021-02-28
 ### Added
 - Support for C-style block comments.

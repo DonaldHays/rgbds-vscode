@@ -347,6 +347,22 @@ export class ASMSymbolDocumenter {
             this._pushDocumentationLine(endCommentMatch[1], commentBuffer);
           }
           
+          // If all comment lines begin with a common prefix (like "--" in
+          // hardware.inc), trim the prefix.
+          if (commentBuffer.length > 1) {
+            let sorted = commentBuffer.concat().sort();
+            let first = sorted[0];
+            let final = sorted[sorted.length - 1];
+            let commonLength = 0;
+            while(commonLength < first.length && commonLength < final.length && first.charAt(commonLength) == final.charAt(commonLength)) {
+              commonLength++;
+            }
+            
+            if (commonLength > 0) {
+              commentBuffer = commentBuffer.map((str) => { return str.substr(commonLength); });
+            }
+          }
+          
           if (defineExpressionRegex.test(line.text)) {
             const trimmed = line.text.replace(/[\s]+/, " ");
             const withoutComment = trimmed.replace(/;.*$/, "");
