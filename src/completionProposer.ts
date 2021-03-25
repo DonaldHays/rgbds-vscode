@@ -5,6 +5,7 @@ import { ASMSymbolDocumenter } from './symbolDocumenter';
 import * as path from 'path';
 import * as fs from 'fs';
 import { ASMFormatter } from './formatter';
+import { syntaxInfo } from './syntaxInfo';
 
 const registerRegex = /\b\[?(a|f|b|c|d|e|h|l|af|bc|de|hl|hli|hld|sp|pc)\]?\b/i
 const itemSplitRegex = /,? /
@@ -38,10 +39,7 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
       this.asmFilePaths.delete(uri.fsPath);
     });
 
-    const extension = vscode.extensions.getExtension("donaldhays.rgbds-z80")!;
-    const instructionsJSONPath = path.join(extension.extensionPath, "instructions.json");
-    const instructionsJSON = JSON.parse(fs.readFileSync(instructionsJSONPath, "utf8"));
-    const instructions = instructionsJSON["instructions"];
+    const instructions = syntaxInfo.instructionsJSON.instructions;
 
     const r8Values = ["a", "b", "c", "d", "e", "h", "l"];
     const r16Values = ["bc", "de", "hl"];
