@@ -3,7 +3,6 @@
 import * as vscode from 'vscode';
 import { ASMSymbolDocumenter } from './symbolDocumenter';
 import * as path from 'path';
-import * as fs from 'fs';
 import { ASMFormatter } from './formatter';
 import { syntaxInfo } from './syntaxInfo';
 

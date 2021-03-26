@@ -1,6 +1,7 @@
 "use strict";
 
 import * as vscode from 'vscode';
+import { syntaxInfo } from './syntaxInfo';
 
 const whitespaceRegex = /^\s+/
 const commentRegex = /^;.*$/
@@ -8,7 +9,7 @@ const stringRegex = /^"(?:\\.|[^"])*"/
 const identifierRegex = /^([a-zA-Z_][a-zA-Z_0-9]*[:]{0,2})\b/
 const registerRegex = /^(a|f|b|c|d|e|h|l|af|bc|de|hl|hli|hld|sp|pc)\b/i
 const conditionCodeRegex = /^(z|nz|nc)\b/i
-const instructionRegex = /^(adc|add|and|bit|call|ccf|cp|cpl|daa|dec|di|ei|halt|inc|jp|jr|ld|ldh|nop|or|pop|push|res|ret|reti|rl|rla|rlc|rlca|rr|rra|rrc|rrca|rst|sbc|scf|sla|sra|srl|stop|sub|swap|xor)\b/i
+const instructionRegex = new RegExp(`^(${syntaxInfo.instructionsWithoutSet.join("|")})\\b`, "i");
 const instructionSetRegex = /^(\s*)(set)\b(.*)$/i
 const setExpressionRegex = /^(\s*[_a-z][_a-z0-9]+\s*)(set)\b(.*)$/i
 const cConditionCodeRegex = /^(call|jp|jr|ret)(\s+)(c)\b/i
