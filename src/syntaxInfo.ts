@@ -8,13 +8,40 @@ class SyntaxInfo {
   instructions: string[];
   instructionsWithoutSet: string[];
   preprocessorKeywords: string[];
-  registerCodes: string[];
-  instructionsJSON: { instructions : [{ [name: string]: any }]};
+  instructionsJSON: {
+    instructions : [{
+      name: string,
+      description: string,
+      optionalA?: boolean,
+      aliasHLI?: boolean,
+      aliasHLD?: boolean,
+      cycles: number,
+      bytes: number,
+      flags: {
+        z?: string,
+        n?: string,
+        h?: string,
+        c?: string
+      }
+    }]
+  };
+  
+  keywordsJSON: {
+    keywords: [{
+      name: string,
+      rules: [{
+        family: "register"|"function"|"sectionDeclaration"|"conditionCode"|"preprocessor"|"dataDirective",
+        context: "any"|"section"|"firstWord"|"notFirstWord"
+      }]
+    }]
+  };
   
   constructor() {
     const extension = vscode.extensions.getExtension("donaldhays.rgbds-z80")!;
     const instructionsJSONPath = path.join(extension.extensionPath, "instructions.json");
+    const keywordsJSONPath = path.join(extension.extensionPath, "keywords.json");
     this.instructionsJSON = JSON.parse(fs.readFileSync(instructionsJSONPath, "utf8"));
+    this.keywordsJSON = JSON.parse(fs.readFileSync(keywordsJSONPath, "utf8"));
     
     const instructions = new Set<string>();
     this.instructionsJSON.instructions.forEach((instruction) => {
@@ -26,8 +53,14 @@ class SyntaxInfo {
     instructions.delete("set");
     this.instructionsWithoutSet = Array.from(instructions);
     
-    this.preprocessorKeywords = ["include", "incbin", "export", "global", "union", "fragment", "nextu", "endu", "printt", "printv", "printi", "printf", "fail", "warn", "if", "elif", "else", "endc", "purge", "rept", "endr", "opt", "popo", "pusho", "pops", "pushs", "equ", "set", "equs", "macro", "endm", "shift", "charmap", "newcharmap", "setcharmap", "pushc", "popc", "rsreset", "rsset", "rb", "rw", "rl", "db", "dw", "dl", "ds", "section", "rom0", "romx", "vram", "sram", "wram0", "wramx", "oam", "hram", "align", "bank", "load", "endl"];
-    this.registerCodes = ["a", "f", "b", "c", "d", "e", "h", "l", "af", "bc", "de", "hl", "hli", "hld", "sp", "pc", "z", "nz", "nc"];
+    this.preprocessorKeywords = [];
+    this.keywordsJSON.keywords.forEach((keyword) => {
+      keyword.rules.forEach((rule) => {
+        if (rule.family == "sectionDeclaration" || rule.family == "preprocessor" || rule.family == "dataDirective") {
+          this.preprocessorKeywords.push(keyword.name);
+        }
+      });
+    });
   }
 };
 

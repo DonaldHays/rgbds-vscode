@@ -45,8 +45,8 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
     const hliValues = ["hl+", "hli"];
     const hldValues = ["hl-", "hld"];
 
-    instructions.forEach((instructionJSON: any) => {
-      const output: any[] = [instructionJSON];
+    instructions.forEach((instructionJSON) => {
+      const output = [instructionJSON];
       var needsToLoop = true;
       while (needsToLoop) {
         needsToLoop = false;
