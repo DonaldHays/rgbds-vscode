@@ -4,7 +4,7 @@ import * as vscode from 'vscode';
 import { ASMSymbolDocumenter } from './symbolDocumenter';
 import * as path from 'path';
 import { ASMFormatter } from './formatter';
-import { syntaxInfo } from './syntaxInfo';
+import { KeywordFamily, KeywordRuleContext, syntaxInfo } from './syntaxInfo';
 
 const registerRegex = /\b\[?(a|f|b|c|d|e|h|l|af|bc|de|hl|hli|hld|sp|pc)\]?\b/i
 const itemSplitRegex = /,? /
@@ -14,6 +14,21 @@ const includeRegex = /^(?:[\w\.]+[:]{0,2})?\s*include\s+\"?/i
 const strictIncludeRegex = /^(?:[\w\.]+[:]{0,2})?\s*include\s+\"?$/i
 const firstWordRegex = /^(?:[\w\.]+[:]{0,2})?\s*\w*$/
 const sectionRegex = /^(?:[\w\.]+[:]{0,2})?\s*section\b/i
+
+const ruleCollections = [
+  { "context": ["notFirstWord"], "rule": "language.register", "kind": vscode.CompletionItemKind.Variable, "items": syntaxInfo.keywordsQuery({hasFamily: [KeywordFamily.Register]}) },
+  { "context": ["notFirstWord"], "rule": "language.conditioncode", "kind": vscode.CompletionItemKind.Value, "items": syntaxInfo.keywordsQuery({hasFamily: [KeywordFamily.ConditionCode]}) },
+  
+  { "context": ["firstWord"], "rule": "language.keyword.preprocessor", "kind": vscode.CompletionItemKind.Keyword, "items": syntaxInfo.keywordsQuery({hasFamily: [KeywordFamily.Preprocessor]}) },
+  
+  { "context": ["firstWord"], "rule": "language.keyword.datadirective", "kind": vscode.CompletionItemKind.Keyword, "items": syntaxInfo.keywordsQuery({hasFamily: [KeywordFamily.DataDirective], hasContext: [KeywordRuleContext.FirstWord]}) },
+  { "context": [], "rule": "language.keyword.datadirective", "kind": vscode.CompletionItemKind.Keyword, "items": syntaxInfo.keywordsQuery({hasFamily: [KeywordFamily.DataDirective], hasContext: [KeywordRuleContext.Any]}) },
+  
+  { "context": ["firstWord"], "rule": "language.keyword.sectiondeclaration", "kind": vscode.CompletionItemKind.Keyword, "items": syntaxInfo.keywordsQuery({hasFamily: [KeywordFamily.SectionDeclaration], hasContext: [KeywordRuleContext.FirstWord]}) },
+  { "context": ["section"], "rule": "language.keyword.sectiondeclaration", "kind": vscode.CompletionItemKind.Keyword, "items": syntaxInfo.keywordsQuery({hasFamily: [KeywordFamily.SectionDeclaration], hasContext: [KeywordRuleContext.Section]}) },
+  
+  { "context": [], "rule": "language.keyword.function", "kind": vscode.CompletionItemKind.Function, "items": syntaxInfo.keywordsQuery({hasFamily: [KeywordFamily.Function]}) },
+]
 
 export class ASMCompletionProposer implements vscode.CompletionItemProvider {
   asmFilePaths: Set<string>;
@@ -364,42 +379,11 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
       }
     });
 
-    const ruleCollections = [
-      { "context": ["notFirstWord"], "rule": "language.register", "kind": vscode.CompletionItemKind.Variable, "items": ["a", "f", "b", "c", "d", "e", "h", "l", "af", "bc", "de", "hl", "hli", "hld", "pc", "sp"] },
-      { "context": ["notFirstWord"], "rule": "language.conditioncode", "kind": vscode.CompletionItemKind.Value, "items": ["c", "nc", "z", "nz"] },
-      
-      { "context": ["firstWord"], "rule": "language.keyword.preprocessor", "kind": vscode.CompletionItemKind.Keyword, "items": ["include", "incbin", "export", "global", "union", "fragment", "nextu", "endu", "printt", "printv", "printi", "printf", "fail", "warn", "if", "elif", "else", "endc", "purge", "rept", "endr", "opt", "popo", "pusho", "pops", "pushs", "endm", "shift", "charmap", "newcharmap", "setcharmap", "pushc", "popc", "load", "endl"] },
-      { "context": ["firstWord"], "rule": "language.keyword.preprocessor", "kind": vscode.CompletionItemKind.Keyword, "items": ["equ", "equs", "macro", "set"] },
-      
-      { "context": ["firstWord"], "rule": "language.keyword.datadirective", "kind": vscode.CompletionItemKind.Keyword, "items": ["rsreset", "rsset"] },
-      { "context": [], "rule": "language.keyword.datadirective", "kind": vscode.CompletionItemKind.Keyword, "items": ["rb", "rw", "rl", "db", "dw", "dl", "ds"] },
-      
-      { "context": ["firstWord"], "rule": "language.keyword.sectiondeclaration", "kind": vscode.CompletionItemKind.Keyword, "items": ["section"] },
-      { "context": ["section"], "rule": "language.keyword.sectiondeclaration", "kind": vscode.CompletionItemKind.Keyword, "items": ["rom0", "romx", "vram", "sram", "wram0", "wramx", "oam", "hram", "align", "bank"] },
-      
-      { "context": [], "rule": "language.keyword.function", "kind": vscode.CompletionItemKind.Function, "items": ["mul", "sin", "cos", "tan", "asin", "acos", "atan", "atan2", "strcat", "strcmp", "strin", "strlen", "strlwr", "strsub", "strupr", "bank", "def", "high", "low", "isconst"] },
-    ]
-    
-    let roughKeywords: {[name: string] : string} = {};
-
     ruleCollections.forEach((collection) => {
-      let hasEveryContext = true;
       for (let contextIndex = 0; contextIndex < collection.context.length; contextIndex++) {
-        hasEveryContext = hasEveryContext && lineContext.has(collection.context[contextIndex]);
-      }
-      
-      if (hasEveryContext == false) {
-        collection.items.forEach((item) => {
-          let rule = this.formatter.rule(`${collection.rule}.${item}`);
-          
-          let cased = item;
-          if (rule == "upper") {
-            cased = item.toUpperCase();
-          }
-          
-          roughKeywords[item] = cased;
-        })
-        return;
+        if (lineContext.has(collection.context[contextIndex]) == false) {
+          return;
+        }
       }
       
       collection.items.forEach((item) => {
@@ -411,8 +395,6 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
         }
         
         output.push(new vscode.CompletionItem(cased, collection.kind));
-        
-        roughKeywords[item] = cased;
       })
     });
     
@@ -422,24 +404,6 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
           output.push(item);
         });
       }
-      
-      if (prefix.indexOf(":") == -1) {
-        let macroItem = new vscode.CompletionItem("macro", vscode.CompletionItemKind.Snippet);
-        macroItem.insertText = new vscode.SnippetString(`\${1:name}: ${roughKeywords["macro"]}\n\t$0\n${roughKeywords["endm"]}`);
-        macroItem.detail = "Macro Definition";
-        let macroDocumentation = new vscode.MarkdownString();
-        macroDocumentation.appendCodeblock(`name: ${roughKeywords["macro"]}\n\n${roughKeywords["endm"]}`, "gbz80");
-        macroItem.documentation = macroDocumentation;
-        output.push(macroItem);
-      }
-      
-      let repeatItem = new vscode.CompletionItem("rept", vscode.CompletionItemKind.Snippet);
-      repeatItem.insertText = new vscode.SnippetString(`${roughKeywords["rept"]} \${1:count}\n\$0\n${roughKeywords["endr"]}`);
-      repeatItem.detail = "Repeat Block";
-      let repeatDocumentation = new vscode.MarkdownString();
-      repeatDocumentation.appendCodeblock(`${roughKeywords["rept"]} count\n\n${roughKeywords["endr"]}`, "gbz80");
-      repeatItem.documentation = repeatDocumentation;
-      output.push(repeatItem);
     }
     
     let triggerWordRange = document.getWordRangeAtPosition(position, /[\S]+/);

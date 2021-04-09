@@ -4,6 +4,22 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
 
+export enum KeywordFamily {
+  Register = "register",
+  Function = "function",
+  SectionDeclaration = "sectionDeclaration",
+  ConditionCode = "conditionCode",
+  Preprocessor = "preprocessor",
+  DataDirective = "dataDirective",
+}
+
+export enum KeywordRuleContext {
+  Any = "any",
+  Section = "section",
+  FirstWord = "firstWord",
+  NotFirstWord = "notFirstWord",
+}
+
 class SyntaxInfo {
   instructions: string[];
   instructionsWithoutSet: string[];
@@ -30,8 +46,8 @@ class SyntaxInfo {
     keywords: [{
       name: string,
       rules: [{
-        family: "register"|"function"|"sectionDeclaration"|"conditionCode"|"preprocessor"|"dataDirective",
-        context: "any"|"section"|"firstWord"|"notFirstWord"
+        family: KeywordFamily,
+        context: KeywordRuleContext
       }]
     }]
   };
@@ -53,14 +69,28 @@ class SyntaxInfo {
     instructions.delete("set");
     this.instructionsWithoutSet = Array.from(instructions);
     
-    this.preprocessorKeywords = [];
-    this.keywordsJSON.keywords.forEach((keyword) => {
-      keyword.rules.forEach((rule) => {
-        if (rule.family == "sectionDeclaration" || rule.family == "preprocessor" || rule.family == "dataDirective") {
-          this.preprocessorKeywords.push(keyword.name);
+    this.preprocessorKeywords = this.keywordsQuery({hasFamily: [KeywordFamily.SectionDeclaration, KeywordFamily.Preprocessor, KeywordFamily.DataDirective]});
+  }
+  
+  keywordsQuery(query: { hasFamily?: KeywordFamily[], hasContext?: KeywordRuleContext[] }): string[] {
+    return this.keywordsJSON.keywords.filter((keyword) => {
+      const hasFamily = query.hasFamily;
+      const hasContext = query.hasContext;
+      
+      if (hasFamily) {
+        if (keyword.rules.reduce((accumulator, rule) => accumulator || hasFamily.includes(rule.family), false) == false) {
+          return false;
         }
-      });
-    });
+      }
+      
+      if (hasContext) {
+        if (keyword.rules.reduce((accumulator, rule) => accumulator || hasContext.includes(rule.context), false) == false) {
+          return false;
+        }
+      }
+      
+      return true;
+    }).map((keyword) => keyword.name);
   }
 };
 
