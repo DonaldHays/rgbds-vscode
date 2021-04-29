@@ -6,6 +6,7 @@ import { ASMSymbolDocumenter } from './symbolDocumenter';
 const hexRegex = /^\$([0-9a-fA-F]+)$/;
 const binaryRegex = /^%([0-1]+)$/;
 const integerRegex = /^([0-9]+)$/;
+const hoverRegex = /(\$[0-9a-fA-F]+)|(%[0-1]+)|([0-9]+)|(\.?[A-Za-z_][A-Za-z_0-9]*(\\@|:*))/g;
 
 export class ASMHoverProvider implements HoverProvider {
   constructor(public symbolDocumenter: ASMSymbolDocumenter) {
@@ -13,7 +14,7 @@ export class ASMHoverProvider implements HoverProvider {
   }
   
   provideHover(document: TextDocument, position: Position, token: CancellationToken): ProviderResult<Hover> {
-    const range = document.getWordRangeAtPosition(position, /(\$[0-9a-fA-F]+)|(%[0-1]+)|([0-9]+)|(\.?[A-Za-z_][A-Za-z_0-9]*(\\@|:*))/g);
+    const range = document.getWordRangeAtPosition(position, hoverRegex);
     if(range) {
       const text = document.getText(range);
       const symbol = this.symbolDocumenter.symbol(text, document);

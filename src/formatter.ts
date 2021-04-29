@@ -1,23 +1,23 @@
 "use strict";
 
 import * as vscode from 'vscode';
-import { syntaxInfo } from './syntaxInfo';
+import { KeywordFamily, syntaxInfo } from './syntaxInfo';
 
 const whitespaceRegex = /^\s+/
 const commentRegex = /^;.*$/
 const stringRegex = /^"(?:\\.|[^"])*"/
 const identifierRegex = /^([a-zA-Z_][a-zA-Z_0-9]*[:]{0,2})\b/
-const registerRegex = /^(a|f|b|c|d|e|h|l|af|bc|de|hl|hli|hld|sp|pc)\b/i
+const registerRegex = new RegExp(`^(${syntaxInfo.keywordsQuery({hasFamily: [KeywordFamily.Register]}).join("|")})\\b`, "i");
 const conditionCodeRegex = /^(z|nz|nc)\b/i
 const instructionRegex = new RegExp(`^(${syntaxInfo.instructionsWithoutSet.join("|")})\\b`, "i");
 const instructionSetRegex = /^(\s*)(set)\b(.*)$/i
 const setExpressionRegex = /^(\s*[_a-z][_a-z0-9]+\s*)(set)\b(.*)$/i
 const cConditionCodeRegex = /^(call|jp|jr|ret)(\s+)(c)\b/i
 const keywordSectionDeclarationBankRegex = /^(bank)\b\s*\[/i
-const keywordPreprocessorRegex = /^(include|incbin|export|global|union|fragment|nextu|endu|printt|printv|printi|printf|fail|warn|if|elif|else|endc|purge|rept|endr|opt|popo|pusho|pops|pushs|equ|equs|macro|endm|shift|charmap|newcharmap|setcharmap|pushc|popc|load|endl)\b/i
-const keywordDataDirectiveRegex = /^(rsreset|rsset|rb|rw|rl|db|dw|dl|ds)\b/i
-const keywordSectionDeclarationRegex = /^(section|rom0|romx|vram|sram|wram0|wramx|oam|hram|align)\b/i
-const keywordFunctionRegex = /^(mul|sin|cos|tan|asin|acos|atan|atan2|strcat|strcmp|strin|strlen|strlwr|strsub|strupr|bank|def|high|low|isconst)\b/i
+const keywordPreprocessorRegex = new RegExp(`^(${syntaxInfo.keywordsQuery({hasFamily: [KeywordFamily.Preprocessor]}).filter((keyword) => keyword != "set").join("|")})\\b`, "i");
+const keywordDataDirectiveRegex = new RegExp(`^(${syntaxInfo.keywordsQuery({hasFamily: [KeywordFamily.DataDirective]}).join("|")})\\b`, "i");
+const keywordSectionDeclarationRegex = new RegExp(`^(${syntaxInfo.keywordsQuery({hasFamily: [KeywordFamily.SectionDeclaration]}).filter((keyword) => keyword != "bank").join("|")})\\b`, "i");
+const keywordFunctionRegex = new RegExp(`^(${syntaxInfo.keywordsQuery({hasFamily: [KeywordFamily.Function]}).join("|")})\\b`, "i");
 const hexLiteralRegex = /^(\$[0-9a-f]+)\b/i
 
 export class ASMFormatter {

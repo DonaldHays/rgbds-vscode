@@ -6,7 +6,7 @@ import * as path from 'path';
 import { ASMFormatter } from './formatter';
 import { KeywordFamily, KeywordRuleContext, syntaxInfo } from './syntaxInfo';
 
-const registerRegex = /\b\[?(a|f|b|c|d|e|h|l|af|bc|de|hl|hli|hld|sp|pc)\]?\b/i
+const registerRegex = new RegExp(`\\b\\[?(${syntaxInfo.keywordsQuery({hasFamily: [KeywordFamily.Register]}).join("|")})\\]?\\b`, "i");
 const itemSplitRegex = /,? /
 const hexRegex = /(\$[0-9a-f]+)/i
 
