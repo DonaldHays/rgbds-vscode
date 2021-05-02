@@ -81,7 +81,7 @@ routine::
 ### `language`
 #### `language.keyword`
 ##### `language.keyword.preprocessor`
-`include, incbin, export, global, union, fragment, nextu, endu, printt, printv, printi, printf, fail, warn, if, elif, else, endc, purge, rept, endr, opt, popo, pusho, pops, pushs, equ, set, equs, macro, endm, shift, charmap, newcharmap, setcharmap, pushc, popc, load, endl`
+`include, incbin, export, global, union, fragment, nextu, endu, print, println, printt, printv, printi, printf, fail, warn, if, elif, else, endc, purge, rept, endr, opt, popo, pusho, pops, pushs, equ, set, equs, macro, endm, shift, charmap, newcharmap, setcharmap, pushc, popc, load, endl`
 
 ##### `language.keyword.datadirective`
 

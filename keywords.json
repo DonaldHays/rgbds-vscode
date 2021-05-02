@@ -247,19 +247,33 @@
       "rules": [{ "family": "preprocessor", "context": "firstWord" }]
     },
     {
+      "name": "print",
+      "available": "0.5.0",
+      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+    },
+    {
       "name": "printf",
+      "deprecated": "0.5.0",
       "rules": [{ "family": "preprocessor", "context": "firstWord" }]
     },
     {
       "name": "printi",
+      "deprecated": "0.5.0",
+      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+    },
+    {
+      "name": "println",
+      "available": "0.5.0",
       "rules": [{ "family": "preprocessor", "context": "firstWord" }]
     },
     {
       "name": "printt",
+      "deprecated": "0.5.0",
       "rules": [{ "family": "preprocessor", "context": "firstWord" }]
     },
     {
       "name": "printv",
+      "deprecated": "0.5.0",
       "rules": [{ "family": "preprocessor", "context": "firstWord" }]
     },
     {

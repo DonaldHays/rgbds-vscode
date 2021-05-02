@@ -45,6 +45,8 @@ class SyntaxInfo {
   keywordsJSON: {
     keywords: [{
       name: string,
+      available: string|undefined,
+      deprecated: string|undefined,
       rules: [{
         family: KeywordFamily,
         context: KeywordRuleContext
