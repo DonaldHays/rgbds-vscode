@@ -51,6 +51,11 @@
       ]
     },
     {
+      "name": "ceil",
+      "available": "0.5.0",
+      "rules": [{ "family": "function", "context": "any" }]
+    },
+    {
       "name": "charmap",
       "rules": [{ "family": "preprocessor", "context": "firstWord" }]
     },
@@ -139,6 +144,11 @@
       "rules": [{ "family": "preprocessor", "context": "firstWord" }]
     },
     {
+      "name": "floor",
+      "available": "0.5.0",
+      "rules": [{ "family": "function", "context": "any" }]
+    },
+    {
       "name": "fragment",
       "rules": [{ "family": "preprocessor", "context": "firstWord" }]
     },
@@ -195,6 +205,11 @@
       "rules": [{ "family": "preprocessor", "context": "firstWord" }]
     },
     {
+      "name": "log",
+      "available": "0.5.0",
+      "rules": [{ "family": "function", "context": "any" }]
+    },
+    {
       "name": "low",
       "rules": [{ "family": "function", "context": "any" }]
     },
@@ -245,6 +260,11 @@
     {
       "name": "pops",
       "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+    },
+    {
+      "name": "pow",
+      "available": "0.5.0",
+      "rules": [{ "family": "function", "context": "any" }]
     },
     {
       "name": "print",
@@ -313,6 +333,11 @@
       "rules": [{ "family": "sectionDeclaration", "context": "section" }]
     },
     {
+      "name": "round",
+      "available": "0.5.0",
+      "rules": [{ "family": "function", "context": "any" }]
+    },
+    {
       "name": "rsreset",
       "rules": [{ "family": "dataDirective", "context": "firstWord" }]
     },
@@ -361,6 +386,11 @@
       "rules": [{ "family": "function", "context": "any" }]
     },
     {
+      "name": "strfmt",
+      "available": "0.5.0",
+      "rules": [{ "family": "function", "context": "any" }]
+    },
+    {
       "name": "strin",
       "rules": [{ "family": "function", "context": "any" }]
     },
@@ -370,6 +400,16 @@
     },
     {
       "name": "strlwr",
+      "rules": [{ "family": "function", "context": "any" }]
+    },
+    {
+      "name": "strrin",
+      "available": "0.5.0",
+      "rules": [{ "family": "function", "context": "any" }]
+    },
+    {
+      "name": "strrpl",
+      "available": "0.5.0",
       "rules": [{ "family": "function", "context": "any" }]
     },
     {

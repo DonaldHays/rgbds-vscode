@@ -93,7 +93,7 @@ routine::
 
 ##### `language.keyword.function`
 
-`mul, sin, cos, tan, asin, acos, atan, atan2, strcat, strcmp, strin, strlen, strlwr, strsub, strupr, bank, def, high, low, isconst`
+`mul, sin, cos, tan, asin, acos, atan, atan2, strcat, strcmp, strin, strlen, strlwr, strsub, strupr, bank, def, high, low, isconst, ceil, floor, log, pow, round, strfmt, strrin, strrpl`
 
 ##### `language.register`
 
