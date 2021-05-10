@@ -20,6 +20,7 @@ const labelDefinitionRegex = /^((([a-zA-Z_][a-zA-Z_0-9]*)?\.)?[a-zA-Z_][a-zA-Z_0
 const defineExpressionRegex = /^[\s]*[a-zA-Z_][a-zA-Z_0-9]*[\s]+(equ|equs|set)[\s]+.*$/i
 const instructionRegex = new RegExp(`^(${syntaxInfo.instructions.join("|")})\\b`, "i");
 const keywordRegex = new RegExp(`^(${syntaxInfo.preprocessorKeywords.join("|")})\\b`, "i");
+const macroDefinitionRegex = /^macro[\s]+([a-zA-Z_][a-zA-Z_0-9]*).*$/i
 
 class ScopeDescriptor {
   constructor(public start: vscode.Position, public end?: vscode.Position) { }
@@ -276,6 +277,7 @@ export class ASMSymbolDocumenter {
       } else {
         const includeLineMatch = includeLineRegex.exec(line.text);
         const labelMatch = labelDefinitionRegex.exec(line.text);
+        const macroMatch = macroDefinitionRegex.exec(line.text);
         const singleLineBlockCommentMatch = singleLineBlockCommentRegex.exec(line.text);
         const blockCommentBeginMatch = blockCommentBeginRegex.exec(line.text);
         const blockCommentEndMatch = blockCommentEndRegex.exec(line.text);
@@ -312,11 +314,12 @@ export class ASMSymbolDocumenter {
           }
         }
         
+        const declarationMatch = macroMatch || labelMatch;
         if (includeLineMatch) {
           const filename = includeLineMatch[1];
           table.includedFiles.push(filename);
-        } else if (labelMatch) {
-          const declaration = labelMatch[1];
+        } else if (declarationMatch) {          
+          const declaration = declarationMatch[1];
           if (instructionRegex.test(declaration)) {
             continue;
           }
