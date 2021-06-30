@@ -1,6 +1,14 @@
 # Change Log
 All notable changes to the "rgbds-z80" extension will be documented in this file.
 
+## [3.0.0] - 2021-06-30
+### Added
+- Support for the `print`, `println`, and `redef` keywords.
+- Support for the `ceil`, `floor`, `log`, `pow`, `round`, `strfmt`, `strrin`, and `strrpl` functions.
+- Support for the new macro definition syntax.
+- Support for the new def constant syntax.
+- Support for indented global labels.
+
 ## [2.7.1] - 2021-03-25
 ### Changed
 - When every line of a doc comment shares a common prefix (like "--" in hardware.inc), the prefix will now be clipped out of the documentation view.
