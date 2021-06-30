@@ -16,8 +16,8 @@ const blockCommentEndRegex = /^(.*?)\s*\*\/.*$/
 
 const includeLineRegex = /^include[\s]+"([^"]+)".*$/i
 const spacerRegex = /^\s*(.)\1{3,}\s*$/
-const labelDefinitionRegex = /^((([a-zA-Z_][a-zA-Z_0-9]*)?\.)?[a-zA-Z_][a-zA-Z_0-9]*[:]{0,2}).*$/
-const defineExpressionRegex = /^[\s]*[a-zA-Z_][a-zA-Z_0-9]*[\s]+(equ|equs|set)[\s]+.*$/i
+const labelDefinitionRegex = /^[\s]*((([a-zA-Z_][a-zA-Z_0-9]*)?\.)?[a-zA-Z_][a-zA-Z_0-9]*[:]{0,2}).*$/
+const defineExpressionRegex = /^[\s]*(?:def[\s]*)?([a-zA-Z_][a-zA-Z_0-9]*)[\s]+(equ|equs|set|=)[\s]+.*$/i
 const instructionRegex = new RegExp(`^(${syntaxInfo.instructions.join("|")})\\b`, "i");
 const keywordRegex = new RegExp(`^(${syntaxInfo.preprocessorKeywords.join("|")})\\b`, "i");
 const macroDefinitionRegex = /^macro[\s]+([a-zA-Z_][a-zA-Z_0-9]*).*$/i
@@ -278,6 +278,7 @@ export class ASMSymbolDocumenter {
         const includeLineMatch = includeLineRegex.exec(line.text);
         const labelMatch = labelDefinitionRegex.exec(line.text);
         const macroMatch = macroDefinitionRegex.exec(line.text);
+        const defineMatch = defineExpressionRegex.exec(line.text);
         const singleLineBlockCommentMatch = singleLineBlockCommentRegex.exec(line.text);
         const blockCommentBeginMatch = blockCommentBeginRegex.exec(line.text);
         const blockCommentEndMatch = blockCommentEndRegex.exec(line.text);
@@ -314,11 +315,11 @@ export class ASMSymbolDocumenter {
           }
         }
         
-        const declarationMatch = macroMatch || labelMatch;
+        const declarationMatch = macroMatch || defineMatch || labelMatch;
         if (includeLineMatch) {
           const filename = includeLineMatch[1];
           table.includedFiles.push(filename);
-        } else if (declarationMatch) {          
+        } else if (declarationMatch) {
           const declaration = declarationMatch[1];
           if (instructionRegex.test(declaration)) {
             continue;
@@ -367,7 +368,7 @@ export class ASMSymbolDocumenter {
           }
           
           if (defineExpressionRegex.test(line.text)) {
-            const trimmed = line.text.replace(/[\s]+/, " ");
+            const trimmed = line.text.replace(/[\s]+/g, " ");
             const withoutComment = trimmed.replace(/;.*$/, "");
             commentBuffer.splice(0, 0, `\`${withoutComment}\`\n`);
           }

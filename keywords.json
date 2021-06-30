@@ -77,7 +77,10 @@
     },
     {
       "name": "def",
-      "rules": [{ "family": "function", "context": "any" }]
+      "rules": [
+        { "family": "preprocessor", "context": "firstWord" },
+        { "family": "function", "context": "any" }
+      ]
     },
     {
       "name": "dl",
@@ -315,6 +318,10 @@
     {
       "name": "rb",
       "rules": [{ "family": "dataDirective", "context": "any" }]
+    },
+    {
+      "name": "redef",
+      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
     },
     {
       "name": "rept",
