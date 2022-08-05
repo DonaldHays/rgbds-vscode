@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to the "rgbds-z80" extension will be documented in this file.
 
+## [3.0.1] - 2022-08-04
+### Fixed
+- Instances of "set" contained as part of other words are no longer impacted by the `"language.keyword.preprocessor"` rule.
+
 ## [3.0.0] - 2021-06-30
 ### Added
 - Support for the `print`, `println`, and `redef` keywords.

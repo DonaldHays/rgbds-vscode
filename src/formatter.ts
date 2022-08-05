@@ -11,7 +11,7 @@ const registerRegex = new RegExp(`^(${syntaxInfo.keywordsQuery({hasFamily: [Keyw
 const conditionCodeRegex = /^(z|nz|nc)\b/i
 const instructionRegex = new RegExp(`^(${syntaxInfo.instructionsWithoutSet.join("|")})\\b`, "i");
 const instructionSetRegex = /^(\s*)(set)\b(.*)$/i
-const setExpressionRegex = /^(\s*[_a-z][_a-z0-9]+\s*)(set)\b(.*)$/i
+const setExpressionRegex = /^(\s*[_a-z][_a-z0-9]+\s*)\b(set)\b(.*)$/i
 const cConditionCodeRegex = /^(call|jp|jr|ret)(\s+)(c)\b/i
 const keywordSectionDeclarationBankRegex = /^(bank)\b\s*\[/i
 const keywordPreprocessorRegex = new RegExp(`^(${syntaxInfo.keywordsQuery({hasFamily: [KeywordFamily.Preprocessor]}).filter((keyword) => keyword != "set").join("|")})\\b`, "i");
