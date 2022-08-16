@@ -118,11 +118,31 @@
       ]
     },
     {
+      "name": "charlen",
+      "available": "0.5.1",
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
+        }
+      ]
+    },
+    {
       "name": "charmap",
       "rules": [
         {
           "family": "preprocessor",
           "context": "firstWord"
+        }
+      ]
+    },
+    {
+      "name": "charsub",
+      "available": "0.5.1",
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
         }
       ]
     },
