@@ -854,6 +854,16 @@
       ]
     },
     {
+      "name": "sizeof",
+      "available": "0.5.1",
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
+        }
+      ]
+    },
+    {
       "name": "sp",
       "rules": [
         {
@@ -868,6 +878,16 @@
         {
           "family": "sectionDeclaration",
           "context": "section"
+        }
+      ]
+    },
+    {
+      "name": "startof",
+      "available": "0.5.1",
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
         }
       ]
     },

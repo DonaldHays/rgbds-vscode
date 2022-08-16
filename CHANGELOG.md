@@ -3,8 +3,9 @@ All notable changes to the "rgbds-z80" extension will be documented in this file
 
 ## [3.1.0] - 2022-08-??
 ### Added
-- Support for the `div` function.
-- Support for the `charlen` and `charsub` functions.
+- Support for the `div` math function.
+- Support for the `charlen` and `charsub` string functions.
+- Support for the `sizeof` and `startof` section functions.
 
 ## [3.0.1] - 2022-08-04
 ### Fixed
