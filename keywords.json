@@ -2,458 +2,1001 @@
   "keywords": [
     {
       "name": "a",
-      "rules": [{ "family": "register", "context": "notFirstWord" }]
+      "rules": [
+        {
+          "family": "register",
+          "context": "notFirstWord"
+        }
+      ]
     },
     {
       "name": "acos",
-      "rules": [{ "family": "function", "context": "any" }]
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
+        }
+      ]
     },
     {
       "name": "af",
-      "rules": [{ "family": "register", "context": "notFirstWord" }]
+      "rules": [
+        {
+          "family": "register",
+          "context": "notFirstWord"
+        }
+      ]
     },
     {
       "name": "align",
-      "rules": [{ "family": "sectionDeclaration", "context": "section" }]
+      "rules": [
+        {
+          "family": "sectionDeclaration",
+          "context": "section"
+        }
+      ]
     },
     {
       "name": "asin",
-      "rules": [{ "family": "function", "context": "any" }]
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
+        }
+      ]
     },
     {
       "name": "atan",
-      "rules": [{ "family": "function", "context": "any" }]
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
+        }
+      ]
     },
     {
       "name": "atan2",
-      "rules": [{ "family": "function", "context": "any" }]
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
+        }
+      ]
     },
     {
       "name": "b",
-      "rules": [{ "family": "register", "context": "notFirstWord" }]
+      "rules": [
+        {
+          "family": "register",
+          "context": "notFirstWord"
+        }
+      ]
     },
     {
       "name": "bank",
       "rules": [
-        { "family": "sectionDeclaration", "context": "section" },
-        { "family": "function", "context": "any" }
+        {
+          "family": "sectionDeclaration",
+          "context": "section"
+        },
+        {
+          "family": "function",
+          "context": "any"
+        }
       ]
     },
     {
       "name": "bc",
-      "rules": [{ "family": "register", "context": "notFirstWord" }]
+      "rules": [
+        {
+          "family": "register",
+          "context": "notFirstWord"
+        }
+      ]
     },
     {
       "name": "c",
       "rules": [
-        { "family": "register", "context": "notFirstWord" },
-        { "family": "conditionCode", "context": "notFirstWord" }
+        {
+          "family": "register",
+          "context": "notFirstWord"
+        },
+        {
+          "family": "conditionCode",
+          "context": "notFirstWord"
+        }
       ]
     },
     {
       "name": "ceil",
       "available": "0.5.0",
-      "rules": [{ "family": "function", "context": "any" }]
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
+        }
+      ]
     },
     {
       "name": "charmap",
-      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "cos",
-      "rules": [{ "family": "function", "context": "any" }]
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
+        }
+      ]
     },
     {
       "name": "d",
-      "rules": [{ "family": "register", "context": "notFirstWord" }]
+      "rules": [
+        {
+          "family": "register",
+          "context": "notFirstWord"
+        }
+      ]
     },
     {
       "name": "db",
-      "rules": [{ "family": "dataDirective", "context": "any" }]
+      "rules": [
+        {
+          "family": "dataDirective",
+          "context": "any"
+        }
+      ]
     },
     {
       "name": "de",
-      "rules": [{ "family": "register", "context": "notFirstWord" }]
+      "rules": [
+        {
+          "family": "register",
+          "context": "notFirstWord"
+        }
+      ]
     },
     {
       "name": "def",
       "rules": [
-        { "family": "preprocessor", "context": "firstWord" },
-        { "family": "function", "context": "any" }
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        },
+        {
+          "family": "function",
+          "context": "any"
+        }
       ]
     },
     {
       "name": "dl",
-      "rules": [{ "family": "dataDirective", "context": "any" }]
+      "rules": [
+        {
+          "family": "dataDirective",
+          "context": "any"
+        }
+      ]
     },
     {
       "name": "ds",
-      "rules": [{ "family": "dataDirective", "context": "any" }]
+      "rules": [
+        {
+          "family": "dataDirective",
+          "context": "any"
+        }
+      ]
     },
     {
       "name": "dw",
-      "rules": [{ "family": "dataDirective", "context": "any" }]
+      "rules": [
+        {
+          "family": "dataDirective",
+          "context": "any"
+        }
+      ]
     },
     {
       "name": "e",
-      "rules": [{ "family": "register", "context": "notFirstWord" }]
+      "rules": [
+        {
+          "family": "register",
+          "context": "notFirstWord"
+        }
+      ]
     },
     {
       "name": "elif",
-      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "else",
-      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "endc",
-      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "endl",
-      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "endm",
-      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "endr",
-      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "endu",
-      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "equ",
-      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "equs",
-      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "export",
-      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "f",
-      "rules": [{ "family": "register", "context": "notFirstWord" }]
+      "rules": [
+        {
+          "family": "register",
+          "context": "notFirstWord"
+        }
+      ]
     },
     {
       "name": "fail",
-      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "floor",
       "available": "0.5.0",
-      "rules": [{ "family": "function", "context": "any" }]
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
+        }
+      ]
     },
     {
       "name": "fragment",
-      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "global",
-      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "h",
-      "rules": [{ "family": "register", "context": "notFirstWord" }]
+      "rules": [
+        {
+          "family": "register",
+          "context": "notFirstWord"
+        }
+      ]
     },
     {
       "name": "high",
-      "rules": [{ "family": "function", "context": "any" }]
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
+        }
+      ]
     },
     {
       "name": "hl",
-      "rules": [{ "family": "register", "context": "notFirstWord" }]
+      "rules": [
+        {
+          "family": "register",
+          "context": "notFirstWord"
+        }
+      ]
     },
     {
       "name": "hld",
-      "rules": [{ "family": "register", "context": "notFirstWord" }]
+      "rules": [
+        {
+          "family": "register",
+          "context": "notFirstWord"
+        }
+      ]
     },
     {
       "name": "hli",
-      "rules": [{ "family": "register", "context": "notFirstWord" }]
+      "rules": [
+        {
+          "family": "register",
+          "context": "notFirstWord"
+        }
+      ]
     },
     {
       "name": "hram",
-      "rules": [{ "family": "sectionDeclaration", "context": "section" }]
+      "rules": [
+        {
+          "family": "sectionDeclaration",
+          "context": "section"
+        }
+      ]
     },
     {
       "name": "if",
-      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "incbin",
-      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "include",
-      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "isconst",
-      "rules": [{ "family": "function", "context": "any" }]
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
+        }
+      ]
     },
     {
       "name": "l",
-      "rules": [{ "family": "register", "context": "notFirstWord" }]
+      "rules": [
+        {
+          "family": "register",
+          "context": "notFirstWord"
+        }
+      ]
     },
     {
       "name": "load",
-      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "log",
       "available": "0.5.0",
-      "rules": [{ "family": "function", "context": "any" }]
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
+        }
+      ]
     },
     {
       "name": "low",
-      "rules": [{ "family": "function", "context": "any" }]
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
+        }
+      ]
     },
     {
       "name": "macro",
-      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "mul",
-      "rules": [{ "family": "function", "context": "any" }]
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
+        }
+      ]
     },
     {
       "name": "nc",
-      "rules": [{ "family": "conditionCode", "context": "notFirstWord" }]
+      "rules": [
+        {
+          "family": "conditionCode",
+          "context": "notFirstWord"
+        }
+      ]
     },
     {
       "name": "newcharmap",
-      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "nextu",
-      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "nz",
-      "rules": [{ "family": "conditionCode", "context": "notFirstWord" }]
+      "rules": [
+        {
+          "family": "conditionCode",
+          "context": "notFirstWord"
+        }
+      ]
     },
     {
       "name": "oam",
-      "rules": [{ "family": "sectionDeclaration", "context": "section" }]
+      "rules": [
+        {
+          "family": "sectionDeclaration",
+          "context": "section"
+        }
+      ]
     },
     {
       "name": "opt",
-      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "pc",
-      "rules": [{ "family": "register", "context": "notFirstWord" }]
+      "rules": [
+        {
+          "family": "register",
+          "context": "notFirstWord"
+        }
+      ]
     },
     {
       "name": "popc",
-      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "popo",
-      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "pops",
-      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "pow",
       "available": "0.5.0",
-      "rules": [{ "family": "function", "context": "any" }]
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
+        }
+      ]
     },
     {
       "name": "print",
       "available": "0.5.0",
-      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "printf",
       "deprecated": "0.5.0",
-      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "printi",
       "deprecated": "0.5.0",
-      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "println",
       "available": "0.5.0",
-      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "printt",
       "deprecated": "0.5.0",
-      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "printv",
       "deprecated": "0.5.0",
-      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "purge",
-      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "pushc",
-      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "pusho",
-      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "pushs",
-      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "rb",
-      "rules": [{ "family": "dataDirective", "context": "any" }]
+      "rules": [
+        {
+          "family": "dataDirective",
+          "context": "any"
+        }
+      ]
     },
     {
       "name": "redef",
-      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "rept",
-      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "rl",
-      "rules": [{ "family": "dataDirective", "context": "any" }]
+      "rules": [
+        {
+          "family": "dataDirective",
+          "context": "any"
+        }
+      ]
     },
     {
       "name": "rom0",
-      "rules": [{ "family": "sectionDeclaration", "context": "section" }]
+      "rules": [
+        {
+          "family": "sectionDeclaration",
+          "context": "section"
+        }
+      ]
     },
     {
       "name": "romx",
-      "rules": [{ "family": "sectionDeclaration", "context": "section" }]
+      "rules": [
+        {
+          "family": "sectionDeclaration",
+          "context": "section"
+        }
+      ]
     },
     {
       "name": "round",
       "available": "0.5.0",
-      "rules": [{ "family": "function", "context": "any" }]
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
+        }
+      ]
     },
     {
       "name": "rsreset",
-      "rules": [{ "family": "dataDirective", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "dataDirective",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "rsset",
-      "rules": [{ "family": "dataDirective", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "dataDirective",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "rw",
-      "rules": [{ "family": "dataDirective", "context": "any" }]
+      "rules": [
+        {
+          "family": "dataDirective",
+          "context": "any"
+        }
+      ]
     },
     {
       "name": "section",
-      "rules": [{ "family": "sectionDeclaration", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "sectionDeclaration",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "set",
-      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "setcharmap",
-      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "shift",
-      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "sin",
-      "rules": [{ "family": "function", "context": "any" }]
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
+        }
+      ]
     },
     {
       "name": "sp",
-      "rules": [{ "family": "register", "context": "notFirstWord" }]
+      "rules": [
+        {
+          "family": "register",
+          "context": "notFirstWord"
+        }
+      ]
     },
     {
       "name": "sram",
-      "rules": [{ "family": "sectionDeclaration", "context": "section" }]
+      "rules": [
+        {
+          "family": "sectionDeclaration",
+          "context": "section"
+        }
+      ]
     },
     {
       "name": "strcat",
-      "rules": [{ "family": "function", "context": "any" }]
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
+        }
+      ]
     },
     {
       "name": "strcmp",
-      "rules": [{ "family": "function", "context": "any" }]
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
+        }
+      ]
     },
     {
       "name": "strfmt",
       "available": "0.5.0",
-      "rules": [{ "family": "function", "context": "any" }]
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
+        }
+      ]
     },
     {
       "name": "strin",
-      "rules": [{ "family": "function", "context": "any" }]
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
+        }
+      ]
     },
     {
       "name": "strlen",
-      "rules": [{ "family": "function", "context": "any" }]
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
+        }
+      ]
     },
     {
       "name": "strlwr",
-      "rules": [{ "family": "function", "context": "any" }]
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
+        }
+      ]
     },
     {
       "name": "strrin",
       "available": "0.5.0",
-      "rules": [{ "family": "function", "context": "any" }]
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
+        }
+      ]
     },
     {
       "name": "strrpl",
       "available": "0.5.0",
-      "rules": [{ "family": "function", "context": "any" }]
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
+        }
+      ]
     },
     {
       "name": "strsub",
-      "rules": [{ "family": "function", "context": "any" }]
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
+        }
+      ]
     },
     {
       "name": "strupr",
-      "rules": [{ "family": "function", "context": "any" }]
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
+        }
+      ]
     },
     {
       "name": "tan",
-      "rules": [{ "family": "function", "context": "any" }]
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
+        }
+      ]
     },
     {
       "name": "union",
-      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "vram",
-      "rules": [{ "family": "sectionDeclaration", "context": "section" }]
+      "rules": [
+        {
+          "family": "sectionDeclaration",
+          "context": "section"
+        }
+      ]
     },
     {
       "name": "warn",
-      "rules": [{ "family": "preprocessor", "context": "firstWord" }]
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
     },
     {
       "name": "wram0",
-      "rules": [{ "family": "sectionDeclaration", "context": "section" }]
+      "rules": [
+        {
+          "family": "sectionDeclaration",
+          "context": "section"
+        }
+      ]
     },
     {
       "name": "wramx",
-      "rules": [{ "family": "sectionDeclaration", "context": "section" }]
+      "rules": [
+        {
+          "family": "sectionDeclaration",
+          "context": "section"
+        }
+      ]
     },
     {
       "name": "z",
-      "rules": [{ "family": "conditionCode", "context": "notFirstWord" }]
+      "rules": [
+        {
+          "family": "conditionCode",
+          "context": "notFirstWord"
+        }
+      ]
     }
   ]
 }
