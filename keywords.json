@@ -46,6 +46,15 @@
       ]
     },
     {
+      "name": "assert",
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
+    },
+    {
       "name": "atan",
       "rules": [
         {
@@ -350,6 +359,15 @@
     },
     {
       "name": "fail",
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
+    },
+    {
+      "name": "fatal",
       "rules": [
         {
           "family": "preprocessor",
@@ -906,6 +924,15 @@
         {
           "family": "function",
           "context": "any"
+        }
+      ]
+    },
+    {
+      "name": "static_assert",
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
         }
       ]
     },
