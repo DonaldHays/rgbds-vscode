@@ -95,6 +95,15 @@
       ]
     },
     {
+      "name": "break",
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
+    },
+    {
       "name": "c",
       "rules": [
         {
