@@ -111,7 +111,7 @@
 			<key>name</key>
 			<string>support.function.gbz80</string>
 			<key>match</key>
-			<string>\b(?i:mul|sin|cos|tan|asin|acos|atan|atan2|strcat|strcmp|strin|strlen|strlwr|strsub|strupr|bank|def|high|low|isconst|ceil|floor|log|pow|round|strfmt|strrin|strrpl)\b</string>
+			<string>\b(?i:div|mul|sin|cos|tan|asin|acos|atan|atan2|strcat|strcmp|strin|strlen|strlwr|strsub|strupr|bank|def|high|low|isconst|ceil|floor|log|pow|round|strfmt|strrin|strrpl)\b</string>
 		</dict>
 		<dict>
 			<key>name</key>

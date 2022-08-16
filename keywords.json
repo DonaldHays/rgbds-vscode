@@ -176,6 +176,15 @@
       ]
     },
     {
+      "name": "div",
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
+        }
+      ]
+    },
+    {
       "name": "dl",
       "rules": [
         {
