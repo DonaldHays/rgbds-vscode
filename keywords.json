@@ -359,6 +359,15 @@
       ]
     },
     {
+      "name": "for",
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
+    },
+    {
       "name": "fragment",
       "rules": [
         {
