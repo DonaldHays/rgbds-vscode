@@ -1,13 +1,17 @@
 # Change Log
 All notable changes to the "rgbds-z80" extension will be documented in this file.
 
-## [3.1.0] - 2022-08-??
+## [3.1.0] - 2022-08-28
 ### Added
 - Support for the `fatal`, `assert`, and `static_assert` assertion keywords.
 - Support for the `for` and `break` repeat block keywords.
 - Support for the `div` math function.
 - Support for the `charlen` and `charsub` string functions.
 - Support for the `sizeof` and `startof` section functions.
+- Support for underscores in number literals.
+
+### Changed
+- Improved hover recognition of number literals.
 
 ## [3.0.1] - 2022-08-04
 ### Fixed

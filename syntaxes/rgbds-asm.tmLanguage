@@ -121,33 +121,39 @@
 		</dict>
 		<dict>
 			<key>name</key>
+			<string>constant.numeric.fixed.gbz80</string>
+			<key>match</key>
+			<string>\b\d[_\d]*\.\d+\b</string>
+		</dict>
+		<dict>
+			<key>name</key>
 			<string>constant.numeric.decimal.gbz80</string>
 			<key>match</key>
-			<string>\b[0-9]+\b</string>
+			<string>\b\d[_\d]*\b</string>
 		</dict>
 		<dict>
 			<key>name</key>
 			<string>constant.numeric.hex.gbz80</string>
 			<key>match</key>
-			<string>\$[0-9a-fA-F]+\b</string>
+			<string>\$[\da-fA-F][_\da-fA-F]*\b</string>
 		</dict>
 		<dict>
 			<key>name</key>
 			<string>constant.numeric.binary.gbz80</string>
 			<key>match</key>
-			<string>\%[01]+\b</string>
+			<string>\%[01][_01]*\b</string>
 		</dict>
 		<dict>
 			<key>name</key>
 			<string>constant.numeric.octal.gbz80</string>
 			<key>match</key>
-			<string>\&amp;[0-7]+\b</string>
+			<string>\&amp;[0-7][_0-7]*\b</string>
 		</dict>
 		<dict>
 			<key>name</key>
 			<string>constant.numeric.gbgfx.gbz80</string>
 			<key>match</key>
-			<string>`[0-3]+\b</string>
+			<string>`[0-3][_0-3]*\b</string>
 		</dict>
 	</array>
 </dict>
