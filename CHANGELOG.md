@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to the "rgbds-z80" extension will be documented in this file.
 
+## [3.2.0] - 2023-04-30
+### Added
+- Support for the `fmod` function.
+- Support for precise fixed-point literals (e.g. 12.34q8).
+
 ## [3.1.0] - 2022-08-28
 ### Added
 - Support for the `fatal`, `assert`, and `static_assert` assertion keywords.

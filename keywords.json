@@ -386,6 +386,15 @@
       ]
     },
     {
+      "name": "fmod",
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
+        }
+      ]
+    },
+    {
       "name": "for",
       "rules": [
         {
