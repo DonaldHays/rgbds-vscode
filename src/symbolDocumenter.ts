@@ -16,7 +16,7 @@ const blockCommentEndRegex = /^(.*?)\s*\*\/.*$/
 
 const includeLineRegex = /^include[\s]+"([^"]+)".*$/i
 const spacerRegex = /^\s*(.)\1{3,}\s*$/
-const labelDefinitionRegex = /^[\s]*((([a-zA-Z_][a-zA-Z_0-9]*)?\.)?[a-zA-Z_][a-zA-Z_0-9]*[:]{0,2}).*$/
+const labelDefinitionRegex = /^\s*((?:[A-Z_]\w+)?(?:(?:\.[A-Z_]\w+:{0,2})|(?:[A-Z_]\w+:{1,2})))/i
 const defineExpressionRegex = /^[\s]*(?:def[\s]*)?([a-zA-Z_][a-zA-Z_0-9]*)[\s]+(equ|equs|set|=)[\s]+.*$/i
 const instructionRegex = new RegExp(`^(${syntaxInfo.instructions.join("|")})\\b`, "i");
 const keywordRegex = new RegExp(`^(${syntaxInfo.preprocessorKeywords.join("|")})\\b`, "i");

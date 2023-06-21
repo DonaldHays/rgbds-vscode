@@ -1,6 +1,13 @@
 # Change Log
 All notable changes to the "rgbds-z80" extension will be documented in this file.
 
+## [3.3.0] - 2023-06-22
+### Removed
+ - Support for colon-less label declarations.
+
+### Fixed
+ - Invoking a macro would mistakingly be seen as re-declaring it.
+
 ## [3.2.1] - 2023-06-21
 ### Added
  - Support for indented documentation.
