@@ -5,7 +5,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { syntaxInfo } from './syntaxInfo';
 
-const commentLineRegex = /^;\s*(.*)$/
+const commentLineRegex = /^\s*;\s*(.*)$/
 const endCommentRegex = /^[^;]+;\s*(.*)$/
 
 const singleLineBlockCommentRegex = /^.*\/\*+\s*(.*?)\s*\*\/.*$/
@@ -20,7 +20,7 @@ const labelDefinitionRegex = /^[\s]*((([a-zA-Z_][a-zA-Z_0-9]*)?\.)?[a-zA-Z_][a-z
 const defineExpressionRegex = /^[\s]*(?:def[\s]*)?([a-zA-Z_][a-zA-Z_0-9]*)[\s]+(equ|equs|set|=)[\s]+.*$/i
 const instructionRegex = new RegExp(`^(${syntaxInfo.instructions.join("|")})\\b`, "i");
 const keywordRegex = new RegExp(`^(${syntaxInfo.preprocessorKeywords.join("|")})\\b`, "i");
-const macroDefinitionRegex = /^macro[\s]+([a-zA-Z_][a-zA-Z_0-9]*).*$/i
+const macroDefinitionRegex = /^\s*macro[\s]+([A-Z_]\w*).*$/i
 
 class ScopeDescriptor {
   constructor(public start: vscode.Position, public end?: vscode.Position) { }
