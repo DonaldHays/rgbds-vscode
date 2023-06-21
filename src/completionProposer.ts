@@ -358,9 +358,9 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
           }
           
           if (shouldIncludeQuotes) {
-            output.push(new vscode.CompletionItem(`"${relative}"`, vscode.CompletionItemKind.File));
+            output.push(new vscode.CompletionItem(`"${relative.replace("\\", "/")}"`, vscode.CompletionItemKind.File));
           } else {
-            output.push(new vscode.CompletionItem(relative, vscode.CompletionItemKind.File));
+            output.push(new vscode.CompletionItem(relative.replace("\\", "/"), vscode.CompletionItemKind.File));
           }
           return;
         }
