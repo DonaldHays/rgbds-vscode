@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to the "rgbds-z80" extension will be documented in this file.
 
+## [3.2.1] - 2023-06-21
+### Added
+ - Support for indented documentation.
+ - Support for indented macro definitions.
+
 ## [3.2.0] - 2023-04-30
 ### Added
 - Support for the `fmod` function.
