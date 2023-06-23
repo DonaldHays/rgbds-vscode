@@ -8,6 +8,7 @@ import { ASMCompletionProposer } from './completionProposer';
 import { ASMDefinitionProvider } from './definitionProvider';
 import { ASMDocumentSymbolProvider } from './documentSymbolProvider';
 import { ASMWorkspaceSymbolProvider } from './workspaceSymbolProvider';
+import { ASMDocumentLinkProvider } from './documentLinkProvider';
 
 export function activate(context: vscode.ExtensionContext) {
   const symbolDocumenter = new ASMSymbolDocumenter();
@@ -21,6 +22,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(vscode.languages.registerDefinitionProvider({ language: "gbz80", scheme: "file" }, new ASMDefinitionProvider(symbolDocumenter)));
   context.subscriptions.push(vscode.languages.registerDocumentSymbolProvider({ language: "gbz80", scheme: "file" }, new ASMDocumentSymbolProvider(symbolDocumenter)));
   context.subscriptions.push(vscode.languages.registerWorkspaceSymbolProvider(new ASMWorkspaceSymbolProvider(symbolDocumenter)));
+  context.subscriptions.push(vscode.languages.registerDocumentLinkProvider({ language: "gbz80", scheme: "file" }, new ASMDocumentLinkProvider(symbolDocumenter)));
 }
 
 // this method is called when your extension is deactivated
