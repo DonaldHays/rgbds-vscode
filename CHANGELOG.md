@@ -1,7 +1,10 @@
 # Change Log
 All notable changes to the "rgbds-z80" extension will be documented in this file.
 
-## [3.3.0] - 2023-06-24
+## [4.0.0] - 2023-06-27
+
+Thanks to sukus21 for the improvements in this release!
+
 ### Added
  - Suggested included files will now use forward slash as directory separator on Windows.
  - The ability to jump to included files by ctrl+clicking the include statement.
