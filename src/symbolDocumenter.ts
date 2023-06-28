@@ -30,8 +30,17 @@ class SymbolDescriptor {
   constructor(public location: vscode.Location, public isExported: boolean, public isLocal: boolean, public kind: vscode.SymbolKind, public scope?: ScopeDescriptor, public documentation?: string) { }
 }
 
+class IncludeDescriptor {
+  constructor(
+    public range: vscode.Range,
+    public name: string,
+    public fsPath: string,
+  ) {
+  }
+}
+
 class FileTable {
-  includedFiles: string[]
+  includedFiles: IncludeDescriptor[]
   fsDir: string
   fsPath: string
   symbols: { [name: string]: SymbolDescriptor }
@@ -144,7 +153,7 @@ export class ASMSymbolDocumenter {
         const globalName = path.basename(globalFilePath);
         const globalFileDirname = path.dirname(globalFilePath);
         for (var i = 0; i < table.includedFiles.length; i++) {
-          const resolvedIncluded = this._resolveFilename(table.includedFiles[i], globalFileDirname);
+          const resolvedIncluded = this._resolveFilename(table.includedFiles[i].name, globalFileDirname);
           if (resolvedIncluded == fsPath) {
             this._seekSymbols(globalName, globalFileDirname, output, searched, SearchMode.includes);
             this._seekSymbols(globalName, globalFileDirname, output, searched, SearchMode.parents);
@@ -185,12 +194,12 @@ export class ASMSymbolDocumenter {
     }
     
     if (mode == SearchMode.includes) {
-      table.includedFiles.forEach((includeFilename) => {
-        const includedFSPath = this._resolveFilename(includeFilename, fsRelativeDir);
+      table.includedFiles.forEach((includeDescriptor) => {
+        const includedFSPath = this._resolveFilename(includeDescriptor.name, fsRelativeDir);
         if (searched.indexOf(includedFSPath) == -1) {
           searched.push(includedFSPath);
           
-          this._seekSymbols(includeFilename, fsRelativeDir, output, searched, SearchMode.includes);
+          this._seekSymbols(includeDescriptor.name, fsRelativeDir, output, searched, SearchMode.includes);
         }
       });
     }
@@ -318,7 +327,14 @@ export class ASMSymbolDocumenter {
         const declarationMatch = macroMatch || defineMatch || labelMatch;
         if (includeLineMatch) {
           const filename = includeLineMatch[1];
-          table.includedFiles.push(filename);
+          const startCharacter = line.text.indexOf(`${filename}`);
+          const startPosition = new vscode.Position(line.lineNumber, startCharacter);
+          const endPosition = new vscode.Position(line.lineNumber, startCharacter + filename.length);
+          table.includedFiles.push(new IncludeDescriptor(
+            new vscode.Range(startPosition, endPosition),
+            filename,
+            this._resolveFilename(filename, document.uri.fsPath),
+          ));
         } else if (declarationMatch) {
           const declaration = declarationMatch[1];
           if (instructionRegex.test(declaration)) {
