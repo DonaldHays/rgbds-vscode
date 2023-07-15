@@ -357,11 +357,12 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
             continue;
           }
           
+          // Format path for windows, and add quotes
+          let includePath = relative.split("\\").join("/");
           if (shouldIncludeQuotes) {
-            output.push(new vscode.CompletionItem(`"${relative.replace("\\", "/")}"`, vscode.CompletionItemKind.File));
-          } else {
-            output.push(new vscode.CompletionItem(relative.replace("\\", "/"), vscode.CompletionItemKind.File));
+            includePath = `"${includePath}"`;
           }
+          output.push(new vscode.CompletionItem(includePath, vscode.CompletionItemKind.File));
           return;
         }
       });
