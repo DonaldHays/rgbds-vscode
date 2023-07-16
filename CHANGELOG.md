@@ -1,7 +1,9 @@
 # Change Log
 All notable changes to the "rgbds-z80" extension will be documented in this file.
 
-## [4.0.1] - 2023-07-15
+## [4.0.1] - 2023-07-16
+
+Thanks to sukus21 for the improvements in this release!
 
 ### Fixed
  - Offset constants (declared with `rb`, `rw` and `rl`) would not get documented.
