@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to the "rgbds-z80" extension will be documented in this file.
 
+## [4.0.1] - 2023-07-15
+
+### Fixed
+ - Offset constants (declared with `rb`, `rw` and `rl`) would not get documented.
+ - Include paths on windows now convert all backslashes to forward slashes, not just the first one.
+
 ## [4.0.0] - 2023-06-27
 
 Thanks to sukus21 for the improvements in this release!
