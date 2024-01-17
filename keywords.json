@@ -313,6 +313,15 @@
       ]
     },
     {
+      "name": "endsection",
+      "rules": [
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
+        }
+      ]
+    },
+    {
       "name": "endu",
       "rules": [
         {
