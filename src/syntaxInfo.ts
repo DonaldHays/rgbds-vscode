@@ -25,7 +25,7 @@ class SyntaxInfo {
   instructionsWithoutSet: string[];
   preprocessorKeywords: string[];
   instructionsJSON: {
-    instructions : [{
+    instructions: [{
       name: string,
       description: string,
       optionalA?: boolean,
@@ -41,56 +41,56 @@ class SyntaxInfo {
       }
     }]
   };
-  
+
   keywordsJSON: {
     keywords: [{
       name: string,
-      available: string|undefined,
-      deprecated: string|undefined,
+      available: string | undefined,
+      deprecated: string | undefined,
       rules: [{
         family: KeywordFamily,
         context: KeywordRuleContext
       }]
     }]
   };
-  
+
   constructor() {
     const extension = vscode.extensions.getExtension("donaldhays.rgbds-z80")!;
     const instructionsJSONPath = path.join(extension.extensionPath, "instructions.json");
     const keywordsJSONPath = path.join(extension.extensionPath, "keywords.json");
     this.instructionsJSON = JSON.parse(fs.readFileSync(instructionsJSONPath, "utf8"));
     this.keywordsJSON = JSON.parse(fs.readFileSync(keywordsJSONPath, "utf8"));
-    
+
     const instructions = new Set<string>();
     this.instructionsJSON.instructions.forEach((instruction) => {
       instructions.add(instruction.name.split(" ")[0]);
     });
-    
+
     this.instructions = Array.from(instructions);
-    
+
     instructions.delete("set");
     this.instructionsWithoutSet = Array.from(instructions);
-    
-    this.preprocessorKeywords = this.keywordsQuery({hasFamily: [KeywordFamily.SectionDeclaration, KeywordFamily.Preprocessor, KeywordFamily.DataDirective]});
+
+    this.preprocessorKeywords = this.keywordsQuery({ hasFamily: [KeywordFamily.SectionDeclaration, KeywordFamily.Preprocessor, KeywordFamily.DataDirective] });
   }
-  
+
   keywordsQuery(query: { hasFamily?: KeywordFamily[], hasContext?: KeywordRuleContext[] }): string[] {
     return this.keywordsJSON.keywords.filter((keyword) => {
       const hasFamily = query.hasFamily;
       const hasContext = query.hasContext;
-      
+
       if (hasFamily) {
         if (keyword.rules.reduce((accumulator, rule) => accumulator || hasFamily.includes(rule.family), false) == false) {
           return false;
         }
       }
-      
+
       if (hasContext) {
         if (keyword.rules.reduce((accumulator, rule) => accumulator || hasContext.includes(rule.context), false) == false) {
           return false;
         }
       }
-      
+
       return true;
     }).map((keyword) => keyword.name);
   }

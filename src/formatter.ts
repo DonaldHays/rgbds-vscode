@@ -7,21 +7,21 @@ const whitespaceRegex = /^\s+/
 const commentRegex = /^;.*$/
 const stringRegex = /^"(?:\\.|[^"])*"/
 const identifierRegex = /^([a-zA-Z_][a-zA-Z_0-9]*[:]{0,2})\b/
-const registerRegex = new RegExp(`^(${syntaxInfo.keywordsQuery({hasFamily: [KeywordFamily.Register]}).join("|")})\\b`, "i");
+const registerRegex = new RegExp(`^(${syntaxInfo.keywordsQuery({ hasFamily: [KeywordFamily.Register] }).join("|")})\\b`, "i");
 const conditionCodeRegex = /^(z|nz|nc)\b/i
 const instructionRegex = new RegExp(`^(${syntaxInfo.instructionsWithoutSet.join("|")})\\b`, "i");
 const instructionSetRegex = /^(\s*)(set)\b(.*)$/i
 const setExpressionRegex = /^(\s*[_a-z][_a-z0-9]+\s*)\b(set)\b(.*)$/i
 const cConditionCodeRegex = /^(call|jp|jr|ret)(\s+)(c)\b/i
 const keywordSectionDeclarationBankRegex = /^(bank)\b\s*\[/i
-const keywordPreprocessorRegex = new RegExp(`^(${syntaxInfo.keywordsQuery({hasFamily: [KeywordFamily.Preprocessor]}).filter((keyword) => keyword != "set").join("|")})\\b`, "i");
-const keywordDataDirectiveRegex = new RegExp(`^(${syntaxInfo.keywordsQuery({hasFamily: [KeywordFamily.DataDirective]}).join("|")})\\b`, "i");
-const keywordSectionDeclarationRegex = new RegExp(`^(${syntaxInfo.keywordsQuery({hasFamily: [KeywordFamily.SectionDeclaration]}).filter((keyword) => keyword != "bank").join("|")})\\b`, "i");
-const keywordFunctionRegex = new RegExp(`^(${syntaxInfo.keywordsQuery({hasFamily: [KeywordFamily.Function]}).join("|")})\\b`, "i");
+const keywordPreprocessorRegex = new RegExp(`^(${syntaxInfo.keywordsQuery({ hasFamily: [KeywordFamily.Preprocessor] }).filter((keyword) => keyword != "set").join("|")})\\b`, "i");
+const keywordDataDirectiveRegex = new RegExp(`^(${syntaxInfo.keywordsQuery({ hasFamily: [KeywordFamily.DataDirective] }).join("|")})\\b`, "i");
+const keywordSectionDeclarationRegex = new RegExp(`^(${syntaxInfo.keywordsQuery({ hasFamily: [KeywordFamily.SectionDeclaration] }).filter((keyword) => keyword != "bank").join("|")})\\b`, "i");
+const keywordFunctionRegex = new RegExp(`^(${syntaxInfo.keywordsQuery({ hasFamily: [KeywordFamily.Function] }).join("|")})\\b`, "i");
 const hexLiteralRegex = /^(\$[0-9a-f]+)\b/i
 
 export class ASMFormatter {
-  private _case(value: string, output: vscode.TextEdit[], line: vscode.TextLine, offset: number, configuration: string|null|undefined) {
+  private _case(value: string, output: vscode.TextEdit[], line: vscode.TextLine, offset: number, configuration: string | null | undefined) {
     if (configuration == "upper") {
       let newValue = value.toUpperCase();
       if (value != newValue) {
@@ -35,44 +35,44 @@ export class ASMFormatter {
       }
     }
   }
-  
+
   rule(name: string): string | null {
     name = name.toLowerCase();
-    
-    let rules: { [key: string]: string|null} = vscode.workspace.getConfiguration().get("rgbdsz80.formatting.capitalization") || {};
+
+    let rules: { [key: string]: string | null } = vscode.workspace.getConfiguration().get("rgbdsz80.formatting.capitalization") || {};
     let components = name.split(".");
-    
+
     while (components.length > 0) {
       let testRule = components.join(".");
       if (rules[testRule] !== undefined) {
         return rules[testRule];
       }
-      
+
       components.pop();
     }
-    
+
     return null;
   }
-  
+
   format(document: vscode.TextDocument, range: vscode.Range, options: vscode.FormattingOptions): vscode.ProviderResult<vscode.TextEdit[]> {
     let startLineNumber = document.lineAt(range.start).lineNumber;
     let endLineNumber = document.lineAt(range.end).lineNumber;
-    
+
     let output: vscode.TextEdit[] = [];
-    
+
     for (let lineNumber = startLineNumber; lineNumber <= endLineNumber; lineNumber++) {
       let line = document.lineAt(lineNumber);
       let text = line.text;
       let offset = 0;
-      
+
       let result: (RegExpExecArray | null) = null;
-      
+
       if (result = instructionSetRegex.exec(text)) {
         this._case(result[2], output, line, result[1].length, this.rule(`language.instruction.${result[2]}`));
       } else if (result = setExpressionRegex.exec(text)) {
         this._case(result[2], output, line, result[1].length, this.rule(`language.keyword.preprocessor.${result[2]}`));
       }
-      
+
       while (text.length > 0) {
         result = null;
         if ((result = whitespaceRegex.exec(text)) || (result = stringRegex.exec(text)) || (result = commentRegex.exec(text))) {
@@ -129,14 +129,14 @@ export class ASMFormatter {
         }
       }
     }
-    
+
     return output;
   }
 }
 
 export class ASMDocumentFormatter implements vscode.DocumentFormattingEditProvider {
   constructor(public formatter: ASMFormatter) { }
-  
+
   provideDocumentFormattingEdits(document: vscode.TextDocument, options: vscode.FormattingOptions, token: vscode.CancellationToken): vscode.ProviderResult<vscode.TextEdit[]> {
     return this.formatter.format(document, new vscode.Range(document.positionAt(0), document.positionAt(document.getText().length - 1)), options);
   }
@@ -144,7 +144,7 @@ export class ASMDocumentFormatter implements vscode.DocumentFormattingEditProvid
 
 export class ASMDocumentRangeFormatter implements vscode.DocumentRangeFormattingEditProvider {
   constructor(public formatter: ASMFormatter) { }
-  
+
   provideDocumentRangeFormattingEdits(document: vscode.TextDocument, range: vscode.Range, options: vscode.FormattingOptions, token: vscode.CancellationToken): vscode.ProviderResult<vscode.TextEdit[]> {
     return this.formatter.format(document, range, options);
   }
@@ -152,7 +152,7 @@ export class ASMDocumentRangeFormatter implements vscode.DocumentRangeFormatting
 
 export class ASMTypingFormatter implements vscode.OnTypeFormattingEditProvider {
   constructor(public formatter: ASMFormatter) { }
-  
+
   public provideOnTypeFormattingEdits(document: vscode.TextDocument, position: vscode.Position, ch: string, options: vscode.FormattingOptions, token: vscode.CancellationToken): vscode.ProviderResult<vscode.TextEdit[]> {
     return this.formatter.format(document, document.lineAt(position.line).range, options);
   }

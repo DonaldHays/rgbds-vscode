@@ -6,7 +6,7 @@ import * as path from 'path';
 import { ASMFormatter } from './formatter';
 import { KeywordFamily, KeywordRuleContext, syntaxInfo } from './syntaxInfo';
 
-const registerRegex = new RegExp(`\\b\\[?(${syntaxInfo.keywordsQuery({hasFamily: [KeywordFamily.Register]}).join("|")})\\]?\\b`, "i");
+const registerRegex = new RegExp(`\\b\\[?(${syntaxInfo.keywordsQuery({ hasFamily: [KeywordFamily.Register] }).join("|")})\\]?\\b`, "i");
 const itemSplitRegex = /,? /
 const hexRegex = /(\$[0-9a-f]+)/i
 
@@ -16,18 +16,18 @@ const firstWordRegex = /^(?:[\w\.]+[:]{0,2})?\s*\w*$/
 const sectionRegex = /^(?:[\w\.]+[:]{0,2})?\s*section\b/i
 
 const ruleCollections = [
-  { "context": ["notFirstWord"], "rule": "language.register", "kind": vscode.CompletionItemKind.Variable, "items": syntaxInfo.keywordsQuery({hasFamily: [KeywordFamily.Register]}) },
-  { "context": ["notFirstWord"], "rule": "language.conditioncode", "kind": vscode.CompletionItemKind.Value, "items": syntaxInfo.keywordsQuery({hasFamily: [KeywordFamily.ConditionCode]}) },
-  
-  { "context": ["firstWord"], "rule": "language.keyword.preprocessor", "kind": vscode.CompletionItemKind.Keyword, "items": syntaxInfo.keywordsQuery({hasFamily: [KeywordFamily.Preprocessor]}) },
-  
-  { "context": ["firstWord"], "rule": "language.keyword.datadirective", "kind": vscode.CompletionItemKind.Keyword, "items": syntaxInfo.keywordsQuery({hasFamily: [KeywordFamily.DataDirective], hasContext: [KeywordRuleContext.FirstWord]}) },
-  { "context": [], "rule": "language.keyword.datadirective", "kind": vscode.CompletionItemKind.Keyword, "items": syntaxInfo.keywordsQuery({hasFamily: [KeywordFamily.DataDirective], hasContext: [KeywordRuleContext.Any]}) },
-  
-  { "context": ["firstWord"], "rule": "language.keyword.sectiondeclaration", "kind": vscode.CompletionItemKind.Keyword, "items": syntaxInfo.keywordsQuery({hasFamily: [KeywordFamily.SectionDeclaration], hasContext: [KeywordRuleContext.FirstWord]}) },
-  { "context": ["section"], "rule": "language.keyword.sectiondeclaration", "kind": vscode.CompletionItemKind.Keyword, "items": syntaxInfo.keywordsQuery({hasFamily: [KeywordFamily.SectionDeclaration], hasContext: [KeywordRuleContext.Section]}) },
-  
-  { "context": [], "rule": "language.keyword.function", "kind": vscode.CompletionItemKind.Function, "items": syntaxInfo.keywordsQuery({hasFamily: [KeywordFamily.Function]}) },
+  { "context": ["notFirstWord"], "rule": "language.register", "kind": vscode.CompletionItemKind.Variable, "items": syntaxInfo.keywordsQuery({ hasFamily: [KeywordFamily.Register] }) },
+  { "context": ["notFirstWord"], "rule": "language.conditioncode", "kind": vscode.CompletionItemKind.Value, "items": syntaxInfo.keywordsQuery({ hasFamily: [KeywordFamily.ConditionCode] }) },
+
+  { "context": ["firstWord"], "rule": "language.keyword.preprocessor", "kind": vscode.CompletionItemKind.Keyword, "items": syntaxInfo.keywordsQuery({ hasFamily: [KeywordFamily.Preprocessor] }) },
+
+  { "context": ["firstWord"], "rule": "language.keyword.datadirective", "kind": vscode.CompletionItemKind.Keyword, "items": syntaxInfo.keywordsQuery({ hasFamily: [KeywordFamily.DataDirective], hasContext: [KeywordRuleContext.FirstWord] }) },
+  { "context": [], "rule": "language.keyword.datadirective", "kind": vscode.CompletionItemKind.Keyword, "items": syntaxInfo.keywordsQuery({ hasFamily: [KeywordFamily.DataDirective], hasContext: [KeywordRuleContext.Any] }) },
+
+  { "context": ["firstWord"], "rule": "language.keyword.sectiondeclaration", "kind": vscode.CompletionItemKind.Keyword, "items": syntaxInfo.keywordsQuery({ hasFamily: [KeywordFamily.SectionDeclaration], hasContext: [KeywordRuleContext.FirstWord] }) },
+  { "context": ["section"], "rule": "language.keyword.sectiondeclaration", "kind": vscode.CompletionItemKind.Keyword, "items": syntaxInfo.keywordsQuery({ hasFamily: [KeywordFamily.SectionDeclaration], hasContext: [KeywordRuleContext.Section] }) },
+
+  { "context": [], "rule": "language.keyword.function", "kind": vscode.CompletionItemKind.Function, "items": syntaxInfo.keywordsQuery({ hasFamily: [KeywordFamily.Function] }) },
 ]
 
 export class ASMCompletionProposer implements vscode.CompletionItemProvider {
@@ -37,18 +37,18 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
   constructor(public symbolDocumenter: ASMSymbolDocumenter, public formatter: ASMFormatter) {
     this.asmFilePaths = new Set();
     this.instructionItems = [];
-    
+
     vscode.workspace.findFiles("**/*.{z80,inc,asm}", null, undefined).then((files) => {
       files.forEach((fileURI) => {
         this.asmFilePaths.add(fileURI.fsPath);
       });
     });
-    
+
     const watcher = vscode.workspace.createFileSystemWatcher("**/*.{z80,inc,asm}");
     watcher.onDidCreate((uri) => {
       this.asmFilePaths.add(uri.fsPath);
     });
-    
+
     watcher.onDidDelete((uri) => {
       this.asmFilePaths.delete(uri.fsPath);
     });
@@ -284,79 +284,79 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
       return components[0];
     }
   }
-  
+
   _fileRelativeDirectories(document: vscode.TextDocument): string[] {
     let output: string[] = [];
-    
+
     output.push(path.dirname(document.fileName));
-    
+
     // Grab the configured include paths. If it's a string, make it an array.
     var includePathConfiguration: any = vscode.workspace.getConfiguration().get("rgbdsz80.includePath");
     if (typeof includePathConfiguration === "string") {
       includePathConfiguration = [includePathConfiguration];
     }
-    
+
     // For each configured include path
     for (var i = 0; i < includePathConfiguration.length; i++) {
       var includePath: string = includePathConfiguration[i];
-      
+
       // If the path is relative, make it absolute starting from workspace root.
       if (path.isAbsolute(includePath) == false) {
         if (vscode.workspace.workspaceFolders !== undefined) {
           includePath = path.resolve(vscode.workspace.workspaceFolders[0].uri.fsPath, includePath);
         }
       }
-      
+
       output.push(includePath);
     }
-    
+
     return output;
   }
 
   provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken, context: vscode.CompletionContext): vscode.ProviderResult<vscode.CompletionItem[] | vscode.CompletionList> {
     let prefix = document.getText(new vscode.Range(position.with({ character: 0 }), position));
-    
+
     let lineContext = new Set();
-    
+
     if (firstWordRegex.test(prefix)) {
       lineContext.add("firstWord");
     } else {
       lineContext.add("notFirstWord");
     }
-    
+
     if (sectionRegex.test(prefix)) {
       lineContext.add("section");
     }
-    
+
     if (includeRegex.test(prefix)) {
       lineContext.add("include");
     }
-    
+
     let output: vscode.CompletionItem[] = [];
-    
+
     if (context.triggerCharacter == `"` || strictIncludeRegex.test(prefix)) {
       if (lineContext.has("include") == false) {
         return output;
       }
-      
+
       let shouldIncludeQuotes = prefix.indexOf(`"`) == -1;
       let directories = this._fileRelativeDirectories(document);
-      
+
       this.asmFilePaths.forEach((filePath) => {
         // Don't include self in the list
         if (filePath == document.fileName) {
           return;
         }
-        
+
         for (let directoryIndex = 0; directoryIndex < directories.length; directoryIndex++) {
           let directory = directories[directoryIndex];
           let relative = path.relative(directory, filePath);
-          
+
           // Don't include parent files in the list
           if (relative.indexOf("..") != -1) {
             continue;
           }
-          
+
           // Format path for windows, and add quotes
           let includePath = relative.split("\\").join("/");
           if (shouldIncludeQuotes) {
@@ -386,19 +386,19 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
           return;
         }
       }
-      
+
       collection.items.forEach((item) => {
         let rule = this.formatter.rule(`${collection.rule}.${item}`);
-        
+
         let cased = item;
         if (rule == "upper") {
           cased = item.toUpperCase();
         }
-        
+
         output.push(new vscode.CompletionItem(cased, collection.kind));
       })
     });
-    
+
     if (lineContext.has("firstWord")) {
       if (vscode.workspace.getConfiguration().get("rgbdsz80.showInstructionCompletionSuggestions") || false) {
         this.instructionItems.forEach((item) => {
@@ -406,7 +406,7 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
         });
       }
     }
-    
+
     let triggerWordRange = document.getWordRangeAtPosition(position, /[\S]+/);
     let triggerWord = document.getText(triggerWordRange);
 
@@ -420,18 +420,18 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
         }
         const item = new vscode.CompletionItem(name, kind);
         item.documentation = new vscode.MarkdownString(symbol.documentation);
-        
+
         if (triggerWord.indexOf(".") == 0 && item.label.indexOf(".") == 0) {
           item.insertText = item.label.substring(1);
         }
-        
+
         if (symbol.isLocal && symbol.scope && symbol.scope.end) {
           let symbolRange = new vscode.Range(symbol.scope.start, symbol.scope.end);
           if (symbolRange.contains(position) == false) {
             continue;
           }
         }
-        
+
         output.push(item);
       }
     }
