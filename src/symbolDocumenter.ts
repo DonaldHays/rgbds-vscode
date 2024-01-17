@@ -379,7 +379,7 @@ export class ASMSymbolDocumenter {
             }
 
             if (commonLength > 0) {
-              commentBuffer = commentBuffer.map((str) => { return str.substr(commonLength); });
+              commentBuffer = commentBuffer.map((str) => { return str.substring(commonLength); });
             }
           }
 

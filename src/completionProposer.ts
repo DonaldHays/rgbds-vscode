@@ -370,7 +370,7 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
     }
 
     this.instructionItems.forEach((item) => {
-      item.label = this._formatSnippet(item.label);
+      item.label = this._formatSnippet(item.label as string);
       if (item.insertText != undefined) {
         if (typeof item.insertText == "string") {
           item.insertText = this._formatSnippet(item.insertText);
@@ -421,8 +421,8 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
         const item = new vscode.CompletionItem(name, kind);
         item.documentation = new vscode.MarkdownString(symbol.documentation);
 
-        if (triggerWord.indexOf(".") == 0 && item.label.indexOf(".") == 0) {
-          item.insertText = item.label.substring(1);
+        if (triggerWord.indexOf(".") == 0 && name.indexOf(".") == 0) {
+          item.insertText = name.substring(1);
         }
 
         if (symbol.isLocal && symbol.scope && symbol.scope.end) {

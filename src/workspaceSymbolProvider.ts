@@ -18,7 +18,9 @@ export class ASMWorkspaceSymbolProvider implements vscode.WorkspaceSymbolProvide
         for (const name in table.symbols) {
           if (table.symbols.hasOwnProperty(name)) {
             const symbol = table.symbols[name];
-            output.push(new vscode.SymbolInformation(name, symbol.kind, symbol.location.range, symbol.location.uri));
+            if (symbol.isExported) {
+              output.push(new vscode.SymbolInformation(name, symbol.kind, "", symbol.location));
+            }
           }
         }
       }

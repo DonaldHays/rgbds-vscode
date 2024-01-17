@@ -76,55 +76,55 @@ export class ASMFormatter {
       while (text.length > 0) {
         result = null;
         if ((result = whitespaceRegex.exec(text)) || (result = stringRegex.exec(text)) || (result = commentRegex.exec(text))) {
-          text = text.substr(result[0].length);
+          text = text.substring(result[0].length);
           offset += result[0].length;
         } else if (result = cConditionCodeRegex.exec(text)) {
           this._case(result[1], output, line, offset, this.rule(`language.instruction.${result[1]}`));
           this._case(result[3], output, line, offset + result[1].length + result[2].length, this.rule(`language.conditioncode.${result[3]}`));
-          text = text.substr(result[0].length);
+          text = text.substring(result[0].length);
           offset += result[0].length;
         } else if (result = instructionRegex.exec(text)) {
           this._case(result[0], output, line, offset, this.rule(`language.instruction.${result[0]}`));
-          text = text.substr(result[0].length);
+          text = text.substring(result[0].length);
           offset += result[0].length;
         } else if (result = keywordPreprocessorRegex.exec(text)) {
           this._case(result[0], output, line, offset, this.rule(`language.keyword.preprocessor.${result[0]}`));
-          text = text.substr(result[0].length);
+          text = text.substring(result[0].length);
           offset += result[0].length;
         } else if (result = keywordDataDirectiveRegex.exec(text)) {
           this._case(result[0], output, line, offset, this.rule(`language.keyword.datadirective.${result[0]}`));
-          text = text.substr(result[0].length);
+          text = text.substring(result[0].length);
           offset += result[0].length;
         } else if (result = keywordSectionDeclarationRegex.exec(text)) {
           this._case(result[0], output, line, offset, this.rule(`language.keyword.sectiondeclaration.${result[0]}`));
-          text = text.substr(result[0].length);
+          text = text.substring(result[0].length);
           offset += result[0].length;
         } else if (result = keywordSectionDeclarationBankRegex.exec(text)) {
           this._case(result[0], output, line, offset, this.rule(`language.keyword.sectiondeclaration.${result[0]}`));
-          text = text.substr(result[0].length);
+          text = text.substring(result[0].length);
           offset += result[0].length;
         } else if (result = keywordFunctionRegex.exec(text)) {
           this._case(result[0], output, line, offset, this.rule(`language.keyword.function.${result[0]}`));
-          text = text.substr(result[0].length);
+          text = text.substring(result[0].length);
           offset += result[0].length;
         } else if (result = registerRegex.exec(text)) {
           this._case(result[0], output, line, offset, this.rule(`language.register.${result[0]}`));
-          text = text.substr(result[0].length);
+          text = text.substring(result[0].length);
           offset += result[0].length;
         } else if (result = conditionCodeRegex.exec(text)) {
           this._case(result[0], output, line, offset, this.rule(`language.conditioncode.${result[0]}`));
-          text = text.substr(result[0].length);
+          text = text.substring(result[0].length);
           offset += result[0].length;
         } else if (result = hexLiteralRegex.exec(text)) {
           this._case(result[0], output, line, offset, this.rule(`language.hex`));
-          text = text.substr(result[0].length);
+          text = text.substring(result[0].length);
           offset += result[0].length;
         } else if (result = identifierRegex.exec(text)) {
-          text = text.substr(result[0].length);
+          text = text.substring(result[0].length);
           offset += result[0].length;
         } else {
           // Chomp one unrecognized character.
-          text = text.substr(1);
+          text = text.substring(1);
           offset += 1;
         }
       }
