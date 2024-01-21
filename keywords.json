@@ -503,6 +503,16 @@
       ]
     },
     {
+      "name": "incharmap",
+      "available": "0.7.0",
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
+        }
+      ]
+    },
+    {
       "name": "include",
       "rules": [
         {
