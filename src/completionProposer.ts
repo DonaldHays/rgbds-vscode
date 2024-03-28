@@ -14,18 +14,19 @@ const includeRegex = /^(?:[\w\.]+[:]{0,2})?\s*include\s+\"?/i
 const strictIncludeRegex = /^(?:[\w\.]+[:]{0,2})?\s*include\s+\"?$/i
 const firstWordRegex = /^(?:[\w\.]+[:]{0,2})?\s*\w*$/
 const sectionRegex = /^(?:[\w\.]+[:]{0,2})?\s*section\b/i
+const multiInstructionLineStart = /::\s*\w*$/
 
 const ruleCollections = [
-  { "context": ["notFirstWord"], "rule": "language.register", "kind": vscode.CompletionItemKind.Variable, "items": syntaxInfo.keywordsQuery({ hasFamily: [KeywordFamily.Register] }) },
-  { "context": ["notFirstWord"], "rule": "language.conditioncode", "kind": vscode.CompletionItemKind.Value, "items": syntaxInfo.keywordsQuery({ hasFamily: [KeywordFamily.ConditionCode] }) },
+  { "context": [KeywordRuleContext.NotFirstWord], "rule": "language.register", "kind": vscode.CompletionItemKind.Variable, "items": syntaxInfo.keywordsQuery({ hasFamily: [KeywordFamily.Register] }) },
+  { "context": [KeywordRuleContext.NotFirstWord], "rule": "language.conditioncode", "kind": vscode.CompletionItemKind.Value, "items": syntaxInfo.keywordsQuery({ hasFamily: [KeywordFamily.ConditionCode] }) },
 
-  { "context": ["firstWord"], "rule": "language.keyword.preprocessor", "kind": vscode.CompletionItemKind.Keyword, "items": syntaxInfo.keywordsQuery({ hasFamily: [KeywordFamily.Preprocessor] }) },
+  { "context": [KeywordRuleContext.FirstWord], "rule": "language.keyword.preprocessor", "kind": vscode.CompletionItemKind.Keyword, "items": syntaxInfo.keywordsQuery({ hasFamily: [KeywordFamily.Preprocessor] }) },
 
-  { "context": ["firstWord"], "rule": "language.keyword.datadirective", "kind": vscode.CompletionItemKind.Keyword, "items": syntaxInfo.keywordsQuery({ hasFamily: [KeywordFamily.DataDirective], hasContext: [KeywordRuleContext.FirstWord] }) },
+  { "context": [KeywordRuleContext.FirstWord], "rule": "language.keyword.datadirective", "kind": vscode.CompletionItemKind.Keyword, "items": syntaxInfo.keywordsQuery({ hasFamily: [KeywordFamily.DataDirective], hasContext: [KeywordRuleContext.FirstWord] }) },
   { "context": [], "rule": "language.keyword.datadirective", "kind": vscode.CompletionItemKind.Keyword, "items": syntaxInfo.keywordsQuery({ hasFamily: [KeywordFamily.DataDirective], hasContext: [KeywordRuleContext.Any] }) },
 
-  { "context": ["firstWord"], "rule": "language.keyword.sectiondeclaration", "kind": vscode.CompletionItemKind.Keyword, "items": syntaxInfo.keywordsQuery({ hasFamily: [KeywordFamily.SectionDeclaration], hasContext: [KeywordRuleContext.FirstWord] }) },
-  { "context": ["section"], "rule": "language.keyword.sectiondeclaration", "kind": vscode.CompletionItemKind.Keyword, "items": syntaxInfo.keywordsQuery({ hasFamily: [KeywordFamily.SectionDeclaration], hasContext: [KeywordRuleContext.Section] }) },
+  { "context": [KeywordRuleContext.FirstWord], "rule": "language.keyword.sectiondeclaration", "kind": vscode.CompletionItemKind.Keyword, "items": syntaxInfo.keywordsQuery({ hasFamily: [KeywordFamily.SectionDeclaration], hasContext: [KeywordRuleContext.FirstWord] }) },
+  { "context": [KeywordRuleContext.Section], "rule": "language.keyword.sectiondeclaration", "kind": vscode.CompletionItemKind.Keyword, "items": syntaxInfo.keywordsQuery({ hasFamily: [KeywordFamily.SectionDeclaration], hasContext: [KeywordRuleContext.Section] }) },
 
   { "context": [], "rule": "language.keyword.function", "kind": vscode.CompletionItemKind.Function, "items": syntaxInfo.keywordsQuery({ hasFamily: [KeywordFamily.Function] }) },
 ]
@@ -316,7 +317,7 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
   provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken, context: vscode.CompletionContext): vscode.ProviderResult<vscode.CompletionItem[] | vscode.CompletionList> {
     let prefix = document.getText(new vscode.Range(position.with({ character: 0 }), position));
 
-    let lineContext = new Set();
+    let lineContext = new Set<string>();
 
     if (firstWordRegex.test(prefix)) {
       lineContext.add("firstWord");
@@ -330,6 +331,10 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
 
     if (includeRegex.test(prefix)) {
       lineContext.add("include");
+    }
+
+    if (multiInstructionLineStart.test(prefix)) {
+      lineContext.add("multiInstructionLineStart");
     }
 
     let output: vscode.CompletionItem[] = [];
@@ -399,7 +404,7 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
       })
     });
 
-    if (lineContext.has("firstWord")) {
+    if (lineContext.has("firstWord") || lineContext.has("multiInstructionLineStart")) {
       if (vscode.workspace.getConfiguration().get("rgbdsz80.showInstructionCompletionSuggestions") || false) {
         this.instructionItems.forEach((item) => {
           output.push(item);
