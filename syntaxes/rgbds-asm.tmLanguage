@@ -38,6 +38,39 @@
 		</dict>
 		<dict>
 			<key>name</key>
+			<string>string.quoted.triple.raw.gbz80</string>
+			<key>begin</key>
+			<string>#&quot;&quot;&quot;</string>
+			<key>end</key>
+			<string>&quot;&quot;&quot;</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>string.quoted.triple.gbz80</string>
+			<key>begin</key>
+			<string>&quot;&quot;&quot;</string>
+			<key>end</key>
+			<string>&quot;&quot;&quot;</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>name</key>
+					<string>constant.character.escape.gbz80</string>
+					<key>match</key>
+					<string>\\.</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>string.quoted.double.raw.gbz80</string>
+			<key>begin</key>
+			<string>#&quot;</string>
+			<key>end</key>
+			<string>&quot;</string>
+		</dict>
+		<dict>
+			<key>name</key>
 			<string>string.quoted.double.gbz80</string>
 			<key>begin</key>
 			<string>&quot;</string>
