@@ -6,12 +6,12 @@ import { KeywordFamily, syntaxInfo } from './syntaxInfo';
 const whitespaceRegex = /^\s+/
 const commentRegex = /^;.*$/
 const stringRegex = /^"(?:\\.|[^"])*"/
-const identifierRegex = /^([a-zA-Z_][a-zA-Z_0-9]*[:]{0,2})\b/
+const identifierRegex = /^([A-Z_][\w#@]*[:]{0,2})\b/i
 const registerRegex = new RegExp(`^(${syntaxInfo.keywordsQuery({ hasFamily: [KeywordFamily.Register] }).join("|")})\\b`, "i");
 const conditionCodeRegex = /^(z|nz|nc)\b/i
 const instructionRegex = new RegExp(`^(${syntaxInfo.instructionsWithoutSet.join("|")})\\b`, "i");
 const instructionSetRegex = /^(\s*)(set)\b(.*)$/i
-const setExpressionRegex = /^(\s*[_a-z][_a-z0-9]+\s*)\b(set)\b(.*)$/i
+const setExpressionRegex = /^(\s*[_a-z][\w#@]+\s*)\b(set)\b(.*)$/i
 const cConditionCodeRegex = /^(call|jp|jr|ret)(\s+)(c)\b/i
 const keywordSectionDeclarationBankRegex = /^(bank)\b\s*\[/i
 const keywordPreprocessorRegex = new RegExp(`^(${syntaxInfo.keywordsQuery({ hasFamily: [KeywordFamily.Preprocessor] }).filter((keyword) => keyword != "set").join("|")})\\b`, "i");
