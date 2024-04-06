@@ -1,6 +1,18 @@
 # Change Log
 All notable changes to the "rgbds-z80" extension will be documented in this file.
 
+## [4.1.0] - 2024-04-06
+
+### Added
+- Support for the `endsection` keyword.
+- Support for the `incharmap` function.
+- Support for completions when writing multiple instructions per line via `::`.
+- Support for `#"raw strings"`.
+- Support for the `#` and `@` characters in symbol names.
+
+### Fixed
+- rb/rw/rl definition expressions that omit values are now recognized for completions and documentation.
+
 ## [4.0.1] - 2023-07-16
 
 Thanks to sukus21 for the improvements in this release!
