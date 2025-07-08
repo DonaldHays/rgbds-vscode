@@ -21,6 +21,7 @@ const defineExpressionRegex = /^\s*(?:def\s*)?([A-Z_][\w#@]*)\s+(?:(?:equ|equs|s
 const instructionRegex = new RegExp(`^(${syntaxInfo.instructions.join("|")})\\b`, "i");
 const keywordRegex = new RegExp(`^(${syntaxInfo.preprocessorKeywords.join("|")})\\b`, "i");
 const macroDefinitionRegex = /^\s*macro[\s]+([A-Z_][\w#@]*).*$/i
+const exportDefinitionRegex = /^\s*export[\s]+([A-Z_][\w#@]*).*$/i
 
 class ScopeDescriptor {
   constructor(public start: vscode.Position, public end?: vscode.Position) { }
@@ -287,6 +288,7 @@ export class ASMSymbolDocumenter {
         const includeLineMatch = includeLineRegex.exec(line.text);
         const labelMatch = labelDefinitionRegex.exec(line.text);
         const macroMatch = macroDefinitionRegex.exec(line.text);
+        const exportMatch = exportDefinitionRegex.exec(line.text);
         const defineMatch = defineExpressionRegex.exec(line.text);
         const singleLineBlockCommentMatch = singleLineBlockCommentRegex.exec(line.text);
         const blockCommentBeginMatch = blockCommentBeginRegex.exec(line.text);
@@ -324,7 +326,7 @@ export class ASMSymbolDocumenter {
           }
         }
 
-        const declarationMatch = macroMatch || defineMatch || labelMatch;
+        const declarationMatch = macroMatch || exportMatch || defineMatch || labelMatch;
         if (includeLineMatch) {
           const filename = includeLineMatch[1];
           const startCharacter = line.text.indexOf(`${filename}`);
@@ -354,11 +356,11 @@ export class ASMSymbolDocumenter {
             table.scopes.push(currentScope);
           }
 
-          const isFunction = declaration.indexOf(":") != -1;
+          const isFunction = !!exportMatch || declaration.indexOf(":") != -1;
 
-          const name = declaration.replace(/:+/, "");
+          const name = !exportMatch ? declaration.replace(/:+/, "") : declaration.replace(/export\s+/i, "");
           const location = new vscode.Location(document.uri, line.range.start);
-          const isExported = declaration.indexOf("::") != -1;
+          const isExported = !!exportMatch || declaration.indexOf("::") != -1;
           const isLocal = declaration.indexOf(".") != -1;
           let documentation: string | undefined = undefined;
 
@@ -393,7 +395,15 @@ export class ASMSymbolDocumenter {
             documentation = commentBuffer.join("\n");
           }
 
-          table.symbols[name] = new SymbolDescriptor(location, isExported, isLocal, isFunction ? vscode.SymbolKind.Function : vscode.SymbolKind.Constant, currentScope, documentation);
+          if (name in table.symbols) {
+            if (exportMatch) {
+              table.symbols[name].isExported = isExported;
+            } else {
+              table.symbols[name] = new SymbolDescriptor(location, table.symbols[name].isExported, isLocal, isFunction ? vscode.SymbolKind.Function : vscode.SymbolKind.Constant, currentScope, documentation);
+            }
+          } else {
+            table.symbols[name] = new SymbolDescriptor(location, isExported, isLocal, isFunction ? vscode.SymbolKind.Function : vscode.SymbolKind.Constant, currentScope, documentation);
+          }
         }
 
         if (hadBlockComment == false && isInBlockComment == false) {
