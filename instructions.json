@@ -507,9 +507,23 @@
       "flags" : {}
     },
     {
+      "name" : "ldi [hl], a",
+      "description" : "[`hl`] = `a`, `hl` += 1",
+      "cycles" : 2,
+      "bytes" : 1,
+      "flags" : {}
+    },
+    {
       "name" : "ld [hl-], a",
       "description" : "[`hl`] = `a`, `hl` -= 1",
       "aliasHLD" : true,
+      "cycles" : 2,
+      "bytes" : 1,
+      "flags" : {}
+    },
+    {
+      "name" : "ldd [hl], a",
+      "description" : "[`hl`] = `a`, `hl` -= 1",
       "cycles" : 2,
       "bytes" : 1,
       "flags" : {}
@@ -523,9 +537,23 @@
       "flags" : {}
     },
     {
+      "name" : "ldi a, [hl]",
+      "description" : "`a` = [`hl`], `hl` += 1",
+      "cycles" : 2,
+      "bytes" : 1,
+      "flags" : {}
+    },
+    {
       "name" : "ld a, [hl-]",
       "description" : "`a` = [`hl`], `hl` -= 1",
       "aliasHLD" : true,
+      "cycles" : 2,
+      "bytes" : 1,
+      "flags" : {}
+    },
+    {
+      "name" : "ldd a, [hl]",
+      "description" : "`a` = [`hl`], `hl` -= 1",
       "cycles" : 2,
       "bytes" : 1,
       "flags" : {}

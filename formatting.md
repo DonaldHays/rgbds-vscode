@@ -105,7 +105,7 @@ routine::
 
 ##### `language.instruction`
 
-`adc, add, and, bit, call, ccf, cp, cpl, daa, dec, di, ei, halt, inc, jp, jr, ld, ldh, nop, or, pop, push, res, ret, reti, rl, rla, rlc, rlca, rr, rra, rrc, rrca, rst, sbc, scf, set, sla, sra, srl, stop, sub, swap, xor`
+`adc, add, and, bit, call, ccf, cp, cpl, daa, dec, di, ei, halt, inc, jp, jr, ld, ldh, ldi, ldd, nop, or, pop, push, res, ret, reti, rl, rla, rlc, rlca, rr, rra, rrc, rrca, rst, sbc, scf, set, sla, sra, srl, stop, sub, swap, xor`
 
 ##### `language.hex`
 
