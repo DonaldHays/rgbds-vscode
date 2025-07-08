@@ -6,7 +6,10 @@ All notable changes to the "rgbds-z80" extension will be documented in this file
 Thanks to RubenZwietering for improvements in this release!
 
 ### Added
-- Support for `hli`/`hld` instructions (Thanks, RubenZwietering!)
+- Support for `hli`/`hld` instructions. (Thanks, RubenZwietering!)
+
+### Changed
+- Completion prompts for `ld [c], a` and `ld a, [c]` are now `ldh [c], a` and `ldh a, [c]`.
 
 ## [4.1.0] - 2024-04-06
 

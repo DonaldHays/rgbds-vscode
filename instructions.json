@@ -457,7 +457,7 @@
       "flags": { }
     },
     {
-      "name": "ld [c], a",
+      "name": "ldh [c], a",
       "description": "[$ff00+`c`] = `a`",
       "cycles": 2,
       "bytes": 1,
@@ -492,7 +492,7 @@
       "flags": { }
     },
     {
-      "name": "ld a, [c]",
+      "name": "ldh a, [c]",
       "description": "`a` = [$ff00+`c`]",
       "cycles": 2,
       "bytes": 1,
