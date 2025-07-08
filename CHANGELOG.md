@@ -1,6 +1,13 @@
 # Change Log
 All notable changes to the "rgbds-z80" extension will be documented in this file.
 
+## [4.2.0] - 2025-??-??
+
+Thanks to RubenZwietering for improvements in this release!
+
+### Added
+- Support for `hli`/`hld` instructions (Thanks, RubenZwietering!)
+
 ## [4.1.0] - 2024-04-06
 
 ### Added
