@@ -11,6 +11,9 @@ Thanks to RubenZwietering for improvements in this release!
 ### Changed
 - Completion prompts for `ld [c], a` and `ld a, [c]` are now `ldh [c], a` and `ldh a, [c]`.
 
+### Fixed
+- Document links on `include` directives now work on lines that begin with whitespace.
+
 ## [4.1.0] - 2024-04-06
 
 ### Added
