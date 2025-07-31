@@ -131,7 +131,7 @@ export class ASMSymbolDocumenter {
    * @param output The collection of discovered symbols.
    * @param searched Paths of files that have already been searched.
    */
-  private _seekSymbolsUp(fsPath: string, output: { [name: string]: SymbolDescriptor }, searched: string[]) {
+  private _seekSymbolsUp(fsPath: string, output: Map<string, SymbolDescriptor>, searched: string[]) {
     for (const globalFilePath in this.files) {
       if (this.files.hasOwnProperty(globalFilePath)) {
         if (searched.indexOf(globalFilePath) != -1) {
@@ -165,7 +165,7 @@ export class ASMSymbolDocumenter {
    * @param searched Paths of files that have already been searched.
    * @param mode What sort of files and symbols to seek through.
    */
-  private _seekSymbols(filename: string, fsRelativeDir: string, output: { [name: string]: SymbolDescriptor }, searched: string[], mode: SearchMode) {
+  private _seekSymbols(filename: string, fsRelativeDir: string, output: Map<string, SymbolDescriptor>, searched: string[], mode: SearchMode) {
     const fsPath = this._resolveFilename(filename, fsRelativeDir);
     const table = this.files[fsPath];
 
@@ -180,7 +180,7 @@ export class ASMSymbolDocumenter {
         const symbol = table.symbols[name];
         if (!(name in output)) {
           if ((mode != SearchMode.globals) || symbol.isExported) {
-            output[name] = symbol;
+            output.set(name, symbol);
           }
         }
       }
@@ -206,8 +206,8 @@ export class ASMSymbolDocumenter {
    * Returns a set of symbols possibly within scope of `context`.
    * @param context The document to find symbols for.
    */
-  symbols(context: vscode.TextDocument): { [name: string]: SymbolDescriptor } {
-    const output: { [name: string]: SymbolDescriptor } = {};
+  symbols(context: vscode.TextDocument): Map<string, SymbolDescriptor> {
+    const output = new Map<string, SymbolDescriptor>();
 
     // First, find all exported symbols in the entire workspace
     for (const filename in this.files) {
@@ -239,7 +239,7 @@ export class ASMSymbolDocumenter {
    * @param searchContext The document to find the symbol in.
    */
   symbol(name: string, searchContext: vscode.TextDocument): SymbolDescriptor | undefined {
-    return this.symbols(searchContext)[name];
+    return this.symbols(searchContext).get(name);
   }
 
   private _pushDocumentationLine(line: String, buffer: String[]) {

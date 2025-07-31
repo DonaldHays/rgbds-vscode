@@ -311,48 +311,65 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
     return output;
   }
 
-  provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken, context: vscode.CompletionContext): vscode.ProviderResult<vscode.CompletionItem[] | vscode.CompletionList> {
-    let prefix = document.getText(new vscode.Range(position.with({ character: 0 }), position));
+  provideCompletionItems(
+    document: vscode.TextDocument,
+    position: vscode.Position,
+    token: vscode.CancellationToken,
+    context: vscode.CompletionContext
+  ): vscode.ProviderResult<vscode.CompletionItem[] | vscode.CompletionList> {
+    // Fetch the line up until the current character.
+    const prefix = document.getText(
+      new vscode.Range(position.with({ character: 0 }), position)
+    );
 
-    let lineContext = new Set<string>();
+    // Generate a set of tags, based on the prefix, that describe the editing
+    // context.
+    const lineContext = new Set<string>();
 
+    // "firstWord" means the user is typing the first identifier on a line.
     if (firstWordRegex.test(prefix)) {
       lineContext.add("firstWord");
     } else {
       lineContext.add("notFirstWord");
     }
 
+    // "section" means the user is typing a section directive.
     if (sectionRegex.test(prefix)) {
       lineContext.add("section");
     }
 
+    // "include" means the user is typing an include directive.
     if (includeRegex.test(prefix)) {
       lineContext.add("include");
     }
 
+    // "multiInstructionLineStart" means the user is typing the first identifier
+    // after `::`.
     if (multiInstructionLineStart.test(prefix)) {
       lineContext.add("multiInstructionLineStart");
     }
 
-    let output: vscode.CompletionItem[] = [];
+    const output: vscode.CompletionItem[] = [];
 
+    // If we're typing a filename in an include directive, propose filenames.
     if (context.triggerCharacter == `"` || strictIncludeRegex.test(prefix)) {
       if (lineContext.has("include") == false) {
+        // If we're in a `"`, but _not_ an include directive, then we're
+        // actually just in a string literal, so propose nothing.
         return output;
       }
 
-      let shouldIncludeQuotes = prefix.indexOf(`"`) == -1;
-      let directories = this._fileRelativeDirectories(document);
+      const shouldIncludeQuotes = prefix.indexOf(`"`) == -1;
+      const directories = this._fileRelativeDirectories(document);
 
-      this.asmFilePaths.forEach((filePath) => {
+      for (const filePath of this.asmFilePaths) {
         // Don't include self in the list
         if (filePath == document.fileName) {
-          return;
+          break;
         }
 
-        for (let directoryIndex = 0; directoryIndex < directories.length; directoryIndex++) {
-          let directory = directories[directoryIndex];
-          let relative = path.relative(directory, filePath);
+        for (const directory of directories) {
+          const relative = path.relative(directory, filePath);
 
           // Don't include parent files in the list
           if (relative.indexOf("..") != -1) {
@@ -365,13 +382,19 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
             includePath = `"${includePath}"`;
           }
           output.push(new vscode.CompletionItem(includePath, vscode.CompletionItemKind.File));
-          return;
+          break;
         }
-      });
+      }
+
+      // Return now, because the only valid completions in this context are
+      // filenames.
       return output;
     }
 
-    this.instructionItems.forEach((item) => {
+    // Apply the current formatting rules to the instruction items. A bit hacky
+    // to be doing it here, but it guarantees the instructions will respect the
+    // current formatting configuration whenever a completion prompt appears.
+    for (const item of this.instructionItems) {
       item.label = this._formatSnippet(item.label as string);
       if (item.insertText != undefined) {
         if (typeof item.insertText == "string") {
@@ -380,62 +403,61 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
           item.insertText.value = this._formatSnippet(item.insertText.value);
         }
       }
-    });
+    }
 
-    ruleCollections.forEach((collection) => {
-      for (let contextIndex = 0; contextIndex < collection.context.length; contextIndex++) {
-        if (lineContext.has(collection.context[contextIndex]) == false) {
-          return;
+    // Add items from the rule collections based on the current context.
+    RULE_LOOP: for (const collection of ruleCollections) {
+      // Don't add items from this collection if they don't match the line
+      // context.
+      for (const ruleContext of collection.context) {
+        if (!lineContext.has(ruleContext)) {
+          continue RULE_LOOP;
         }
       }
 
-      collection.items.forEach((item) => {
-        let rule = this.formatter.rule(`${collection.rule}.${item}`);
-
-        let cased = item;
-        if (rule == "upper") {
-          cased = item.toUpperCase();
-        }
+      // Append all items for this collection.
+      for (const item of collection.items) {
+        const rule = this.formatter.rule(`${collection.rule}.${item}`);
+        const cased = (rule == "upper") ? item.toUpperCase() : item;
 
         output.push(new vscode.CompletionItem(cased, collection.kind));
-      })
-    });
-
-    if (lineContext.has("firstWord") || lineContext.has("multiInstructionLineStart")) {
-      if (this.config.showInstructionCompletionSuggestions) {
-        this.instructionItems.forEach((item) => {
-          output.push(item);
-        });
       }
     }
 
-    let triggerWordRange = document.getWordRangeAtPosition(position, /[\S]+/);
-    let triggerWord = document.getText(triggerWordRange);
+    // Add instructions.
+    if (lineContext.has("firstWord") || lineContext.has("multiInstructionLineStart")) {
+      if (this.config.showInstructionCompletionSuggestions) {
+        for (const item of this.instructionItems) {
+          output.push(item);
+        }
+      }
+    }
+
+    // Add symbols.
+    const triggerWordRange = document.getWordRangeAtPosition(position, /[\S]+/);
+    const triggerWord = document.getText(triggerWordRange);
 
     const symbols = this.symbolDocumenter.symbols(document);
-    for (const name in symbols) {
-      if (symbols.hasOwnProperty(name)) {
-        const symbol = symbols[name];
-        let kind = vscode.CompletionItemKind.Constant;
-        if (symbol.kind == vscode.SymbolKind.Function) {
-          kind = vscode.CompletionItemKind.Function;
-        }
-        const item = new vscode.CompletionItem(name, kind);
-        item.documentation = new vscode.MarkdownString(symbol.documentation);
-
-        if (triggerWord.indexOf(".") == 0 && name.indexOf(".") == 0) {
-          item.insertText = name.substring(1);
-        }
-
-        if (symbol.isLocal && symbol.scope && symbol.scope.end) {
-          let symbolRange = new vscode.Range(symbol.scope.start, symbol.scope.end);
-          if (symbolRange.contains(position) == false) {
-            continue;
-          }
-        }
-
-        output.push(item);
+    for (const [name, symbol] of symbols) {
+      let kind = vscode.CompletionItemKind.Constant;
+      if (symbol.kind == vscode.SymbolKind.Function) {
+        kind = vscode.CompletionItemKind.Function;
       }
+      const item = new vscode.CompletionItem(name, kind);
+      item.documentation = new vscode.MarkdownString(symbol.documentation);
+
+      if (triggerWord.indexOf(".") == 0 && name.indexOf(".") == 0) {
+        item.insertText = name.substring(1);
+      }
+
+      if (symbol.isLocal && symbol.scope && symbol.scope.end) {
+        const symbolRange = new vscode.Range(symbol.scope.start, symbol.scope.end);
+        if (symbolRange.contains(position) == false) {
+          continue;
+        }
+      }
+
+      output.push(item);
     }
 
     return output;
