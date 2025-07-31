@@ -4,6 +4,7 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
 import { syntaxInfo } from './syntaxInfo';
+import { ASMConfiguration } from './configuration';
 
 const commentLineRegex = /^\s*;\s*(.*)$/
 const endCommentRegex = /^[^;]+;\s*(.*)$/
@@ -63,7 +64,7 @@ enum SearchMode {
 
 export class ASMSymbolDocumenter {
   files: { [name: string]: FileTable };
-  constructor() {
+  constructor(private config: ASMConfiguration) {
     this.files = {};
 
     vscode.workspace.findFiles("**/*.{z80,inc,asm}", null, undefined).then((files) => {
@@ -103,16 +104,8 @@ export class ASMSymbolDocumenter {
       return simpleJoin;
     }
 
-    // Grab the configured include paths. If it's a string, make it an array.
-    var includePathConfiguration: any = vscode.workspace.getConfiguration().get("rgbdsz80.includePath");
-    if (typeof includePathConfiguration === "string") {
-      includePathConfiguration = [includePathConfiguration];
-    }
-
     // For each configured include path
-    for (var i = 0; i < includePathConfiguration.length; i++) {
-      var includePath: string = includePathConfiguration[i];
-
+    for (let includePath of this.config.includePaths) {
       // If the path is relative, make it absolute starting from workspace root.
       if (path.isAbsolute(includePath) == false) {
         if (vscode.workspace.workspaceFolders !== undefined) {
@@ -250,7 +243,7 @@ export class ASMSymbolDocumenter {
   }
 
   private _pushDocumentationLine(line: String, buffer: String[]) {
-    if ((line.indexOf("@") == 0 || vscode.workspace.getConfiguration().get("rgbdsz80.includeAllDocCommentNewlines")) && buffer.length > 0) {
+    if ((line.indexOf("@") == 0 || this.config.includeAllDocCommentNewlines) && buffer.length > 0) {
       let lastLine = buffer[buffer.length - 1];
       if (lastLine.lastIndexOf("  ") != lastLine.length - 2) {
         buffer[buffer.length - 1] = lastLine + "  ";

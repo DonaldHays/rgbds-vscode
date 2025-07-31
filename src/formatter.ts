@@ -2,6 +2,7 @@
 
 import * as vscode from 'vscode';
 import { KeywordFamily, syntaxInfo } from './syntaxInfo';
+import { ASMConfiguration } from './configuration';
 
 const whitespaceRegex = /^\s+/
 const commentRegex = /^;.*$/
@@ -21,6 +22,8 @@ const keywordFunctionRegex = new RegExp(`^(${syntaxInfo.keywordsQuery({ hasFamil
 const hexLiteralRegex = /^(\$[0-9a-f]+)\b/i
 
 export class ASMFormatter {
+  constructor(private config: ASMConfiguration) { }
+
   private _case(value: string, output: vscode.TextEdit[], line: vscode.TextLine, offset: number, configuration: string | null | undefined) {
     if (configuration == "upper") {
       let newValue = value.toUpperCase();
@@ -39,7 +42,7 @@ export class ASMFormatter {
   rule(name: string): string | null {
     name = name.toLowerCase();
 
-    let rules: { [key: string]: string | null } = vscode.workspace.getConfiguration().get("rgbdsz80.formatting.capitalization") || {};
+    const rules = this.config.capitalizationRules;
     let components = name.split(".");
 
     while (components.length > 0) {

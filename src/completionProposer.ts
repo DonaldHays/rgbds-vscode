@@ -5,6 +5,7 @@ import { ASMSymbolDocumenter } from './symbolDocumenter';
 import * as path from 'path';
 import { ASMFormatter } from './formatter';
 import { KeywordFamily, KeywordRuleContext, syntaxInfo } from './syntaxInfo';
+import { ASMConfiguration } from './configuration';
 
 const registerRegex = new RegExp(`\\b\\[?(${syntaxInfo.keywordsQuery({ hasFamily: [KeywordFamily.Register] }).join("|")})\\]?\\b`, "i");
 const itemSplitRegex = /,? /
@@ -35,7 +36,11 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
   asmFilePaths: Set<string>;
   instructionItems: vscode.CompletionItem[];
 
-  constructor(public symbolDocumenter: ASMSymbolDocumenter, public formatter: ASMFormatter) {
+  constructor(
+    public symbolDocumenter: ASMSymbolDocumenter,
+    public formatter: ASMFormatter,
+    private config: ASMConfiguration
+  ) {
     this.asmFilePaths = new Set();
     this.instructionItems = [];
 
@@ -291,16 +296,8 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
 
     output.push(path.dirname(document.fileName));
 
-    // Grab the configured include paths. If it's a string, make it an array.
-    var includePathConfiguration: any = vscode.workspace.getConfiguration().get("rgbdsz80.includePath");
-    if (typeof includePathConfiguration === "string") {
-      includePathConfiguration = [includePathConfiguration];
-    }
-
     // For each configured include path
-    for (var i = 0; i < includePathConfiguration.length; i++) {
-      var includePath: string = includePathConfiguration[i];
-
+    for (let includePath of this.config.includePaths) {
       // If the path is relative, make it absolute starting from workspace root.
       if (path.isAbsolute(includePath) == false) {
         if (vscode.workspace.workspaceFolders !== undefined) {
@@ -405,7 +402,7 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
     });
 
     if (lineContext.has("firstWord") || lineContext.has("multiInstructionLineStart")) {
-      if (vscode.workspace.getConfiguration().get("rgbdsz80.showInstructionCompletionSuggestions") || false) {
+      if (this.config.showInstructionCompletionSuggestions) {
         this.instructionItems.forEach((item) => {
           output.push(item);
         });
