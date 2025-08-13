@@ -12,7 +12,7 @@ const itemSplitRegex = /,? /
 const hexRegex = /(\$[0-9a-f]+)/i
 
 const includeRegex = /^\s*(?:[\w\.]+[:]{0,2})?\s*include\s+\"?/i
-const strictIncludeRegex = /^\s*(?:[\w\.]+[:]{0,2})?\s*include\s+\"?$/i
+const strictIncludeRegex = /^\s*(?:[\w\.]+[:]{0,2})?\s*include\s+(?:\"[^\"]*)?$/i
 const firstWordRegex = /^(?:[\w\.]+[:]{0,2})?\s*\w*$/
 const sectionRegex = /^(?:[\w\.]+[:]{0,2})?\s*section\b/i
 const multiInstructionLineStart = /::\s*\w*$/
@@ -359,7 +359,8 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
         return output;
       }
 
-      const shouldIncludeQuotes = prefix.indexOf(`"`) == -1;
+      const finalDoubleQuoteIndex = prefix.lastIndexOf(`"`);
+      const shouldIncludeQuotes = (finalDoubleQuoteIndex == -1);
       const directories = this._fileRelativeDirectories(document);
 
       for (const filePath of this.asmFilePaths) {
@@ -378,9 +379,23 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
 
           // Format path for windows, and add quotes
           let includePath = relative.split("\\").join("/");
+
           if (shouldIncludeQuotes) {
             includePath = `"${includePath}"`;
+          } else {
+            // Only show paths that match what's already been typed.
+            const alreadyTyped = prefix.substring(finalDoubleQuoteIndex + 1);
+            if (includePath.indexOf(alreadyTyped) !== 0) {
+              continue;
+            }
+
+            // If there's directory separators, trim the suggestion.
+            const slashIndex = alreadyTyped.lastIndexOf("/");
+            if (slashIndex !== -1) {
+              includePath = includePath.substring(slashIndex + 1);
+            }
           }
+
           output.push(new vscode.CompletionItem(includePath, vscode.CompletionItemKind.File));
           break;
         }

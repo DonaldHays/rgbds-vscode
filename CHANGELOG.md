@@ -1,5 +1,5 @@
 # Change Log
-All notable changes to the "rgbds-z80" extension will be documented in this file.
+All notable changes to the "rgbds-vscode" extension will be documented in this file.
 
 ## [4.2.0] - 2025-??-??
 
@@ -10,6 +10,7 @@ Thanks to RubenZwietering for improvements in this release!
 
 ### Changed
 - Completion prompts for `ld [c], a` and `ld a, [c]` are now `ldh [c], a` and `ldh a, [c]`.
+- Improved completion suggestions on `include` directives.
 
 ### Fixed
 - Document links on `include` directives now work on lines that begin with whitespace.
