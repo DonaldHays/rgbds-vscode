@@ -11,6 +11,16 @@ Thanks to RubenZwietering for improvements in this release!
 ### Changed
 - Completion prompts for `ld [c], a` and `ld a, [c]` are now `ldh [c], a` and `ldh a, [c]`.
 - Improved completion suggestions on `include` directives.
+  - Triggering IntelliSense after already having typed part of the path will now
+    filter suggestions.
+  - Better tab completion.
+  - The workspace root is now searched for include files.
+  - Suggestions now search for `.s` and `.sm83` files.
+  - Suggestions no longer automatically search relative to the working file.
+  - Suggestions are resolved relative to the deepest matching entry in
+    `"rgbdsz80.includePath"`. For example, if the include path setting has
+    `"src/"` and `"src/battle/"`, the file `"src/battle/turns.asm"` will be
+    suggested as `"turns.asm"`.
 
 ### Fixed
 - Document links on `include` directives now work on lines that begin with whitespace.

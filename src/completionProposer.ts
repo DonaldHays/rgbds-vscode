@@ -291,10 +291,12 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
     }
   }
 
-  _fileRelativeDirectories(document: vscode.TextDocument): string[] {
+  _includePathDirectories(document: vscode.TextDocument): string[] {
     let output: string[] = [];
 
-    output.push(path.dirname(document.fileName));
+    if (vscode.workspace.workspaceFolders !== undefined) {
+      output.push(vscode.workspace.workspaceFolders[0].uri.fsPath);
+    }
 
     // For each configured include path
     for (let includePath of this.config.includePaths) {
@@ -307,6 +309,17 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
 
       output.push(includePath);
     }
+
+    // Sort so that subdirectories appear before their parent directories.
+    output.sort((a, b) => {
+      if (path.relative(a, b).indexOf("..") !== -1) {
+        return -1;
+      } else if (path.relative(b, a).indexOf("..") !== -1) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
 
     return output;
   }
@@ -361,7 +374,7 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
 
       const finalDoubleQuoteIndex = prefix.lastIndexOf(`"`);
       const shouldIncludeQuotes = (finalDoubleQuoteIndex == -1);
-      const directories = this._fileRelativeDirectories(document);
+      const directories = this._includePathDirectories(document);
 
       for (const filePath of this.asmFilePaths) {
         // Don't include self in the list
