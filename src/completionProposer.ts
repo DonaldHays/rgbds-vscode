@@ -44,13 +44,13 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
     this.asmFilePaths = new Set();
     this.instructionItems = [];
 
-    vscode.workspace.findFiles("**/*.{z80,inc,asm}", null, undefined).then((files) => {
-      files.forEach((fileURI) => {
+    vscode.workspace.findFiles("**/*.{z80,inc,asm,s,sm83}", null, undefined).then((files) => {
+      for (const fileURI of files) {
         this.asmFilePaths.add(fileURI.fsPath);
-      });
+      }
     });
 
-    const watcher = vscode.workspace.createFileSystemWatcher("**/*.{z80,inc,asm}");
+    const watcher = vscode.workspace.createFileSystemWatcher("**/*.{z80,inc,asm,s,sm83}");
     watcher.onDidCreate((uri) => {
       this.asmFilePaths.add(uri.fsPath);
     });
@@ -365,7 +365,7 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
       for (const filePath of this.asmFilePaths) {
         // Don't include self in the list
         if (filePath == document.fileName) {
-          break;
+          continue;
         }
 
         for (const directory of directories) {
