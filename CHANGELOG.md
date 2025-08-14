@@ -26,6 +26,7 @@ Thanks to RubenZwietering for improvements in this release!
 
 ### Fixed
 - Document links on `include` directives now work on lines that begin with whitespace.
+- Symbols exported via `export` are now correctly recognized as exported in IntelliSense. (Thanks, RubenZwietering!)
 
 ## [4.1.0] - 2024-04-06
 
