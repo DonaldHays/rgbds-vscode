@@ -6,6 +6,7 @@ const kCompleteInstructions = "rgbdsz80.showInstructionCompletionSuggestions";
 const kCapitalization = "rgbdsz80.formatting.capitalization";
 const kIncludePath = "rgbdsz80.includePath";
 const kAllNewlines = "rgbdsz80.includeAllDocCommentNewlines";
+const kIncludeSuggestionExtensions = "rgbdsz80.includeSuggestionExtensions";
 
 export class ASMConfiguration {
   private get config() {
@@ -13,7 +14,7 @@ export class ASMConfiguration {
   }
 
   /**
-   * Returns whether intellisense autocomplete suggestions should include Game
+   * Returns whether IntelliSense autocomplete suggestions should include Game
    * Boy opcode instructions.
    */
   get showInstructionCompletionSuggestions(): boolean {
@@ -44,5 +45,14 @@ export class ASMConfiguration {
    */
   get includeAllDocCommentNewlines(): boolean {
     return this.config.get(kAllNewlines) ?? false;
+  }
+
+  /**
+   * Returns the list of extensions to consider when providing suggestions for
+   * include files.
+   */
+  get includeSuggestionExtensions(): Set<string> {
+    const extensions = this.config.get<string[]>(kIncludeSuggestionExtensions);
+    return new Set<string>(extensions);
   }
 }

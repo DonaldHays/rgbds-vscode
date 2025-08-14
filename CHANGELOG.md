@@ -16,6 +16,8 @@ Thanks to RubenZwietering for improvements in this release!
   - Better tab completion.
   - The workspace root is now searched for include files.
   - Suggestions now search for `.s` and `.sm83` files.
+  - Suggestions may be filtered by file extension using the
+    `rgbdsz80.includeSuggestionExtensions` configuration variable.
   - Suggestions no longer automatically search relative to the working file.
   - Suggestions are resolved relative to the deepest matching entry in
     `"rgbdsz80.includePath"`. For example, if the include path setting has
@@ -117,7 +119,7 @@ Thanks to sukus21 for the improvements in this release!
 
 ## [2.5.0] - 2020-02-11
 ### Added
-- Local labels are now shown in intellisense prompts, appropriately limited to the current scope.
+- Local labels are now shown in IntelliSense prompts, appropriately limited to the current scope.
 
 ### Fixed
 - Some ways of writing local labels will no longer cause similar global labels to fail to export.
@@ -153,17 +155,17 @@ Thanks to sukus21 for the improvements in this release!
 - Comments that begin with @ will now only have a single newline preceding them instead of two in the formatted Markdown.
 
 ### Fixed
-- Register capitalization formatting is now correctly reflected in intellisense prompts.
+- Register capitalization formatting is now correctly reflected in IntelliSense prompts.
 - Two spaces at the end of a doc comment line should now correctly force a newline in the formatted Markdown.
 
 ## [2.0.0] - 2018-08-30
 ### Added
 - [Capitalization Formatting](https://github.com/DonaldHays/rgbds-vscode/blob/master/formatting.md) support.
-- Intellisense support for project files in include statements.
-- All keywords, registers, and condition codes are now present in intellisense prompts.
+- IntelliSense support for project files in include statements.
+- All keywords, registers, and condition codes are now present in IntelliSense prompts.
 
 ### Changed
-- Intellisense prompts are now populated based on some basic context information to reduce invalid options.
+- IntelliSense prompts are now populated based on some basic context information to reduce invalid options.
 - The problem matcher has been _improved_ but not _fixed_. It does a better job of reporting certain errors, but there are some where it won't underline the error in context.
 - Refined the syntax highlighting grammer. Some parts of the language were reclassified, so you may see some color changes with your theme.
 
@@ -197,22 +199,22 @@ Thanks to sukus21 for the improvements in this release!
 
 ## [1.3.2] - 2018-04-01
 ### Fixed
-- Removed some false positive cases that could result in out-of-scope symbol declarations appearing in Intellisense.
+- Removed some false positive cases that could result in out-of-scope symbol declarations appearing in IntelliSense.
 
 ### Added
 - Added a snippet for repeat blocks.
 
 ## [1.3.1] - 2018-03-31
 ### Added
-- Added support for additional instruction aliases in Intellisense.
+- Added support for additional instruction aliases in IntelliSense.
 
 ## [1.3.0] - 2018-03-29
 ### Changed
-- Improved Intellisense support for instructions.
+- Improved IntelliSense support for instructions.
 
 ## [1.2.0] - 2018-03-20
 ### Changed
-- Symbol seeking for Intellisense has been made more inclusive. Now grabs symbols from files that include the working file.
+- Symbol seeking for IntelliSense has been made more inclusive. Now grabs symbols from files that include the working file.
 
 ## [1.1.0] - 2018-03-19
 ### Fixed

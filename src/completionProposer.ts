@@ -6,6 +6,7 @@ import * as path from 'path';
 import { ASMFormatter } from './formatter';
 import { KeywordFamily, KeywordRuleContext, syntaxInfo } from './syntaxInfo';
 import { ASMConfiguration } from './configuration';
+import { ASMDocumentWatcher } from './documentWatcher';
 
 const registerRegex = new RegExp(`\\b\\[?(${syntaxInfo.keywordsQuery({ hasFamily: [KeywordFamily.Register] }).join("|")})\\]?\\b`, "i");
 const itemSplitRegex = /,? /
@@ -33,30 +34,43 @@ const ruleCollections = [
 ]
 
 export class ASMCompletionProposer implements vscode.CompletionItemProvider {
-  asmFilePaths: Set<string>;
+  includeFilePaths: Set<string>;
   instructionItems: vscode.CompletionItem[];
 
   constructor(
     public symbolDocumenter: ASMSymbolDocumenter,
     public formatter: ASMFormatter,
+    private watcher: ASMDocumentWatcher,
     private config: ASMConfiguration
   ) {
-    this.asmFilePaths = new Set();
+    this.includeFilePaths = new Set();
     this.instructionItems = [];
 
-    vscode.workspace.findFiles("**/*.{z80,inc,asm,s,sm83}", null, undefined).then((files) => {
-      for (const fileURI of files) {
-        this.asmFilePaths.add(fileURI.fsPath);
+    vscode.workspace.onDidChangeConfiguration((change) => {
+      const key = "rgbdsz80.includeSuggestionExtensions";
+      if (change.affectsConfiguration(key)) {
+        this.includeFilePaths.clear();
+
+        const newExtensions = this.config.includeSuggestionExtensions;
+        for (const file of this.watcher.getFilesWithExtensions(newExtensions)) {
+          this.includeFilePaths.add(file.path);
+        };
       }
     });
 
-    const watcher = vscode.workspace.createFileSystemWatcher("**/*.{z80,inc,asm,s,sm83}");
-    watcher.onDidCreate((uri) => {
-      this.asmFilePaths.add(uri.fsPath);
+    const extensions = this.config.includeSuggestionExtensions;
+    for (const file of this.watcher.getFilesWithExtensions(extensions)) {
+      this.includeFilePaths.add(file.path);
+    };
+
+    this.watcher.onDidAdd((file) => {
+      if (this.config.includeSuggestionExtensions.has(file.extension)) {
+        this.includeFilePaths.add(file.path);
+      }
     });
 
-    watcher.onDidDelete((uri) => {
-      this.asmFilePaths.delete(uri.fsPath);
+    this.watcher.onDidRemove((file) => {
+      this.includeFilePaths.delete(file.path);
     });
 
     const instructions = syntaxInfo.instructionsJSON.instructions;
@@ -376,7 +390,7 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
       const shouldIncludeQuotes = (finalDoubleQuoteIndex == -1);
       const directories = this._includePathDirectories(document);
 
-      for (const filePath of this.asmFilePaths) {
+      for (const filePath of this.includeFilePaths) {
         // Don't include self in the list
         if (filePath == document.fileName) {
           continue;

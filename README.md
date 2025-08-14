@@ -25,11 +25,11 @@ An included problem matcher enables Visual Studio Code to highlight invalid line
 
 ### Documented Symbol Detection
 
-Symbols you declare are detected and populated in Intellisense prompts. It even grabs your documentation comments!
+Symbols you declare are detected and populated in IntelliSense prompts. It even grabs your documentation comments!
 - Any uninterrupted runs of lines that consist only of comments preceding a symbol declaration will be considered part of that symbol's documentation.
 - A comment on the same line as a symbol declaration is also part of its documentation.
 
-![intellisense](https://raw.githubusercontent.com/DonaldHays/rgbds-vscode/master/previews/doc-comment.gif)
+![IntelliSense](https://raw.githubusercontent.com/DonaldHays/rgbds-vscode/master/previews/doc-comment.gif)
 
 ### Documentation Hovers
 
@@ -69,7 +69,13 @@ The `rgbasm` problem matcher is named "rgbdserror", and the `rgblink` problem ma
 
 ### Include Path Searching
 
-This extension supports Intellisense for symbols declared in included files. By default, it searches for included files relative to the directory of the open file. But you can configure additional directories to search via the `rgbdsz80.includePath` configuration variable. You may assign a string path or an array of string paths to that variable, and all associated directories will be searched in turn to resolve an included file. Configured paths may be either absolute or relative to the _workspace_ directory.
+This extension supports IntelliSense for symbols declared in included files. By default, it searches for included files relative to the workspace root. But you can configure additional directories to search via the `rgbdsz80.includePath` configuration variable. You may assign a string path or an array of string paths to that variable, and all associated directories will be searched in turn to resolve an included file. Configured paths may be either absolute or relative to the workspace directory.
+
+### Include File Suggestion Filtering
+
+By default, IntelliSense prompts for include directives will suggest files of any supported file extension. However, it's common practice to separate header/include files from implementation/code files, and to use different extensions (such as `.inc`/`.asm`) to differentiate them. By using the `rgbdsz80.includeSuggestionExtensions` configuration variable, you can specify an array of extensions to only be suggested files that have those extensions.
+
+For example, the setting `"rgbdsz80.includeSuggestionExtensions" : [ ".inc" ]` will only suggest files ending in `.inc`.
 
 ### Capitalization Formatting
 

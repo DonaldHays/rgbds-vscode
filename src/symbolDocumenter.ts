@@ -5,6 +5,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { syntaxInfo } from './syntaxInfo';
 import { ASMConfiguration } from './configuration';
+import { ASMDocumentWatcher } from './documentWatcher';
 
 const commentLineRegex = /^\s*;\s*(.*)$/
 const endCommentRegex = /^[^;]+;\s*(.*)$/
@@ -65,36 +66,33 @@ enum SearchMode {
 
 export class ASMSymbolDocumenter {
   files: { [name: string]: FileTable };
-  constructor(private config: ASMConfiguration) {
+  constructor(watcher: ASMDocumentWatcher, private config: ASMConfiguration) {
     this.files = {};
 
-    vscode.workspace.findFiles("**/*.{z80,inc,asm}", null, undefined).then((files) => {
-      files.forEach((fileURI) => {
-        vscode.workspace.openTextDocument(fileURI).then((document) => {
-          this._document(document);
-        });
+    for (const file of watcher.files) {
+      vscode.workspace.openTextDocument(file.uri).then((document) => {
+        this._document(document);
       });
-    });
+    }
 
     vscode.workspace.onDidChangeTextDocument((event: vscode.TextDocumentChangeEvent) => {
       this._document(event.document);
     });
 
-    const watcher = vscode.workspace.createFileSystemWatcher("**/*.{z80,inc,asm}");
-    watcher.onDidChange((uri) => {
-      vscode.workspace.openTextDocument(uri).then((document) => {
+    watcher.onDidAdd((file) => {
+      vscode.workspace.openTextDocument(file.uri).then((document) => {
         this._document(document);
       });
     });
 
-    watcher.onDidCreate((uri) => {
-      vscode.workspace.openTextDocument(uri).then((document) => {
+    watcher.onDidChange((file) => {
+      vscode.workspace.openTextDocument(file.uri).then((document) => {
         this._document(document);
       });
     });
 
-    watcher.onDidDelete((uri) => {
-      delete this.files[uri.fsPath];
+    watcher.onDidRemove((file) => {
+      delete this.files[file.path];
     });
   }
 
@@ -159,7 +157,7 @@ export class ASMSymbolDocumenter {
   }
 
   /**
-   * Seeks symbols for use by Intellisense in `filename`.
+   * Seeks symbols for use by IntelliSense in `filename`.
    * @param filename The name of the file to seek in.
    * @param fsRelativeDir The directory of the originating context.
    * @param output The collection of discovered symbols.

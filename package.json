@@ -1,7 +1,7 @@
 {
     "name": "rgbds-z80",
-    "displayName": "RGBDS Z80",
-    "description": "Language service for RGBDS GB Z80.",
+    "displayName": "RGBDS",
+    "description": "Language service for the RGBDS Game Boy assembler.",
     "version": "4.1.0",
     "publisher": "donaldhays",
     "engines": {
@@ -12,6 +12,7 @@
     ],
     "keywords": [
         "rgbds",
+        "sm83",
         "z80",
         "gbz80",
         "game boy",
@@ -94,7 +95,7 @@
                 "title": "RGBDS Z80",
                 "properties": {
                     "rgbdsz80.showInstructionCompletionSuggestions": {
-                        "description": "Makes Intellisense prompts include documented instruction suggestions.",
+                        "description": "Makes IntelliSense prompts include documented instruction suggestions.",
                         "type": "boolean",
                         "default": true
                     },
@@ -103,13 +104,27 @@
                         "type": "boolean",
                         "default": false
                     },
+                    "rgbdsz80.includeSuggestionExtensions": {
+                        "description": "The extensions of files (including the \".\") to include in `include` directive suggestions.",
+                        "type": [ "array", "string" ],
+                        "items": {
+                            "type": "string"
+                        },
+                        "default": [
+                            ".asm",
+                            ".z80",
+                            ".inc",
+                            ".s",
+                            ".sm83"
+                        ]
+                    },
                     "rgbdsz80.includePath": {
                         "description": "Specifies folder paths relative to the workspace root to search for include files.",
                         "type": [
                             "array",
                             "string"
                         ],
-                        "default": []
+                        "default": [ ]
                     },
                     "rgbdsz80.formatting.capitalization": {
                         "description": "How to capitalize parts of the language.",
@@ -127,7 +142,7 @@
                                 ]
                             }
                         },
-                        "default": {}
+                        "default": { }
                     }
                 }
             }
