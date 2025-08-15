@@ -305,7 +305,7 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
     }
   }
 
-  _includePathDirectories(document: vscode.TextDocument): string[] {
+  _includePathDirectories(): string[] {
     let output: string[] = [];
 
     if (vscode.workspace.workspaceFolders !== undefined) {
@@ -388,7 +388,7 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
 
       const finalDoubleQuoteIndex = prefix.lastIndexOf(`"`);
       const shouldIncludeQuotes = (finalDoubleQuoteIndex == -1);
-      const directories = this._includePathDirectories(document);
+      const directories = this._includePathDirectories();
 
       for (const filePath of this.includeFilePaths) {
         // Don't include self in the list
