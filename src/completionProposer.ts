@@ -317,7 +317,10 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
       // If the path is relative, make it absolute starting from workspace root.
       if (path.isAbsolute(includePath) == false) {
         if (vscode.workspace.workspaceFolders !== undefined) {
-          includePath = path.resolve(vscode.workspace.workspaceFolders[0].uri.fsPath, includePath);
+          includePath = path.resolve(
+            vscode.workspace.workspaceFolders[0].uri.fsPath,
+            includePath
+          );
         }
       }
 

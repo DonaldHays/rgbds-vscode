@@ -30,17 +30,30 @@ class ScopeDescriptor {
 }
 
 class SymbolDescriptor {
-  constructor(public location: vscode.Location, public isExported: boolean, public isLocal: boolean, public kind: vscode.SymbolKind, public scope?: ScopeDescriptor, public documentation?: string) { }
+  constructor(
+    public location: vscode.Location,
+    public isExported: boolean,
+    public isLocal: boolean,
+    public kind: vscode.SymbolKind,
+    public scope?: ScopeDescriptor,
+    public documentation?: string
+  ) { }
 }
 
-class IncludeDescriptor {
-  constructor(
-    public range: vscode.Range,
-    public name: string,
-    public fsPath: string,
-  ) {
-  }
-}
+type IncludeDescriptor = {
+  /**
+   * The range of the file string in the include directive.
+   * 
+   * This is used for providing document links.
+   */
+  readonly range: vscode.Range;
+
+  /** The file's path as written in the include directive. */
+  readonly relativePath: string;
+
+  /** The file's absolute path, if resolved to a real file. */
+  readonly absolutePath?: string;
+};
 
 class FileTable {
   includedFiles: IncludeDescriptor[]
@@ -96,59 +109,68 @@ export class ASMSymbolDocumenter {
     });
   }
 
-  private _resolveFilename(filename: string, fsRelativeDir: string): string {
-    // Try just sticking the filename onto the directory.
-    let simpleJoin = path.resolve(fsRelativeDir, filename);
-    if (fs.existsSync(simpleJoin)) {
-      return simpleJoin;
+  /**
+   * Returns the absolute file path of `filename`, accounting for configured
+   * include paths, or `undefined` if the file does not exist.
+   * 
+   * @param filename a file path relative to the workspace root or a configured
+   *   include path.
+   * @returns the resolved, absolute file path, if the file exists, or
+   *   `undefined` if it does not.
+   */
+  private _resolvedFilename(filename: string): string | undefined {
+    const workspaceRoot = vscode.workspace.workspaceFolders ?
+      vscode.workspace.workspaceFolders[0].uri.fsPath :
+      undefined;
+
+    // Search relative to workspace root first
+    if (workspaceRoot) {
+      const resolved = path.resolve(workspaceRoot, filename);
+      if (fs.existsSync(resolved)) {
+        return resolved;
+      }
     }
 
-    // For each configured include path
+    // Search configured include paths, in the order they were declared in
     for (let includePath of this.config.includePaths) {
       // If the path is relative, make it absolute starting from workspace root.
-      if (path.isAbsolute(includePath) == false) {
-        if (vscode.workspace.workspaceFolders !== undefined) {
-          includePath = path.resolve(vscode.workspace.workspaceFolders[0].uri.fsPath, includePath);
-        }
+      if (workspaceRoot && !path.isAbsolute(includePath)) {
+        includePath = path.resolve(workspaceRoot, includePath);
       }
 
       // Test for existence of the filename glued onto the include path.
-      var joined = path.resolve(includePath, filename);
-      if (fs.existsSync(joined)) {
-        return joined;
+      const resolved = path.resolve(includePath, filename);
+      if (fs.existsSync(resolved)) {
+        return resolved;
       }
     }
-
-    // Nothing found, return the empty string.
-    return "";
   }
 
   /**
-   * Seeks files that include `fsPath` for symbols.
-   * @param fsPath The file to seek above.
-   * @param fsRelativeDir The directory of the originating context.
+   * Seeks files that include `absolutePath` for symbols.
+   * @param absolutePath The file to seek above.
    * @param output The collection of discovered symbols.
    * @param searched Paths of files that have already been searched.
    */
-  private _seekSymbolsUp(fsPath: string, output: Map<string, SymbolDescriptor>, searched: string[]) {
-    for (const globalFilePath in this.files) {
-      if (this.files.hasOwnProperty(globalFilePath)) {
-        if (searched.indexOf(globalFilePath) != -1) {
+  private _seekSymbolsFromParents(
+    absolutePath: string,
+    output: Map<string, SymbolDescriptor>,
+    searched: Set<string>
+  ) {
+    // Search every file as a potential parent.
+    for (const parentPath in this.files) {
+      if (this.files.hasOwnProperty(parentPath)) {
+        const parentTable = this.files[parentPath];
+
+        // Skip this file if it's already been considered.
+        if (searched.has(parentPath)) {
           continue;
         }
 
-        const table = this.files[globalFilePath];
-        if (table == undefined) {
-          return;
-        }
-
-        const globalName = path.basename(globalFilePath);
-        const globalFileDirname = path.dirname(globalFilePath);
-        for (var i = 0; i < table.includedFiles.length; i++) {
-          const resolvedIncluded = this._resolveFilename(table.includedFiles[i].name, globalFileDirname);
-          if (resolvedIncluded == fsPath) {
-            this._seekSymbols(globalName, globalFileDirname, output, searched, SearchMode.includes);
-            this._seekSymbols(globalName, globalFileDirname, output, searched, SearchMode.parents);
+        for (const includedFile of parentTable.includedFiles) {
+          if (includedFile.absolutePath == absolutePath) {
+            this._seekSymbols(parentPath, output, searched, SearchMode.includes);
+            this._seekSymbols(parentPath, output, searched, SearchMode.parents);
             break;
           }
         }
@@ -157,27 +179,30 @@ export class ASMSymbolDocumenter {
   }
 
   /**
-   * Seeks symbols for use by IntelliSense in `filename`.
-   * @param filename The name of the file to seek in.
-   * @param fsRelativeDir The directory of the originating context.
+   * Seeks symbols for use by IntelliSense in `absolutePath`.
+   * @param absolutePath The name of the file to seek in.
    * @param output The collection of discovered symbols.
    * @param searched Paths of files that have already been searched.
    * @param mode What sort of files and symbols to seek through.
    */
-  private _seekSymbols(filename: string, fsRelativeDir: string, output: Map<string, SymbolDescriptor>, searched: string[], mode: SearchMode) {
-    const fsPath = this._resolveFilename(filename, fsRelativeDir);
-    const table = this.files[fsPath];
+  private _seekSymbols(
+    absolutePath: string,
+    output: Map<string, SymbolDescriptor>,
+    searched: Set<string>,
+    mode: SearchMode
+  ) {
+    const table = this.files[absolutePath];
 
     if (table == undefined) {
       return;
     }
 
-    searched.push(fsPath);
+    searched.add(absolutePath);
 
     for (const name in table.symbols) {
       if (table.symbols.hasOwnProperty(name)) {
         const symbol = table.symbols[name];
-        if (!(name in output)) {
+        if (!output.has(name)) {
           if ((mode != SearchMode.globals) || symbol.isExported) {
             output.set(name, symbol);
           }
@@ -186,18 +211,22 @@ export class ASMSymbolDocumenter {
     }
 
     if (mode == SearchMode.includes) {
-      table.includedFiles.forEach((includeDescriptor) => {
-        const includedFSPath = this._resolveFilename(includeDescriptor.name, fsRelativeDir);
-        if (searched.indexOf(includedFSPath) == -1) {
-          searched.push(includedFSPath);
+      for (const includeDescriptor of table.includedFiles) {
+        const includedAbsolutePath = includeDescriptor.absolutePath;
+        if (includedAbsolutePath) {
+          if (!searched.has(includedAbsolutePath)) {
+            searched.add(includedAbsolutePath);
 
-          this._seekSymbols(includeDescriptor.name, fsRelativeDir, output, searched, SearchMode.includes);
+            this._seekSymbols(
+              includedAbsolutePath, output, searched, SearchMode.includes
+            );
+          }
         }
-      });
+      }
     }
 
     if (mode == SearchMode.parents) {
-      this._seekSymbolsUp(fsPath, output, searched);
+      this._seekSymbolsFromParents(absolutePath, output, searched);
     }
   }
 
@@ -211,22 +240,18 @@ export class ASMSymbolDocumenter {
     // First, find all exported symbols in the entire workspace
     for (const filename in this.files) {
       if (this.files.hasOwnProperty(filename)) {
-        const globalFileBasename = path.basename(filename);
-        const globalFileDirname = path.dirname(filename);
-
-        this._seekSymbols(globalFileBasename, globalFileDirname, output, [], SearchMode.globals);
+        this._seekSymbols(filename, output, new Set(), SearchMode.globals);
       }
     }
 
-    const contextFileBasename = path.basename(context.uri.fsPath);
-    const contextFileDirname = path.dirname(context.uri.fsPath);
+    const absolutePath = context.uri.fsPath;
 
     // Next, grab all symbols for this file and included files
-    const searchedIncludes: string[] = []
-    this._seekSymbols(contextFileBasename, contextFileDirname, output, searchedIncludes, SearchMode.includes);
+    const searched = new Set<string>();
+    this._seekSymbols(absolutePath, output, searched, SearchMode.includes);
 
     // Finally, grab files that include this file
-    this._seekSymbols(contextFileBasename, contextFileDirname, output, searchedIncludes, SearchMode.parents);
+    this._seekSymbols(absolutePath, output, searched, SearchMode.parents);
 
     return output;
   }
@@ -319,15 +344,17 @@ export class ASMSymbolDocumenter {
 
         const declarationMatch = macroMatch || exportMatch || defineMatch || labelMatch;
         if (includeLineMatch) {
-          const filename = includeLineMatch[1];
-          const startCharacter = line.text.indexOf(`${filename}`);
-          const startPosition = new vscode.Position(line.lineNumber, startCharacter);
-          const endPosition = new vscode.Position(line.lineNumber, startCharacter + filename.length);
-          table.includedFiles.push(new IncludeDescriptor(
-            new vscode.Range(startPosition, endPosition),
-            filename,
-            this._resolveFilename(filename, document.uri.fsPath),
-          ));
+          const relativePath = includeLineMatch[1];
+          const startCharacter = line.text.indexOf(`${relativePath}`);
+          const startPosition = new vscode.Position(
+            line.lineNumber, startCharacter
+          );
+          const endPosition = new vscode.Position(
+            line.lineNumber, startCharacter + relativePath.length
+          );
+          const range = new vscode.Range(startPosition, endPosition);
+          const absolutePath = this._resolvedFilename(relativePath);
+          table.includedFiles.push({ range, relativePath, absolutePath });
         } else if (declarationMatch) {
           const declaration = declarationMatch[1];
           if (instructionRegex.test(declaration)) {
