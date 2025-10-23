@@ -77,9 +77,18 @@ enum SearchMode {
   parents
 }
 
+type FileResolution = {
+  readonly absolutePath?: string;
+  readonly diagnostic?: vscode.Diagnostic;
+};
+
 export class ASMSymbolDocumenter {
   files: { [name: string]: FileTable };
-  constructor(watcher: ASMDocumentWatcher, private config: ASMConfiguration) {
+  constructor(
+    watcher: ASMDocumentWatcher,
+    private config: ASMConfiguration,
+    private diagnostics: vscode.DiagnosticCollection,
+  ) {
     this.files = {};
 
     for (const file of watcher.files) {
@@ -111,14 +120,14 @@ export class ASMSymbolDocumenter {
 
   /**
    * Returns the absolute file path of `filename`, accounting for configured
-   * include paths, or `undefined` if the file does not exist.
+   * include paths.
    * 
    * @param filename a file path relative to the workspace root or a configured
    *   include path.
-   * @returns the resolved, absolute file path, if the file exists, or
-   *   `undefined` if it does not.
    */
-  private _resolvedFilename(filename: string): string | undefined {
+  private _resolvedFilename(
+    range: vscode.Range, filename: string
+  ): FileResolution {
     const workspaceRoot = vscode.workspace.workspaceFolders ?
       vscode.workspace.workspaceFolders[0].uri.fsPath :
       undefined;
@@ -127,7 +136,7 @@ export class ASMSymbolDocumenter {
     if (workspaceRoot) {
       const resolved = path.resolve(workspaceRoot, filename);
       if (fs.existsSync(resolved)) {
-        return resolved;
+        return { absolutePath: resolved };
       }
     }
 
@@ -141,9 +150,18 @@ export class ASMSymbolDocumenter {
       // Test for existence of the filename glued onto the include path.
       const resolved = path.resolve(includePath, filename);
       if (fs.existsSync(resolved)) {
-        return resolved;
+        return { absolutePath: resolved };
       }
     }
+
+    return {
+      diagnostic: new vscode.Diagnostic(
+        range,
+        `Could not find \"${filename}\". Search paths can be added to your ` +
+        `workspace's "rgbdsz80.includePath" setting.`,
+        vscode.DiagnosticSeverity.Warning
+      )
+    };
   }
 
   /**
@@ -279,6 +297,7 @@ export class ASMSymbolDocumenter {
 
   private _document(document: vscode.TextDocument) {
     const table = new FileTable(document.uri.fsPath);
+    const diagnostics: vscode.Diagnostic[] = [];
     this.files[document.uri.fsPath] = table;
 
     let currentScope: ScopeDescriptor | undefined = undefined;
@@ -353,8 +372,15 @@ export class ASMSymbolDocumenter {
             line.lineNumber, startCharacter + relativePath.length
           );
           const range = new vscode.Range(startPosition, endPosition);
-          const absolutePath = this._resolvedFilename(relativePath);
+          const { absolutePath, diagnostic } = this._resolvedFilename(
+            range, relativePath
+          );
+
           table.includedFiles.push({ range, relativePath, absolutePath });
+
+          if (diagnostic) {
+            diagnostics.push(diagnostic);
+          }
         } else if (declarationMatch) {
           const declaration = declarationMatch[1];
           if (instructionRegex.test(declaration)) {
@@ -433,5 +459,7 @@ export class ASMSymbolDocumenter {
     if (currentScope) {
       currentScope.end = document.lineAt(document.lineCount - 1).rangeIncludingLineBreak.end;
     }
+
+    this.diagnostics.set(document.uri, diagnostics);
   }
 }

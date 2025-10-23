@@ -13,9 +13,10 @@ import { ASMConfiguration } from './configuration';
 import { ASMDocumentWatcher } from './documentWatcher';
 
 export function activate(context: vscode.ExtensionContext) {
+  const diagnostics = vscode.languages.createDiagnosticCollection();
   const config = new ASMConfiguration();
   const watcher = new ASMDocumentWatcher();
-  const symbolDocumenter = new ASMSymbolDocumenter(watcher, config);
+  const symbolDocumenter = new ASMSymbolDocumenter(watcher, config, diagnostics);
   const formatter = new ASMFormatter(config);
 
   context.subscriptions.push(vscode.languages.registerHoverProvider(

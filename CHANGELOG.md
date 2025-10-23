@@ -23,6 +23,8 @@ Thanks to RubenZwietering for improvements in this release!
     `"rgbdsz80.includePath"`. For example, if the include path setting has
     `"src/"` and `"src/battle/"`, the file `"src/battle/turns.asm"` will be
     suggested as `"turns.asm"`.
+  - A warning diagnostic is now provided if the extension cannot find an
+    included file.
 
 ### Fixed
 - Document links on `include` directives now work on lines that begin with whitespace.
