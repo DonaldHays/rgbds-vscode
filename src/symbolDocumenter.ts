@@ -136,7 +136,11 @@ export class ASMSymbolDocumenter {
     if (workspaceRoot) {
       const resolved = path.resolve(workspaceRoot, filename);
       if (fs.existsSync(resolved)) {
-        return { absolutePath: resolved };
+        if (fs.statSync(resolved).isDirectory()) {
+          return {};
+        } else {
+          return { absolutePath: resolved };
+        }
       }
     }
 
@@ -150,7 +154,11 @@ export class ASMSymbolDocumenter {
       // Test for existence of the filename glued onto the include path.
       const resolved = path.resolve(includePath, filename);
       if (fs.existsSync(resolved)) {
-        return { absolutePath: resolved };
+        if (fs.statSync(resolved).isDirectory()) {
+          return {};
+        } else {
+          return { absolutePath: resolved };
+        }
       }
     }
 
