@@ -44,7 +44,7 @@ export class ASMDocumentWatcher {
       }
     });
 
-    // Use a file system watcher to observer changes in the workspace.
+    // Use a file system watcher to observe changes in the workspace.
     const watcher = vscode.workspace.createFileSystemWatcher(glob);
 
     watcher.onDidChange((uri) => {

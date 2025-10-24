@@ -91,28 +91,37 @@ export class ASMSymbolDocumenter {
   ) {
     this.files = {};
 
-    for (const file of watcher.files) {
-      vscode.workspace.openTextDocument(file.uri).then((document) => {
-        this._document(document);
-      });
-    }
+    // Redocument everything if the include paths configuration changes.
+    vscode.workspace.onDidChangeConfiguration((event: vscode.ConfigurationChangeEvent) => {
+      if (event.affectsConfiguration("rgbdsz80.includePath")) {
+        for (const file of watcher.files) {
+          vscode.workspace.openTextDocument(file.uri).then((document) => {
+            this._document(document);
+          });
+        }
+      }
+    });
 
+    // Redocument a file whenever it's edited.
     vscode.workspace.onDidChangeTextDocument((event: vscode.TextDocumentChangeEvent) => {
       this._document(event.document);
     });
 
+    // Document a file when it's added.
     watcher.onDidAdd((file) => {
       vscode.workspace.openTextDocument(file.uri).then((document) => {
         this._document(document);
       });
     });
 
+    // Redocument a file when it changes on disk.
     watcher.onDidChange((file) => {
       vscode.workspace.openTextDocument(file.uri).then((document) => {
         this._document(document);
       });
     });
 
+    // Remove a file's documentation when it's removed.
     watcher.onDidRemove((file) => {
       delete this.files[file.path];
     });
