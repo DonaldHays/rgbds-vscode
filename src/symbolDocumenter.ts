@@ -126,7 +126,7 @@ export class ASMSymbolDocumenter {
    *   include path.
    */
   private _resolvedFilename(
-    range: vscode.Range, filename: string
+    range: vscode.Range, filename: string, localDir: string,
   ): FileResolution {
     const workspaceRoot = vscode.workspace.workspaceFolders ?
       vscode.workspace.workspaceFolders[0].uri.fsPath :
@@ -162,6 +162,28 @@ export class ASMSymbolDocumenter {
       }
     }
 
+    // Cover previous behavior by finding files relative to current file, but
+    // warn if a file was found that way
+    const localPath = path.resolve(localDir, filename);
+    if (fs.existsSync(localPath) && !fs.statSync(localPath).isDirectory()) {
+      const reportDir = (workspaceRoot !== undefined) ?
+        path.relative(workspaceRoot, localDir) :
+        "its directory";
+
+      return {
+        absolutePath: localPath,
+        diagnostic: new vscode.Diagnostic(
+          range,
+          `File \"${filename}\" was found relative to this document's ` +
+          `directory, which is not registered as an include path. Add ` +
+          `\"${reportDir}\" to your workspace's "rgbdsz80.includePath" ` +
+          `setting.`,
+          vscode.DiagnosticSeverity.Warning
+        )
+      }
+    }
+
+    // The file could not be found, warn about it
     return {
       diagnostic: new vscode.Diagnostic(
         range,
@@ -381,7 +403,7 @@ export class ASMSymbolDocumenter {
           );
           const range = new vscode.Range(startPosition, endPosition);
           const { absolutePath, diagnostic } = this._resolvedFilename(
-            range, relativePath
+            range, relativePath, path.dirname(document.uri.fsPath)
           );
 
           table.includedFiles.push({ range, relativePath, absolutePath });

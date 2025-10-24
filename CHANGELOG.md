@@ -14,17 +14,18 @@ Thanks to RubenZwietering for improvements in this release!
   - Triggering IntelliSense after already having typed part of the path will now
     filter suggestions.
   - Better tab completion.
-  - The workspace root is now searched for include files.
   - Suggestions now search for `.s` and `.sm83` files.
   - Suggestions may be filtered by file extension using the
     `rgbdsz80.includeSuggestionExtensions` configuration variable.
-  - Suggestions no longer automatically search relative to the working file.
+  - The workspace root is now searched for include files.
+  - If an included file can only be found relative to the working file, it will
+    still work, but a warning will now be produced.
+  - A warning diagnostic is now provided if the extension cannot find an
+    included file.
   - Suggestions are resolved relative to the deepest matching entry in
     `"rgbdsz80.includePath"`. For example, if the include path setting has
     `"src/"` and `"src/battle/"`, the file `"src/battle/turns.asm"` will be
     suggested as `"turns.asm"`.
-  - A warning diagnostic is now provided if the extension cannot find an
-    included file.
 
 ### Fixed
 - Document links on `include` directives now work on lines that begin with whitespace.
