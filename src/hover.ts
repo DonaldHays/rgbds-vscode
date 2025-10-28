@@ -3,12 +3,12 @@
 import { HoverProvider, TextDocument, Position, CancellationToken, ProviderResult, Hover, MarkdownString } from 'vscode';
 import { ASMSymbolDocumenter } from './symbolDocumenter';
 
-const hexRegex = /^\$([\da-fA-F][_\da-fA-F]*)$/;
+const hexRegex = /^(?:\$|0x)([\da-f][_\da-f]*)$/i;
 const binaryRegex = /^\%([01][_01]*)$/;
 const octalRegex = /^\&([0-7][_0-7]*)$/;
 const integerRegex = /^(\d[_\d]*)$/;
 const fixedRegex = /^(\d[_\d]*\.\d+)$/;
-const hoverRegex = /(\$[\da-fA-F][_\da-fA-F]*)|(\%[01][_01]*)|(\&[0-7][_0-7]*)|(\`[0-3][_0-3]*)|(\d[_\d]*(\.\d+)?)|(\.?[A-Za-z_]\w*(\\@|:*))/g;
+const hoverRegex = /((?:\$|0x)[\da-f][_\da-f]*)|(\%[01][_01]*)|(\&[0-7][_0-7]*)|(\`[0-3][_0-3]*)|(\d[_\d]*(\.\d+)?)|(\.?[a-z_]\w*(\\@|:*))/gi;
 
 export class ASMHoverProvider implements HoverProvider {
   constructor(public symbolDocumenter: ASMSymbolDocumenter) {

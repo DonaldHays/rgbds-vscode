@@ -10,7 +10,7 @@ import { ASMDocumentWatcher } from './documentWatcher';
 
 const registerRegex = new RegExp(`\\b\\[?(${syntaxInfo.keywordsQuery({ hasFamily: [KeywordFamily.Register] }).join("|")})\\]?\\b`, "i");
 const itemSplitRegex = /,? /
-const hexRegex = /(\$[0-9a-f]+)/i
+const hexRegex = /((?:\$|0x)[\da-f][_\da-f]*)/i
 
 const includeRegex = /^\s*(?:[\w\.]+[:]{0,2})?\s*include\s+\"?/i
 const strictIncludeRegex = /^\s*(?:[\w\.]+[:]{0,2})?\s*include\s+(?:\"[^\"]*)?$/i

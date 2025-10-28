@@ -168,7 +168,7 @@
 			<key>name</key>
 			<string>constant.numeric.hex.gbz80</string>
 			<key>match</key>
-			<string>\$[\da-fA-F][_\da-fA-F]*\b</string>
+			<string>(?i)(?:\$|0x)[\da-f][_\da-f]*\b</string>
 		</dict>
 		<dict>
 			<key>name</key>
