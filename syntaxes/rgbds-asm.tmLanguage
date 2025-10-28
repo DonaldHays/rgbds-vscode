@@ -180,7 +180,7 @@
 			<key>name</key>
 			<string>constant.numeric.octal.gbz80</string>
 			<key>match</key>
-			<string>\&amp;[0-7][_0-7]*\b</string>
+			<string>(?i)(?:\&amp;|0o)[0-7][_0-7]*\b</string>
 		</dict>
 		<dict>
 			<key>name</key>
