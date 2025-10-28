@@ -174,7 +174,7 @@
 			<key>name</key>
 			<string>constant.numeric.binary.gbz80</string>
 			<key>match</key>
-			<string>\%[01][_01]*\b</string>
+			<string>(?i)(?:\%|0b)[01][_01]*\b</string>
 		</dict>
 		<dict>
 			<key>name</key>
