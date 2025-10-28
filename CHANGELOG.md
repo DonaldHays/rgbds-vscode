@@ -8,6 +8,7 @@ Thanks to RubenZwietering for improvements in this release!
 ### Added
 - Support for `hli`/`hld` instructions. (Thanks, RubenZwietering!)
 - Support for the `align` directive.
+- Support for the `0x` hex, `0o` octal, and `0b` binary integer formats.
 
 ### Changed
 - Completion prompts for `ld [c], a` and `ld a, [c]` are now `ldh [c], a` and `ldh a, [c]`.
