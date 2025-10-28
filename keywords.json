@@ -33,6 +33,10 @@
         {
           "family": "sectionDeclaration",
           "context": "section"
+        },
+        {
+          "family": "preprocessor",
+          "context": "firstWord"
         }
       ]
     },

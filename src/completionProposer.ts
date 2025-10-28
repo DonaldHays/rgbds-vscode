@@ -451,6 +451,7 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
     }
 
     // Add items from the rule collections based on the current context.
+    const registered = new Map<vscode.CompletionItemKind, Set<string>>();
     RULE_LOOP: for (const collection of ruleCollections) {
       // Don't add items from this collection if they don't match the line
       // context.
@@ -461,7 +462,15 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
       }
 
       // Append all items for this collection.
+      const items = registered.get(collection.kind) ?? new Set();
+      registered.set(collection.kind, items);
       for (const item of collection.items) {
+        if (items.has(item)) {
+          continue;
+        }
+
+        items.add(item);
+
         const rule = this.formatter.rule(`${collection.rule}.${item}`);
         const cased = (rule == "upper") ? item.toUpperCase() : item;
 
