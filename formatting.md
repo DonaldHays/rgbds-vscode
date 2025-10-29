@@ -93,7 +93,7 @@ routine::
 
 ##### `language.keyword.function`
 
-`mul, sin, cos, tan, asin, acos, atan, atan2, strcat, strcmp, strin, strlen, strlwr, strsub, strupr, bank, def, high, low, isconst, ceil, floor, log, pow, round, strfmt, strrin, strrpl`
+`acos, asin, atan, atan2, bank, bitwidth, bytelen, ceil, charcmp, charlen, charsize, charsub, charval, cos, def, div, floor, fmod, high, incharmap, isconst, log, low, mul, pow, readfile, revchar, round, sin, sizeof, startof, strbyte, strcat, strchar, strcmp, strfind, strfmt, strin, strlen, strlwr, strrfind, strrin, strrpl, strslice, strsub, strupr, tan, tzcount`
 
 ##### `language.register`
 

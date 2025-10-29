@@ -108,11 +108,29 @@
       ]
     },
     {
+      "name": "bitwidth",
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
+        }
+      ]
+    },
+    {
       "name": "break",
       "rules": [
         {
           "family": "preprocessor",
           "context": "firstWord"
+        }
+      ]
+    },
+    {
+      "name": "bytelen",
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
         }
       ]
     },
@@ -140,6 +158,15 @@
       ]
     },
     {
+      "name": "charcmp",
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
+        }
+      ]
+    },
+    {
       "name": "charlen",
       "available": "0.5.1",
       "rules": [
@@ -159,8 +186,26 @@
       ]
     },
     {
+      "name": "charsize",
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
+        }
+      ]
+    },
+    {
       "name": "charsub",
       "available": "0.5.1",
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
+        }
+      ]
+    },
+    {
+      "name": "charval",
       "rules": [
         {
           "family": "function",
@@ -795,6 +840,15 @@
       ]
     },
     {
+      "name": "readfile",
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
+        }
+      ]
+    },
+    {
       "name": "redef",
       "rules": [
         {
@@ -809,6 +863,15 @@
         {
           "family": "preprocessor",
           "context": "firstWord"
+        }
+      ]
+    },
+    {
+      "name": "revchar",
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
         }
       ]
     },
@@ -969,6 +1032,15 @@
       ]
     },
     {
+      "name": "strbyte",
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
+        }
+      ]
+    },
+    {
       "name": "strcat",
       "rules": [
         {
@@ -978,7 +1050,25 @@
       ]
     },
     {
+      "name": "strchar",
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
+        }
+      ]
+    },
+    {
       "name": "strcmp",
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
+        }
+      ]
+    },
+    {
+      "name": "strfind",
       "rules": [
         {
           "family": "function",
@@ -1024,6 +1114,15 @@
       ]
     },
     {
+      "name": "strrfind",
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
+        }
+      ]
+    },
+    {
       "name": "strrin",
       "available": "0.5.0",
       "rules": [
@@ -1036,6 +1135,15 @@
     {
       "name": "strrpl",
       "available": "0.5.0",
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
+        }
+      ]
+    },
+    {
+      "name": "strslice",
       "rules": [
         {
           "family": "function",
@@ -1063,6 +1171,15 @@
     },
     {
       "name": "tan",
+      "rules": [
+        {
+          "family": "function",
+          "context": "any"
+        }
+      ]
+    },
+    {
+      "name": "tzcount",
       "rules": [
         {
           "family": "function",

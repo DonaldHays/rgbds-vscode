@@ -144,7 +144,7 @@
 			<key>name</key>
 			<string>support.function.gbz80</string>
 			<key>match</key>
-			<string>\b(?i:div|mul|fmod|sin|cos|tan|asin|acos|atan|atan2|strcat|strcmp|strin|strlen|strlwr|strsub|strupr|incharmap|charlen|charsub|bank|sizeof|startof|def|high|low|isconst|ceil|floor|log|pow|round|strfmt|strrin|strrpl)\b</string>
+			<string>\b(?i:acos|asin|atan|atan2|bank|bitwidth|bytelen|ceil|charcmp|charlen|charsize|charsub|charval|cos|def|div|floor|fmod|high|incharmap|isconst|log|low|mul|pow|readfile|revchar|round|sin|sizeof|startof|strbyte|strcat|strchar|strcmp|strfind|strfmt|strin|strlen|strlwr|strrfind|strrin|strrpl|strslice|strsub|strupr|tan|tzcount)\b</string>
 		</dict>
 		<dict>
 			<key>name</key>
