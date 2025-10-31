@@ -87,32 +87,20 @@
 			</array>
 		</dict>
 		<dict>
-			<key>match</key>
-			<string>^\s*((?i:set))\b</string>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.other.opcode.gbz80</string>
-				</dict>
-			</dict>
-		</dict>
-		<dict>
 			<key>name</key>
 			<string>keyword.other.opcode.gbz80</string>
 			<key>match</key>
-			<string>\b(?i:adc|add|and|bit|call|ccf|cp|cpl|daa|dec|di|ei|halt|inc|jp|jr|ld|ldh|ldi|ldd|nop|or|pop|push|res|ret|reti|rl|rla|rlc|rlca|rr|rra|rrc|rrca|rst|sbc|scf|sla|sra|srl|stop|sub|swap|xor)\b</string>
+			<string>(?i:adc|add|and|bit|call|ccf|cp|cpl|daa|dec|di|ei|halt|inc|jp|jr|ld|ldh|ldi|ldd|nop|or|pop|push|res|ret|reti|rl|rla|rlc|rlca|rr|rra|rrc|rrca|rst|set|sbc|scf|sla|sra|srl|stop|sub|swap|xor)(?![\w#$@])</string>
 		</dict>
 		<dict>
 			<key>name</key>
 			<string>variable.language.registercodes.gbz80</string>
 			<key>match</key>
-			<string>\b(?i:a|f|b|c|d|e|h|l|af|bc|de|hl|hli|hld|sp|pc|z|nz|nc)\b</string>
+			<string>(?i:a|f|b|c|d|e|h|l|af|bc|de|hl|hli|hld|sp|pc|z|nz|nc)(?![\w#$@])</string>
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>\b((?i:bank))\b(\s*\[)</string>
+			<string>((?i:bank))(?![\w#$@])(\s*\[)</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
@@ -124,7 +112,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>^\s*((?i:def))\b</string>
+			<string>^\s*((?i:def))(?![\w#$@])</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
@@ -138,19 +126,25 @@
 			<key>name</key>
 			<string>keyword.control.gbz80</string>
 			<key>match</key>
-			<string>\b(?i:include|incbin|export|global|union|fragment|nextu|endu|print|println|printt|printv|printi|printf|assert|static_assert|fatal|fail|warn|if|elif|else|endc|purge|for|rept|endr|break|opt|popo|pusho|pops|pushs|equ|set|equs|macro|endm|shift|charmap|newcharmap|setcharmap|pushc|popc|redef|rsreset|rsset|rb|rw|rl|db|dw|dl|ds|section|endsection|rom0|romx|vram|sram|wram0|wramx|oam|hram|align|load|endl)\b</string>
+			<string>(?i:include|incbin|export|global|union|fragment|nextu|endu|print|println|printt|printv|printi|printf|assert|static_assert|fatal|fail|warn|if|elif|else|endc|purge|for|rept|endr|break|opt|popo|pusho|pops|pushs|equ|equs|macro|endm|shift|charmap|newcharmap|setcharmap|pushc|popc|redef|rsreset|rsset|rb|rw|rl|db|dw|dl|ds|section|endsection|rom0|romx|vram|sram|wram0|wramx|oam|hram|align|load|endl)(?![\w#$@])</string>
 		</dict>
 		<dict>
 			<key>name</key>
 			<string>support.function.gbz80</string>
 			<key>match</key>
-			<string>\b(?i:acos|asin|atan|atan2|bank|bitwidth|bytelen|ceil|charcmp|charlen|charsize|charsub|charval|cos|def|div|floor|fmod|high|incharmap|isconst|log|low|mul|pow|readfile|revchar|round|sin|sizeof|startof|strbyte|strcat|strchar|strcmp|strfind|strfmt|strin|strlen|strlwr|strrfind|strrin|strrpl|strslice|strsub|strupr|tan|tzcount)\b</string>
+			<string>(?i:acos|asin|atan|atan2|bank|bitwidth|bytelen|ceil|charcmp|charlen|charsize|charsub|charval|cos|def|div|floor|fmod|high|incharmap|isconst|log|low|mul|pow|readfile|revchar|round|sin|sizeof|startof|strbyte|strcat|strchar|strcmp|strfind|strfmt|strin|strlen|strlwr|strrfind|strrin|strrpl|strslice|strsub|strupr|tan|tzcount)(?![\w#$@])</string>
 		</dict>
 		<dict>
-			<key>name</key>
-			<string>variable.other.gbz80</string>
 			<key>match</key>
-			<string>\b((([a-zA-Z_][\w#@]*)?\.)?[a-zA-Z_][\w#@]*[:]{0,2})\b</string>
+			<string>(?i:#?((?:(?:[a-z_][\w#$@]*)?\.)?[a-z_][\w#$@]*):{0,2})</string>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>variable.other.gbz80</string>
+				</dict>
+			</dict>
 		</dict>
 		<dict>
 			<key>name</key>
