@@ -2,7 +2,7 @@
     "name": "rgbds-z80",
     "displayName": "RGBDS",
     "description": "Language service for the RGBDS Game Boy assembler.",
-    "version": "4.1.0",
+    "version": "5.0.0",
     "publisher": "donaldhays",
     "engines": {
         "vscode": "^1.88.0"
@@ -25,33 +25,40 @@
             {
                 "name": "rgbdserror",
                 "owner": "rgbasm",
+                "source": "rgbasm",
                 "fileLocation": [
                     "relative",
                     "${workspaceFolder}"
                 ],
                 "pattern": [
                     {
-                        "regexp": "^(warning|ERROR|error): (?:.+ -> )*(.*)\\(([0-9]+)\\)(?: -> .*)?:\\s*(\\[.*\\])?$",
+                        "regexp": "^(?i:(warning|error|fatal): (.*)?)$",
                         "severity": 1,
-                        "file": 2,
-                        "line": 3
+                        "message": 2
                     },
                     {
-                        "regexp": "^\\s+(.*)$",
-                        "message": 1
+                        "regexp": "^\\s+at ([^:]+)(?:::.+)?\\((\\d+)\\)$",
+                        "file": 1,
+                        "line": 2
                     }
                 ]
             },
             {
                 "name": "rgbdslinkerror",
                 "owner": "rgblink",
-                "pattern": {
-                    "regexp": "^(warning|error): (?:(?:.+ -> )*([^:]*)(::REPT~\\d+)?(::[^\\(]+)?\\(([0-9]+)\\): )?(.+)$",
-                    "severity": 1,
-                    "file": 2,
-                    "line": 5,
-                    "message": 6
-                }
+                "source": "rgblink",
+                "pattern": [
+                    {
+                        "regexp": "^(?i:(warning|error|fatal): (.*)?)$",
+                        "severity": 1,
+                        "message": 2
+                    },
+                    {
+                        "regexp": "^\\s+at ([^:]+)(?:::.+)?\\((\\d+)\\)$",
+                        "file": 1,
+                        "line": 2
+                    }
+                ]
             }
         ],
         "languages": [

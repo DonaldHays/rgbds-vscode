@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to the "rgbds-vscode" extension will be documented in this file.
 
-## [4.2.0] - 2025-??-??
+## [5.0.0] - 2025-??-??
 
 Thanks to RubenZwietering for improvements in this release!
 
@@ -34,6 +34,7 @@ Thanks to RubenZwietering for improvements in this release!
     `"rgbdsz80.includePath"`. For example, if the include path setting has
     `"src/"` and `"src/battle/"`, the file `"src/battle/turns.asm"` will be
     suggested as `"turns.asm"`.
+- The extension now matches the diagnostic format of RGBDS v1.0.0.
 
 ### Fixed
 - Document links on `include` directives now work on lines that begin with whitespace.
