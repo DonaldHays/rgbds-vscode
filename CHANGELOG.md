@@ -10,6 +10,7 @@ Thanks to RubenZwietering for improvements in this release!
 - Support for the `align` directive.
 - Support for the `0x` hex, `0o` octal, and `0b` binary integer formats.
 - Support for `#RawIdentifiers`.
+- Support for `{SymbolInterpolation}`.
 - Support for the `bitwidth`, `bytelen`, `charcmp`, `charsize`, `charval`,
   `readfile`, `revchar`, `strbyte`, `strchar`, `strfind`, `strrfind`,
   `strslice`, and `tzcount` functions.
