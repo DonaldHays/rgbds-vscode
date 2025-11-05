@@ -7,19 +7,17 @@ import { ASMConfiguration } from './configuration';
 const whitespaceRegex = /^\s+/
 const commentRegex = /^;.*$/
 const stringRegex = /^"(?:\\.|[^"])*"/
-const identifierRegex = /^([A-Z_][\w#@]*[:]{0,2})\b/i
-const registerRegex = new RegExp(`^(${syntaxInfo.keywordsQuery({ hasFamily: [KeywordFamily.Register] }).join("|")})\\b`, "i");
-const conditionCodeRegex = /^(z|nz|nc)\b/i
-const instructionRegex = new RegExp(`^(${syntaxInfo.instructionsWithoutSet.join("|")})\\b`, "i");
-const instructionSetRegex = /^(\s*)(set)\b(.*)$/i
-const setExpressionRegex = /^(\s*[_a-z][\w#@]+\s*)\b(set)\b(.*)$/i
-const cConditionCodeRegex = /^(call|jp|jr|ret)(\s+)(c)\b/i
-const keywordSectionDeclarationBankRegex = /^(bank)\b\s*\[/i
-const keywordPreprocessorRegex = new RegExp(`^(${syntaxInfo.keywordsQuery({ hasFamily: [KeywordFamily.Preprocessor] }).filter((keyword) => keyword != "set").join("|")})\\b`, "i");
-const keywordDataDirectiveRegex = new RegExp(`^(${syntaxInfo.keywordsQuery({ hasFamily: [KeywordFamily.DataDirective] }).join("|")})\\b`, "i");
-const keywordSectionDeclarationRegex = new RegExp(`^(${syntaxInfo.keywordsQuery({ hasFamily: [KeywordFamily.SectionDeclaration] }).filter((keyword) => keyword != "bank").join("|")})\\b`, "i");
-const keywordFunctionRegex = new RegExp(`^(${syntaxInfo.keywordsQuery({ hasFamily: [KeywordFamily.Function] }).join("|")})\\b`, "i");
-const hexLiteralRegex = /^(\$[0-9a-f]+)\b/i
+const identifierRegex = /^#?((?:(?:[a-z_][\w#$@]*)?\.[\w#$@]+)|(?:[a-z_][\w#$@]*)):{0,2}/i
+const registerRegex = new RegExp(`^(${syntaxInfo.keywordsQuery({ hasFamily: [KeywordFamily.Register] }).join("|")})(?![\\w#$@])`, "i");
+const conditionCodeRegex = /^(z|nz|nc)(?![\w#$@])/i
+const instructionRegex = new RegExp(`^(${syntaxInfo.instructions.join("|")})(?![\\w#$@])`, "i");
+const cConditionCodeRegex = /^(call|jp|jr|ret)(\s+)(c)(?![\w#$@])/i
+const keywordSectionDeclarationBankRegex = /^(bank)(?![\w#$@])\s*\[/i
+const keywordPreprocessorRegex = new RegExp(`^(${syntaxInfo.keywordsQuery({ hasFamily: [KeywordFamily.Preprocessor] }).filter((keyword) => keyword != "set").join("|")})(?![\\w#$@])`, "i");
+const keywordDataDirectiveRegex = new RegExp(`^(${syntaxInfo.keywordsQuery({ hasFamily: [KeywordFamily.DataDirective] }).join("|")})(?![\\w#$@])`, "i");
+const keywordSectionDeclarationRegex = new RegExp(`^(${syntaxInfo.keywordsQuery({ hasFamily: [KeywordFamily.SectionDeclaration] }).filter((keyword) => keyword != "bank").join("|")})(?![\\w#$@])`, "i");
+const keywordFunctionRegex = new RegExp(`^(${syntaxInfo.keywordsQuery({ hasFamily: [KeywordFamily.Function] }).join("|")})(?![\\w#$@])`, "i");
+const hexLiteralRegex = /^(?:\$|0x)([\da-f][_\da-f]*)\b/i
 
 export class ASMFormatter {
   constructor(private config: ASMConfiguration) { }
@@ -69,12 +67,6 @@ export class ASMFormatter {
       let offset = 0;
 
       let result: (RegExpExecArray | null) = null;
-
-      if (result = instructionSetRegex.exec(text)) {
-        this._case(result[2], output, line, result[1].length, this.rule(`language.instruction.${result[2]}`));
-      } else if (result = setExpressionRegex.exec(text)) {
-        this._case(result[2], output, line, result[1].length, this.rule(`language.keyword.preprocessor.${result[2]}`));
-      }
 
       while (text.length > 0) {
         result = null;

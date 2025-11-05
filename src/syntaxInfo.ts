@@ -22,7 +22,6 @@ export enum KeywordRuleContext {
 
 class SyntaxInfo {
   instructions: string[];
-  instructionsWithoutSet: string[];
   preprocessorKeywords: string[];
   instructionsJSON: {
     instructions: [{
@@ -67,10 +66,6 @@ class SyntaxInfo {
     });
 
     this.instructions = Array.from(instructions);
-
-    instructions.delete("set");
-    this.instructionsWithoutSet = Array.from(instructions);
-
     this.preprocessorKeywords = this.keywordsQuery({ hasFamily: [KeywordFamily.SectionDeclaration, KeywordFamily.Preprocessor, KeywordFamily.DataDirective] });
   }
 

@@ -136,7 +136,7 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>(?i:#?((?:(?:[a-z_][\w#$@]*)?\.)?[a-z_][\w#$@]*):{0,2})</string>
+			<string>(?i:#?((?:(?:[a-z_][\w#$@]*)?\.[\w#$@]+)|(?:[a-z_][\w#$@]*)):{0,2})</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>

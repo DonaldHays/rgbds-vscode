@@ -9,7 +9,7 @@ export class ASMDefinitionProvider implements vscode.DefinitionProvider {
   }
 
   provideDefinition(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): vscode.ProviderResult<vscode.Definition> {
-    const range = document.getWordRangeAtPosition(position, /(\$[0-9a-fA-F]+)|(%[0-1]+)|([0-9]+)|(\.?[A-Za-z_][A-Za-z_0-9]*(\\@|:*))/g);
+    const range = document.getWordRangeAtPosition(position, /((?:\$|0x)[\da-f][_\da-f]*)|((?:\%|0b)[01][_01]*)|((?:\&|0o)[0-7][_0-7]*)|(\`[0-3][_0-3]*)|(\d[_\d]*(\.\d+)?)|((?:(?:[a-z_][\w#$@]*)?\.[\w#$@]+)|(?:[a-z_][\w#$@]*))/gi);
     if (range) {
       const text = document.getText(range);
       const symbol = this.symbolDocumenter.symbol(text, document);

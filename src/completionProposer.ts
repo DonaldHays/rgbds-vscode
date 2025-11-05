@@ -12,10 +12,10 @@ const registerRegex = new RegExp(`\\b\\[?(${syntaxInfo.keywordsQuery({ hasFamily
 const itemSplitRegex = /,? /
 const hexRegex = /((?:\$|0x)[\da-f][_\da-f]*)/i
 
-const includeRegex = /^\s*(?:[\w\.]+[:]{0,2})?\s*include\s+\"?/i
-const strictIncludeRegex = /^\s*(?:[\w\.]+[:]{0,2})?\s*include\s+(?:\"[^\"]*)?$/i
-const firstWordRegex = /^(?:[\w\.]+[:]{0,2})?\s*\w*$/
-const sectionRegex = /^(?:[\w\.]+[:]{0,2})?\s*section\b/i
+const includeRegex = /^\s*(?:[\w#$@\.]+[:]{0,2})?\s*include\s+\"?/i
+const strictIncludeRegex = /^\s*(?:[\w#$@\.]+[:]{0,2})?\s*include\s+(?:\"[^\"]*)?$/i
+const firstWordRegex = /^(?:[\w#$@\.]+[:]{0,2})?\s*\w*$/
+const sectionRegex = /^(?:[\w#$@\.]+[:]{0,2})?\s*section\b/i
 const multiInstructionLineStart = /::\s*\w*$/
 
 const ruleCollections = [
@@ -500,8 +500,14 @@ export class ASMCompletionProposer implements vscode.CompletionItemProvider {
       const item = new vscode.CompletionItem(name, kind);
       item.documentation = new vscode.MarkdownString(symbol.documentation);
 
-      if (triggerWord.indexOf(".") == 0 && name.indexOf(".") == 0) {
-        item.insertText = name.substring(1);
+      if (symbol.isReservedWord) {
+        item.label = `#${name}`;
+        item.filterText = name;
+        if (triggerWord.indexOf("#") == -1) {
+          item.insertText = `#${name}`;
+        } else {
+          item.insertText = name;
+        }
       }
 
       if (symbol.isLocal && symbol.scope && symbol.scope.end) {

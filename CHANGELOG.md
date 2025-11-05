@@ -9,12 +9,14 @@ Thanks to RubenZwietering for improvements in this release!
 - Support for `hli`/`hld` instructions. (Thanks, RubenZwietering!)
 - Support for the `align` directive.
 - Support for the `0x` hex, `0o` octal, and `0b` binary integer formats.
+- Support for `#RawIdentifiers`.
 - Support for the `bitwidth`, `bytelen`, `charcmp`, `charsize`, `charval`,
   `readfile`, `revchar`, `strbyte`, `strchar`, `strfind`, `strrfind`,
   `strslice`, and `tzcount` functions.
 
 ### Changed
 - Completion prompts for `ld [c], a` and `ld a, [c]` are now `ldh [c], a` and `ldh a, [c]`.
+- Various improvements and modernization of symbol detection.
 - Improved completion suggestions on `include` directives.
   - Triggering IntelliSense after already having typed part of the path will now
     filter suggestions.

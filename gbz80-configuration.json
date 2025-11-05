@@ -1,23 +1,37 @@
 {
-  "comments" : {
-    "lineComment" : ";",
-    "blockComment" : ["/*", "*/"]
+  "comments": {
+    "lineComment": ";",
+    "blockComment": [ "/*", "*/" ]
   },
-  "autoClosingPairs" : [
-    { "open": "(", "close" : ")" },
-    { "open": "\"", "close" : "\"", "notIn": ["string"] },
-    { "open": "/**", "close" : "*/", "notIn": ["string"] }
+  "autoClosingPairs": [
+    { "open": "(", "close": ")" },
+    { "open": "[[", "close": "]]" },
+    { "open": "\"", "close": "\"", "notIn": [ "string" ] },
+    { "open": "/**", "close": "*/", "notIn": [ "string" ] }
   ],
-  "brackets" : [
-    [ "(", ")" ]
+  "brackets": [
+    [ "(", ")" ],
+    [ "[", "]" ],
+    [ "[[", "]]" ]
   ],
-  "surroundingPairs" : [
-    ["[", "]"],
-    ["(", ")"],
-    ["\"", "\""]
+  "surroundingPairs": [
+    [ "[", "]" ],
+    [ "[[", "]]" ],
+    [ "(", ")" ],
+    [ "\"", "\"" ]
   ],
-  "indentationRules" : {
-    "increaseIndentPattern" : "^(((([a-zA-Z_][a-zA-Z_0-9]*)?\\.)?[a-zA-Z_][a-zA-Z_0-9]*[:]{1,2})|(\\.[a-zA-Z_][a-zA-Z_0-9]*)).*$",
-    "decreaseIndentPattern" : "^\\s+(((([a-zA-Z_][a-zA-Z_0-9]*)?\\.)?[a-zA-Z_][a-zA-Z_0-9]*[:]{1,2})|(\\.[a-zA-Z_][a-zA-Z_0-9]*)).*$"
+  "wordPattern": {
+    "pattern": "((?:\\$|0x)[\\da-f][_\\da-f]*)|((?:\\%|0b)[01][_01]*)|((?:\\&|0o)[0-7][_0-7]*)|(\\`[0-3][_0-3]*)|(\\d[_\\d]*(\\.\\d+)?)|((?:(?:[a-z_][\\w#$@]*)?\\.[\\w#$@]+)|(?:[a-z_][\\w#$@]*))",
+    "flags": "i"
+  },
+  "indentationRules": {
+    "increaseIndentPattern": {
+      "pattern": "^\\s*#?((?:(?:[a-z_][\\w#$@]*)?\\.[\\w#$@]+:{0,2})|(?:[a-z_][\\w#$@]*:{1,2})).*$",
+      "flags": "i"
+    },
+    "decreaseIndentPattern": {
+      "pattern": "^\\s+#?((?:(?:[a-z_][\\w#$@]*)?\\.[\\w#$@]+:{0,2})|(?:[a-z_][\\w#$@]*:{1,2})).*$",
+      "flags": "i"
+    }
   }
 }

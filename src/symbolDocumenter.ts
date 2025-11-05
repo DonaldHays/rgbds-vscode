@@ -18,12 +18,12 @@ const blockCommentEndRegex = /^(.*?)\s*\*\/.*$/
 
 const includeLineRegex = /^\s*include[\s]+"([^"]+)".*$/i
 const spacerRegex = /^\s*(.)\1{3,}\s*$/
-const labelDefinitionRegex = /^\s*((?:[A-Z_][\w#@]*)?(?:(?:\.[\w#@]*:{0,2})|(?:[A-Z_][\w#@]*:{1,2})))/i
-const defineExpressionRegex = /^\s*(?:def\s*)?([A-Z_][\w#@]*)\s+(?:(?:equ|equs|set|=)\s+.+|(?:rb|rw|rl)(?:\s+.*)?)$/i
-const instructionRegex = new RegExp(`^(${syntaxInfo.instructions.join("|")})\\b`, "i");
-const keywordRegex = new RegExp(`^(${syntaxInfo.preprocessorKeywords.join("|")})\\b`, "i");
-const macroDefinitionRegex = /^\s*macro[\s]+([A-Z_][\w#@]*).*$/i
-const exportDefinitionRegex = /^\s*export[\s]+([A-Z_][\w#@]*).*$/i
+const labelDefinitionRegex = /^\s*(#?)((?:(?:[a-z_][\w#$@]*)?\.[\w#$@]+:{0,2})|(?:[a-z_][\w#$@]*:{1,2}))/i
+const defineExpressionRegex = /^\s*(?:def\s*)?(#?)([a-z_][\w#$@]*)\s+(?:(?:equ|equs|=)\s+.+|(?:rb|rw|rl)(?:\s+.*)?)$/i
+const instructionRegex = new RegExp(`^(${syntaxInfo.instructions.join("|")})(?![\\w#$@])`, "i");
+const keywordRegex = new RegExp(`^(${syntaxInfo.preprocessorKeywords.join("|")})(?![\\w#$@])`, "i");
+const macroDefinitionRegex = /^\s*macro[\s]+(#?)([a-z_][\w#$@]*).*$/i
+const exportDefinitionRegex = /^\s*export[\s]+(#?)([a-z_][\w#$@]*).*$/i
 
 class ScopeDescriptor {
   constructor(public start: vscode.Position, public end?: vscode.Position) { }
@@ -35,6 +35,7 @@ class SymbolDescriptor {
     public isExported: boolean,
     public isLocal: boolean,
     public kind: vscode.SymbolKind,
+    public isReservedWord: boolean,
     public scope?: ScopeDescriptor,
     public documentation?: string
   ) { }
@@ -421,13 +422,21 @@ export class ASMSymbolDocumenter {
             diagnostics.push(diagnostic);
           }
         } else if (declarationMatch) {
-          const declaration = declarationMatch[1];
-          if (instructionRegex.test(declaration)) {
-            continue;
-          }
+          const isRaw = declarationMatch[1] == "#";
+          const declaration = declarationMatch[2];
+          let isReservedWord = false;
 
-          if (keywordRegex.test(declaration)) {
-            continue;
+          if (!isRaw) {
+            if (instructionRegex.test(declaration)) {
+              continue;
+            }
+
+            if (keywordRegex.test(declaration)) {
+              continue;
+            }
+          } else {
+            isReservedWord = instructionRegex.test(declaration);
+            isReservedWord ||= keywordRegex.test(declaration);
           }
 
           if (declaration.indexOf(".") == -1) {
@@ -482,10 +491,26 @@ export class ASMSymbolDocumenter {
             if (exportMatch) {
               table.symbols[name].isExported = isExported;
             } else {
-              table.symbols[name] = new SymbolDescriptor(location, table.symbols[name].isExported, isLocal, isFunction ? vscode.SymbolKind.Function : vscode.SymbolKind.Constant, currentScope, documentation);
+              table.symbols[name] = new SymbolDescriptor(
+                location,
+                table.symbols[name].isExported,
+                isLocal,
+                isFunction ? vscode.SymbolKind.Function : vscode.SymbolKind.Constant,
+                isReservedWord,
+                currentScope,
+                documentation
+              );
             }
           } else {
-            table.symbols[name] = new SymbolDescriptor(location, isExported, isLocal, isFunction ? vscode.SymbolKind.Function : vscode.SymbolKind.Constant, currentScope, documentation);
+            table.symbols[name] = new SymbolDescriptor(
+              location,
+              isExported,
+              isLocal,
+              isFunction ? vscode.SymbolKind.Function : vscode.SymbolKind.Constant,
+              isReservedWord,
+              currentScope,
+              documentation
+            );
           }
         }
 

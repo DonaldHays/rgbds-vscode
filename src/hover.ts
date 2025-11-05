@@ -8,7 +8,7 @@ const binaryRegex = /^(?:\%|0b)([01][_01]*)$/i;
 const octalRegex = /^(?:\&|0o)([0-7][_0-7]*)$/i;
 const integerRegex = /^(\d[_\d]*)$/;
 const fixedRegex = /^(\d[_\d]*\.\d+)$/;
-const hoverRegex = /((?:\$|0x)[\da-f][_\da-f]*)|((?:\%|0b)[01][_01]*)|((?:\&|0o)[0-7][_0-7]*)|(\`[0-3][_0-3]*)|(\d[_\d]*(\.\d+)?)|(\.?[a-z_]\w*(\\@|:*))/gi;
+const hoverRegex = /((?:\$|0x)[\da-f][_\da-f]*)|((?:\%|0b)[01][_01]*)|((?:\&|0o)[0-7][_0-7]*)|(\`[0-3][_0-3]*)|(\d[_\d]*(\.\d+)?)|((?:(?:[a-z_][\w#$@]*)?\.[\w#$@]+)|(?:[a-z_][\w#$@]*))/gi;
 
 export class ASMHoverProvider implements HoverProvider {
   constructor(public symbolDocumenter: ASMSymbolDocumenter) {
