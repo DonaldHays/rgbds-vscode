@@ -1,6 +1,6 @@
-# RGBDS GBZ80
+# RGBDS
 
-This extension provides support for the RGBDS flavor of the Game Boy's Z80 variant assembly language in Visual Studio Code.
+This extension provides support for the RGBDS assembler for the Game Boy in Visual Studio Code.
 
 ## Features
 

@@ -16,7 +16,8 @@
         "z80",
         "gbz80",
         "game boy",
-        "gameboy"
+        "gameboy",
+        "assembly"
     ],
     "icon": "icon.png",
     "main": "./out/extension",
